@@ -9,28 +9,13 @@ import SwiftUI
 import SwiftData
 
 @main
-struct PhotoWeatherApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
+final class PhotoWeatherApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    lazy var rootComponent = RootComponent()
+    
     var body: some Scene {
-        WindowGroup {
-            ForecastList(
-                viewModel: ForecastList.ViewModel(
-                    fetcher: Dependencies.forecastFetcher,
-                    photoFetcher: Dependencies.photoFetcher
-                )
-            )
+        return WindowGroup {
+            rootComponent.rootView
         }
     }
 }

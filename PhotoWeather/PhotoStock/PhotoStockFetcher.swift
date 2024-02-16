@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol FlickrAPIKeyProvider {
+public protocol FlickrAPIKeyProviding {
     func flickrAPIKey() throws -> String
 }
 
@@ -21,11 +21,11 @@ public protocol PhotoStockFetching {
 
 class PhotoStockFetcher: PhotoStockFetching {
     private let networkService: NetworkServiceProtocol
-    private let apiKeyProvider: FlickrAPIKeyProvider
+    private let apiKeyProvider: FlickrAPIKeyProviding
     
     init(
         networkService: NetworkServiceProtocol,
-        apiKeyProvider: FlickrAPIKeyProvider
+        apiKeyProvider: FlickrAPIKeyProviding
     ) {
         self.networkService = networkService
         self.apiKeyProvider = apiKeyProvider
@@ -68,7 +68,6 @@ class PhotoStockFetcher: PhotoStockFetching {
     // MARK: - Endpoints
     private static func fetchURL(for location: ForecastLocation, tags: [String], apiKey: String) -> URL? {
         let queryItems = [
-            // TODO: get this value from config?
             QueryItemKeys.apiKey: apiKey,
             QueryItemKeys.tags: tags
                 .map { $0.lowercased() }

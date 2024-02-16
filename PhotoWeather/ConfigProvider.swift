@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol ConfigProviding: FlickrAPIKeyProvider { }
+public protocol ConfigProviding: FlickrAPIKeyProviding { }
 
 public enum ConfigError: Error {
     case missingKey

@@ -7,6 +7,12 @@
 
 import SwiftUI
 import CoreLocation
+import NeedleFoundation
+
+public protocol ForecastLocationItemDependency: Dependency {
+    var weatherFetcher: ForecastFetching { get }
+    var photoFetcher: PhotoStockFetching { get }
+}
 
 struct Location {
     let name: String
@@ -35,9 +41,8 @@ extension ForecastLocationItem {
         let weatherIcon: String
     }
     
-    @MainActor
     class ViewModel: ObservableObject {
-        private let fetcher: ForecastFetching
+        private let weatherFetcher: ForecastFetching
         private let photoFetcher: PhotoStockFetching
         private let location: Location
         
@@ -51,17 +56,17 @@ extension ForecastLocationItem {
         
         init(
             location: Location,
-            fetcher: ForecastFetching,
+            weatherFetcher: ForecastFetching,
             photoFetcher: PhotoStockFetching
         ) {
-            self.fetcher = fetcher
+            self.weatherFetcher = weatherFetcher
             self.photoFetcher = photoFetcher
             self.location = location
         }
         
         private nonisolated func fetchForecast(for location: ForecastLocation) async -> ForecastItem? {
             do {
-                let weather = try await self.fetcher.forecast(for: location)
+                let weather = try await self.weatherFetcher.forecast(for: location)
                 print(weather)
                 return weather
             } catch {
@@ -89,6 +94,7 @@ extension ForecastLocationItem {
 }
 
 extension ForecastLocationItem.ViewModel {
+    @MainActor
     func onAppear() {
         Task { [weak self] in
             guard let self else { return }

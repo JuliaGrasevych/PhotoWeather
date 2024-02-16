@@ -9,9 +9,14 @@ import SwiftUI
 
 struct ForecastList: View {
     @StateObject private var viewModel: ViewModel
+    private let itemBuilder: ForecastLocationItemBuilder
     
-    init(viewModel: @escaping @autoclosure () -> ViewModel) {
+    init(
+        viewModel: @escaping @autoclosure () -> ViewModel,
+        itemBuilder: ForecastLocationItemBuilder
+    ) {
         _viewModel = .init(wrappedValue: viewModel())
+        self.itemBuilder = itemBuilder
     }
     
     var body: some View {
@@ -19,11 +24,7 @@ struct ForecastList: View {
             ZStack {
                 LazyHStack(spacing: 0) {
                     ForEach(viewModel.locations, id: \.name) { item in
-                        ForecastLocationItem(viewModel: ForecastLocationItem.ViewModel(
-                            location: item,
-                            fetcher: viewModel.fetcher,
-                            photoFetcher: viewModel.photoFetcher
-                        ))
+                        itemBuilder.view(location: item)
                         .containerRelativeFrame([.horizontal, .vertical])
                     }
                     .scrollTransition { effect, phase in
@@ -90,13 +91,16 @@ struct PhotoStockPreviewFetcher: PhotoStockFetching {
     }
 }
 
-fileprivate extension ForecastList.ViewModel {
+extension ForecastList.ViewModel {
     static let preview: ForecastList.ViewModel = ForecastList.ViewModel(
-        fetcher: ForecastListPreviewFetcher(),
+        weatherFetcher: ForecastListPreviewFetcher(),
         photoFetcher: PhotoStockPreviewFetcher()
     )
 }
 
 #Preview {
-    ForecastList(viewModel: .preview)
+    ForecastList(
+        viewModel: .preview,
+        itemBuilder: ForecastLocationItemBuilderPreview()
+    )
 }

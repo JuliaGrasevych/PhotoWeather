@@ -219,15 +219,23 @@ fileprivate struct PreviewLocation: ForecastLocation {
     var timeZoneIdentifier: String? = nil
 }
 
-fileprivate extension ForecastLocationItem.ViewModel {
+extension ForecastLocationItem.ViewModel {
     static let preview: ForecastLocationItem.ViewModel = ForecastLocationItem.ViewModel(
         location: Location(
             name: "Kyiv",
             location: PreviewLocation()
         ),
-        fetcher: ForecastListPreviewFetcher(),
+        weatherFetcher: ForecastListPreviewFetcher(),
         photoFetcher: PhotoStockPreviewFetcher()
     )
+}
+
+struct ForecastLocationItemBuilderPreview: ForecastLocationItemBuilder {
+    func view(location: Location) -> AnyView {
+        AnyView(
+            ForecastLocationItem(viewModel: .preview)
+        )
+    }
 }
 
 #Preview {

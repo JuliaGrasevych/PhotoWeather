@@ -7,20 +7,25 @@
 
 import SwiftUI
 import CoreLocation
+import NeedleFoundation
+
+public protocol ForecastListDependency: Dependency {
+    var weatherFetcher: ForecastFetching { get }
+    var photoFetcher: PhotoStockFetching { get }
+}
 
 extension ForecastList {
-    @MainActor
     class ViewModel: ObservableObject {
-        let fetcher: ForecastFetching
-        let photoFetcher: PhotoStockFetching
+        private let weatherFetcher: ForecastFetching
+        private let photoFetcher: PhotoStockFetching
         
         @Published var locations: [Location] = []
         
         init(
-            fetcher: ForecastFetching,
+            weatherFetcher: ForecastFetching,
             photoFetcher: PhotoStockFetching
         ) {
-            self.fetcher = fetcher
+            self.weatherFetcher = weatherFetcher
             self.photoFetcher = photoFetcher
         }
         
@@ -35,6 +40,7 @@ extension ForecastList {
 }
 
 extension ForecastList.ViewModel {
+    @MainActor 
     func onAppear() {
         Task { [weak self] in
             guard let self else { return }
