@@ -1,0 +1,11 @@
+//
+//  Config.xcconfig
+//  PhotoWeather
+//
+//  Created by Julia Grasevych on 16.02.2024.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+FLICKR_API_KEY = // add your api key here
