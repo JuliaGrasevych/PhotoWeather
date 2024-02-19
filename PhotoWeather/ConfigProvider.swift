@@ -7,6 +7,8 @@
 
 import Foundation
 
+import PhotoStock
+
 public protocol ConfigProviding: FlickrAPIKeyProviding { }
 
 public enum ConfigError: Error {

@@ -1,8 +1,12 @@
 
 
+import Core
 import CoreLocation
+import Forecast
 import Foundation
 import NeedleFoundation
+import PhotoStock
+import PhotoStockDependency
 import SwiftUI
 
 // swiftlint:disable unused_declaration
@@ -110,7 +114,13 @@ extension ForecastListComponent: Registration {
     public func registerItems() {
         keyPathToName[\ForecastListDependency.weatherFetcher] = "weatherFetcher-ForecastFetching"
         keyPathToName[\ForecastListDependency.photoFetcher] = "photoFetcher-PhotoStockFetching"
-
+        localTable["view-AnyView"] = { [unowned self] in self.view as Any }
+    }
+}
+extension PhotoStockComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\PhotoStockComponentDependency.networkService] = "networkService-NetworkServiceProtocol"
+        keyPathToName[\PhotoStockComponentDependency.apiKeyProvider] = "apiKeyProvider-FlickrAPIKeyProviding"
     }
 }
 extension RootComponent: Registration {
@@ -119,12 +129,6 @@ extension RootComponent: Registration {
         localTable["networkService-NetworkServiceProtocol"] = { [unowned self] in self.networkService as Any }
         localTable["apiKeyProvider-FlickrAPIKeyProviding"] = { [unowned self] in self.apiKeyProvider as Any }
         localTable["photoFetcher-PhotoStockFetching"] = { [unowned self] in self.photoFetcher as Any }
-    }
-}
-extension PhotoStockComponent: Registration {
-    public func registerItems() {
-        keyPathToName[\PhotoStockComponentDependency.networkService] = "networkService-NetworkServiceProtocol"
-        keyPathToName[\PhotoStockComponentDependency.apiKeyProvider] = "apiKeyProvider-FlickrAPIKeyProviding"
     }
 }
 
@@ -146,8 +150,8 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->RootComponent->ForecastComponent", factory86564a6fad5198b6d013b3a8f24c1d289f2c0f2e)
     registerProviderFactory("^->RootComponent->ForecastComponent->ForecastListComponent->ForecastLocationItemComponent", factory7b5a985098510ca0e8780ddef189803d21e8f8d8)
     registerProviderFactory("^->RootComponent->ForecastComponent->ForecastListComponent", factoryce735b6ba16cf6375ceca64e87904111336e27d0)
-    registerProviderFactory("^->RootComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->RootComponent->PhotoStockComponent", factory18332b7f0337893519d5b3a8f24c1d289f2c0f2e)
+    registerProviderFactory("^->RootComponent", factoryEmptyDependencyProvider)
 }
 #endif
 

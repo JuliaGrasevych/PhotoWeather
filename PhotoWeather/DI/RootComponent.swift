@@ -8,6 +8,11 @@
 import Foundation
 import SwiftUI
 import NeedleFoundation
+import Core
+
+import PhotoStock
+import PhotoStockDependency
+import Forecast
 
 final class RootComponent: BootstrapComponent {
     // MARK: - Child Dependencies
