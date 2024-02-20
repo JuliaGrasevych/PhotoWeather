@@ -10,8 +10,8 @@ import SwiftUI
 import NeedleFoundation
 
 public class ForecastListComponent: Component<ForecastListDependency> {
-    var viewModel: ForecastList.ViewModel {
-        ForecastList.ViewModel(
+    var viewModel: ForecastListView.ViewModel {
+        ForecastListView.ViewModel(
             weatherFetcher: dependency.weatherFetcher,
             photoFetcher: dependency.photoFetcher
         )
@@ -19,14 +19,19 @@ public class ForecastListComponent: Component<ForecastListDependency> {
     
     public var view: AnyView {
         AnyView(
-            ForecastList(
+            ForecastListView(
                 viewModel: self.viewModel,
-                itemBuilder: itemComponent
+                itemBuilder: itemComponent,
+                addLocationBuilder: addLocationComponent
             )
         )
     }
     
     var itemComponent: ForecastLocationItemComponent {
         ForecastLocationItemComponent(parent: self)
+    }
+    
+    var addLocationComponent: ForecastAddLocationComponent {
+        ForecastAddLocationComponent(parent: self)
     }
 }

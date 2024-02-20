@@ -14,8 +14,8 @@ public protocol ForecastLocationItemBuilder {
 }
 
 public class ForecastLocationItemComponent: Component<ForecastLocationItemDependency>, ForecastLocationItemBuilder {
-    func viewModel(location: Location) -> ForecastLocationItem.ViewModel {
-        ForecastLocationItem.ViewModel(
+    func viewModel(location: Location) -> ForecastLocationItemView.ViewModel {
+        ForecastLocationItemView.ViewModel(
             location: location,
             weatherFetcher: dependency.weatherFetcher,
             photoFetcher: dependency.photoFetcher
@@ -24,7 +24,7 @@ public class ForecastLocationItemComponent: Component<ForecastLocationItemDepend
     
     public func view(location: Location) -> AnyView {
         AnyView(
-            ForecastLocationItem(viewModel: self.viewModel(location: location))
+            ForecastLocationItemView(viewModel: self.viewModel(location: location))
         )
     }
 }

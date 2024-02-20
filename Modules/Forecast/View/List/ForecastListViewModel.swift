@@ -16,11 +16,12 @@ public protocol ForecastListDependency: Dependency {
     var photoFetcher: PhotoStockFetching { get }
 }
 
-extension ForecastList {
+extension ForecastListView {
     class ViewModel: ObservableObject {
         private let weatherFetcher: ForecastFetching
         private let photoFetcher: PhotoStockFetching
         
+        @MainActor
         @Published var locations: [Location] = []
         
         init(
@@ -31,22 +32,21 @@ extension ForecastList {
             self.photoFetcher = photoFetcher
         }
         
-        private nonisolated func fetch() async -> [Location] {
+        private func fetch() async -> [Location] {
             guard let locations = try? await CLGeocoder().geocodeAddressString("Kyiv, Ukraine"),
                   let loc = locations.first else {
                 return []
             }
-            return [Location(name: "Kyiv", location: loc)]
+            return [Location(name: "loc.name", location: loc)]
         }
     }
 }
 
-extension ForecastList.ViewModel {
+extension ForecastListView.ViewModel {
     @MainActor 
     func onAppear() {
-        Task { [weak self] in
-            guard let self else { return }
-            self.locations = await self.fetch()
+        Task {
+            locations = await fetch()
         }
     }
 }

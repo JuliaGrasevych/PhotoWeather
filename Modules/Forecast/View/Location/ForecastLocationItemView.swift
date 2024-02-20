@@ -1,5 +1,5 @@
 //
-//  ForecastLocationItem.swift
+//  ForecastLocationItemView.swift
 //  Forecast
 //
 //  Created by Julia Grasevych on 07.02.2024.
@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreLocation
 
-struct ForecastLocationItem: View {
+struct ForecastLocationItemView: View {
     @StateObject private var viewModel: ViewModel
     @State private var showForecast = false
     
@@ -190,13 +190,13 @@ struct ForecastLocationItem: View {
     }
 }
 
-extension Font {
+fileprivate extension Font {
     static func weatherIconFont(size: CGFloat) -> Font {
         .custom("weather-icons-lite", size: size)
     }
 }
 
-extension View {
+fileprivate extension View {
     func defaultContentShadow() -> some View {
         self.shadow(color: .white, radius: 10)
     }
@@ -219,8 +219,8 @@ fileprivate struct PreviewLocation: ForecastLocation {
     var timeZoneIdentifier: String? = nil
 }
 
-extension ForecastLocationItem.ViewModel {
-    static let preview: ForecastLocationItem.ViewModel = ForecastLocationItem.ViewModel(
+extension ForecastLocationItemView.ViewModel {
+    static let preview: ForecastLocationItemView.ViewModel = ForecastLocationItemView.ViewModel(
         location: Location(
             name: "Kyiv",
             location: PreviewLocation()
@@ -233,12 +233,12 @@ extension ForecastLocationItem.ViewModel {
 struct ForecastLocationItemBuilderPreview: ForecastLocationItemBuilder {
     func view(location: Location) -> AnyView {
         AnyView(
-            ForecastLocationItem(viewModel: .preview)
+            ForecastLocationItemView(viewModel: .preview)
         )
     }
 }
 
 #Preview {
-    ForecastLocationItem(viewModel: .preview)
+    ForecastLocationItemView(viewModel: .preview)
 }
 
