@@ -8,7 +8,7 @@
 import Foundation
 import Core
 
-public protocol ForecastLocation: LocationProtocol {
+public protocol ForecastLocation: LocationProtocol, Sendable {
     var timeZoneIdentifier: String? { get }
 }
 

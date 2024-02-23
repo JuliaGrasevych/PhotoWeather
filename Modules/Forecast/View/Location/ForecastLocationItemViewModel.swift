@@ -15,11 +15,7 @@ import PhotoStockDependency
 public protocol ForecastLocationItemDependency: Dependency {
     var weatherFetcher: ForecastFetching { get }
     var photoFetcher: PhotoStockFetching { get }
-}
-
-public struct Location {
-    let name: String
-    let location: ForecastLocation
+    var locationManager: LocationManaging { get }
 }
 
 extension ForecastLocationItemView {
@@ -47,8 +43,10 @@ extension ForecastLocationItemView {
     class ViewModel: ObservableObject {
         private let weatherFetcher: ForecastFetching
         private let photoFetcher: PhotoStockFetching
-        private let location: Location
+        private let locationManager: LocationManaging
+        private let location: NamedLocation
         
+        // TODO: wrap this in 1 struct
         private(set) lazy var locationName = location.name
         @MainActor
         @Published private(set) var isFetching = false
@@ -64,13 +62,16 @@ extension ForecastLocationItemView {
         @Published private(set) var imageURL: URL? = nil
         
         init(
-            location: Location,
+            location: NamedLocation,
             weatherFetcher: ForecastFetching,
-            photoFetcher: PhotoStockFetching
+            photoFetcher: PhotoStockFetching,
+            locationManager: LocationManaging
         ) {
             self.weatherFetcher = weatherFetcher
             self.photoFetcher = photoFetcher
+            self.locationManager = locationManager
             self.location = location
+            onLoad()
         }
         
         private func fetchForecast(for location: ForecastLocation) async -> ForecastItem? {
@@ -101,9 +102,8 @@ extension ForecastLocationItemView {
 }
 
 extension ForecastLocationItemView.ViewModel {
-    @MainActor
-    func onAppear() {
-        Task {
+    func onLoad() {
+        Task { @MainActor in
             isFetching = true
             let forecast = await fetchForecast(for: location.location)
             currentWeather = ForecastLocationItemView.CurrentWeather(model: forecast)
@@ -115,6 +115,12 @@ extension ForecastLocationItemView.ViewModel {
                 forecast: forecast
             )
             isFetching = false
+        }
+    }
+    
+    func deleteLocation() {
+        Task {
+            await locationManager.remove(location: location.id)
         }
     }
     

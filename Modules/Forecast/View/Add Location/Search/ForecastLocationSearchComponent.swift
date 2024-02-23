@@ -10,7 +10,7 @@ import SwiftUI
 import NeedleFoundation
 
 public protocol ForecastLocationSearchViewBuilder {
-    var view: AnyView { get }
+    func view(locationBinding: Binding<NamedLocation?>) -> AnyView
 }
 
 public class ForecastLocationSearchComponent: Component<ForecastLocationSearchDependency>, ForecastLocationSearchViewBuilder {
@@ -18,9 +18,12 @@ public class ForecastLocationSearchComponent: Component<ForecastLocationSearchDe
         ForecastLocationSearchView.ViewModel(locationFinder: dependency.locationFinder)
     }
     
-    public var view: AnyView {
+    public func view(locationBinding: Binding<NamedLocation?>) -> AnyView {
         AnyView(
-            ForecastLocationSearchView(viewModel: self.viewModel)
+            ForecastLocationSearchView(
+                viewModel: self.viewModel,
+                location: locationBinding
+            )
         )
     }
 }

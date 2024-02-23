@@ -10,13 +10,29 @@ import SwiftUI
 import NeedleFoundation
 
 public protocol ForecastAddLocationDependency: Dependency {
-    
+    var locationStorage: LocationStoring { get }
 }
 
 extension ForecastAddLocationView {
     class ViewModel: ObservableObject {
-        func addLocation() {
-            
+        private let locationStorage: LocationStoring
+        
+        @MainActor
+        @Published var location: NamedLocation? {
+            didSet {
+                guard let location else { return }
+                add(location: location)
+            }
+        }
+        
+        init(locationStorage: LocationStoring) {
+            self.locationStorage = locationStorage
+        }
+        
+        func add(location: NamedLocation) {
+            Task {
+                await locationStorage.add(location: location)
+            }
         }
     }
 }

@@ -12,46 +12,32 @@ import NeedleFoundation
 import PhotoStockDependency
 
 public protocol ForecastListDependency: Dependency {
-    var weatherFetcher: ForecastFetching { get }
-    var photoFetcher: PhotoStockFetching { get }
+    var locationStorage: LocationStoring { get }
 }
 
 extension ForecastListView {
     class ViewModel: ObservableObject {
-        private let weatherFetcher: ForecastFetching
-        private let photoFetcher: PhotoStockFetching
+        private let locationStorage: LocationStoring
         
         @MainActor
-        @Published var locations: [Location] = []
+        @Published var locations: [NamedLocation] = []
         
         init(
-            weatherFetcher: ForecastFetching,
-            photoFetcher: PhotoStockFetching
+            locationStorage: LocationStoring
         ) {
-            self.weatherFetcher = weatherFetcher
-            self.photoFetcher = photoFetcher
-        }
-        
-        private func fetch() async -> [Location] {
-            guard let locations = try? await CLGeocoder().geocodeAddressString("Kyiv, Ukraine"),
-                  let loc = locations.first else {
-                return []
+            self.locationStorage = locationStorage
+            
+            Task { @MainActor in
+                let locations = await locationStorage.locations()
+                for await changes in locations {
+                    self.locations = changes
+                }
             }
-            return [Location(name: "loc.name", location: loc)]
         }
     }
 }
 
-extension ForecastListView.ViewModel {
-    @MainActor 
-    func onAppear() {
-        Task {
-            locations = await fetch()
-        }
-    }
-}
-
-extension CLPlacemark: ForecastLocation {
+extension CLPlacemark: ForecastLocation, @unchecked Sendable {
     public var latitude: Float {
         Float(self.location?.coordinate.latitude ?? 0)
     }

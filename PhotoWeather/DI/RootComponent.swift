@@ -15,6 +15,8 @@ import PhotoStockDependency
 import Forecast
 
 final class RootComponent: BootstrapComponent {
+    let locationStore = LocationStorage()
+    
     // MARK: - Child Dependencies
     public var networkService: NetworkServiceProtocol {
         shared {
@@ -31,6 +33,18 @@ final class RootComponent: BootstrapComponent {
     public var photoFetcher: PhotoStockFetching {
         shared {
             photoStockComponent.fetcher
+        }
+    }
+    
+    public var locationStorage: LocationStoring {
+        shared {
+            locationStore
+        }
+    }
+    
+    public var locationManager: LocationManaging {
+        shared {
+            locationStore
         }
     }
     

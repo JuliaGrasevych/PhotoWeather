@@ -12,27 +12,17 @@ struct ForecastLocationSearchView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject private var viewModel: ViewModel
     
-    init(viewModel: @escaping @autoclosure () -> ViewModel) {
+    @Binding var location: NamedLocation?
+    
+    init(viewModel: @escaping @autoclosure () -> ViewModel, location: Binding<NamedLocation?>) {
         _viewModel = .init(wrappedValue: viewModel())
+        _location = location
     }
     
     var body: some View {
         NavigationStack {
             VStack {
-//                TextField(
-//                    "Search query",
-//                    text: $viewModel.text,
-//                    prompt: Text("Search")
-//                )
-//                
-//                .padding(8)
-//                .multilineTextAlignment(.center)
-//                .background(.gray.opacity(0.25))
-//                .clipShape(RoundedRectangle(cornerRadius: 10))
-//                .padding()
-                
-//                Spacer()
-                List($viewModel.searchResults, id: \.description) { $item in
+                List($viewModel.searchResults, id: \.self, selection: $viewModel.selection) { $item in
                     VStack(alignment: .leading) {
                         Text(item)
                     }
@@ -47,11 +37,24 @@ struct ForecastLocationSearchView: View {
                     }
                 }
             }
+            .foregroundColor(.black)
+            .onReceive(viewModel.$dismiss) { shouldDismiss in
+                guard shouldDismiss else { return }
+                dismiss()
+            }
+            .onReceive(viewModel.$location) { location in
+                guard let location else { return }
+                self.location = location
+            }
         }
     }
 }
 
 fileprivate struct LocationSearchingPreview: LocationSearching {
+    func location(for query: String) async throws -> NamedLocation {
+        throw NSError(domain: "", code: 0)
+    }
+    
     func search(query: String) async throws -> [String] {
         return ["Kyiv"]
     }
@@ -64,12 +67,14 @@ extension ForecastLocationSearchView.ViewModel {
 struct ForecastLocationSearchView_Preview: PreviewProvider {
     @Environment(\.dismiss) var dismiss
     static var previews: some View {
-        ForecastLocationSearchView(viewModel: .preview).body
+        ForecastLocationSearchView(viewModel: .preview, location: .constant(nil)).body
     }
 }
 
 struct ForecastLocationSearchViewBuilderPreview: ForecastLocationSearchViewBuilder {
-    let view: AnyView = AnyView(
-            ForecastLocationSearchView(viewModel: .preview)
+    func view(locationBinding: Binding<NamedLocation?>) -> AnyView {
+        AnyView(
+            ForecastLocationSearchView(viewModel: .preview, location: .constant(nil))
         )
+    }
 }

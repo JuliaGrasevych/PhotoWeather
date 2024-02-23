@@ -10,7 +10,8 @@ import CoreLocation
 
 struct ForecastLocationItemView: View {
     @StateObject private var viewModel: ViewModel
-    @State private var showForecast = false
+    @State private var showingForecast = false
+    @State private var showingDeleteAlert = false
     
     init(viewModel: @escaping @autoclosure () -> ViewModel) {
         _viewModel = .init(wrappedValue: viewModel())
@@ -29,6 +30,7 @@ struct ForecastLocationItemView: View {
                             .tint(.white)
                     })
                 }
+                .contentShape(Rectangle())
                 .clipped()
             
             VStack {
@@ -42,8 +44,11 @@ struct ForecastLocationItemView: View {
             )
         }
         .background(.black)
-        .onAppear {
-            viewModel.onAppear()
+        .alert("Delete current location?", isPresented: $showingDeleteAlert) {
+            Button("Delete", role: .destructive) {
+                viewModel.deleteLocation()
+            }
+            Button("Cancel", role: .cancel) { }
         }
     }
     
@@ -73,7 +78,7 @@ struct ForecastLocationItemView: View {
             VStack(spacing: 20) {
                 todaysForecastTopView()
                 
-                if showForecast {
+                if showingForecast {
                     ScrollView(.vertical) {
                         VStack(alignment: .leading) {
                             hourlyWeatherView(forecast: viewModel.hourlyForecast)
@@ -83,7 +88,7 @@ struct ForecastLocationItemView: View {
                     .transition(.push(from: .bottom))
                 }
                 Button("Delete location", role: .destructive) {
-                    
+                    showingDeleteAlert = true
                 }
                 .buttonStyle(.borderless)
                 .shadow(color: .red, radius: 20)
@@ -100,7 +105,7 @@ struct ForecastLocationItemView: View {
     private func todaysForecastTopView() -> some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading) {
-                Text(showForecast ? "Today" : "Forecast")
+                Text(showingForecast ? "Today" : "Forecast")
                     .font(.headline)
                 HStack(spacing: 16) {
                     Self.dailyTemperatureView(value: viewModel.todayForecast.temperatureMin, isMax: false)
@@ -111,10 +116,10 @@ struct ForecastLocationItemView: View {
             Spacer()
             Button {
                 withAnimation {
-                    showForecast.toggle()
+                    showingForecast.toggle()
                 }
             } label: {
-                Image(systemName: showForecast ? "arrow.down.circle.fill" : "arrow.up.circle.fill")
+                Image(systemName: showingForecast ? "arrow.down.circle.fill" : "arrow.up.circle.fill")
             }
             .font(.title)
         }
@@ -221,17 +226,19 @@ fileprivate struct PreviewLocation: ForecastLocation {
 
 extension ForecastLocationItemView.ViewModel {
     static let preview: ForecastLocationItemView.ViewModel = ForecastLocationItemView.ViewModel(
-        location: Location(
+        location: NamedLocation(
+            id: "1",
             name: "Kyiv",
             location: PreviewLocation()
         ),
         weatherFetcher: ForecastListPreviewFetcher(),
-        photoFetcher: PhotoStockPreviewFetcher()
+        photoFetcher: PhotoStockPreviewFetcher(),
+        locationManager: LocationStoragePreview()
     )
 }
 
 struct ForecastLocationItemBuilderPreview: ForecastLocationItemBuilder {
-    func view(location: Location) -> AnyView {
+    func view(location: NamedLocation) -> AnyView {
         AnyView(
             ForecastLocationItemView(viewModel: .preview)
         )

@@ -58,15 +58,17 @@ private func factory608345bf27adcb4b08a7675656a41af65a05573c(_ component: Needle
     return ForecastLocationSearchDependencyd0fd584696711db3e3a6Provider(forecastAddLocationComponent: parent1(component) as! ForecastAddLocationComponent)
 }
 private class ForecastAddLocationDependency842a162c523bcbb0bb93Provider: ForecastAddLocationDependency {
-
-
-    init() {
-
+    var locationStorage: LocationStoring {
+        return rootComponent.locationStorage
+    }
+    private let rootComponent: RootComponent
+    init(rootComponent: RootComponent) {
+        self.rootComponent = rootComponent
     }
 }
 /// ^->RootComponent->ForecastComponent->ForecastListComponent->ForecastAddLocationComponent
-private func factory2cea3293fe90ce11468ee3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return ForecastAddLocationDependency842a162c523bcbb0bb93Provider()
+private func factory2cea3293fe90ce11468e42f5655bf2362a8495f6(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ForecastAddLocationDependency842a162c523bcbb0bb93Provider(rootComponent: parent3(component) as! RootComponent)
 }
 private class ForecastLocationItemDependency82611c29f5e1ee9b87d6Provider: ForecastLocationItemDependency {
     var weatherFetcher: ForecastFetching {
@@ -74,6 +76,9 @@ private class ForecastLocationItemDependency82611c29f5e1ee9b87d6Provider: Foreca
     }
     var photoFetcher: PhotoStockFetching {
         return rootComponent.photoFetcher
+    }
+    var locationManager: LocationManaging {
+        return rootComponent.locationManager
     }
     private let forecastComponent: ForecastComponent
     private let rootComponent: RootComponent
@@ -87,22 +92,17 @@ private func factory7b5a985098510ca0e8780ddef189803d21e8f8d8(_ component: Needle
     return ForecastLocationItemDependency82611c29f5e1ee9b87d6Provider(forecastComponent: parent2(component) as! ForecastComponent, rootComponent: parent3(component) as! RootComponent)
 }
 private class ForecastListDependency5440bb37a7e976e93088Provider: ForecastListDependency {
-    var weatherFetcher: ForecastFetching {
-        return forecastComponent.weatherFetcher
+    var locationStorage: LocationStoring {
+        return rootComponent.locationStorage
     }
-    var photoFetcher: PhotoStockFetching {
-        return rootComponent.photoFetcher
-    }
-    private let forecastComponent: ForecastComponent
     private let rootComponent: RootComponent
-    init(forecastComponent: ForecastComponent, rootComponent: RootComponent) {
-        self.forecastComponent = forecastComponent
+    init(rootComponent: RootComponent) {
         self.rootComponent = rootComponent
     }
 }
 /// ^->RootComponent->ForecastComponent->ForecastListComponent
-private func factoryce735b6ba16cf6375ceca64e87904111336e27d0(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return ForecastListDependency5440bb37a7e976e93088Provider(forecastComponent: parent1(component) as! ForecastComponent, rootComponent: parent2(component) as! RootComponent)
+private func factoryce735b6ba16cf6375ceca9403e3301bb54f80df0(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ForecastListDependency5440bb37a7e976e93088Provider(rootComponent: parent2(component) as! RootComponent)
 }
 private class PhotoStockComponentDependency4c4ae33c040d2d8a8bfcProvider: PhotoStockComponentDependency {
     var networkService: NetworkServiceProtocol {
@@ -136,7 +136,7 @@ extension ForecastLocationSearchComponent: Registration {
 }
 extension ForecastAddLocationComponent: Registration {
     public func registerItems() {
-
+        keyPathToName[\ForecastAddLocationDependency.locationStorage] = "locationStorage-LocationStoring"
         localTable["view-AnyView"] = { [unowned self] in self.view as Any }
         localTable["locationFinder-LocationSearching"] = { [unowned self] in self.locationFinder as Any }
     }
@@ -145,12 +145,12 @@ extension ForecastLocationItemComponent: Registration {
     public func registerItems() {
         keyPathToName[\ForecastLocationItemDependency.weatherFetcher] = "weatherFetcher-ForecastFetching"
         keyPathToName[\ForecastLocationItemDependency.photoFetcher] = "photoFetcher-PhotoStockFetching"
+        keyPathToName[\ForecastLocationItemDependency.locationManager] = "locationManager-LocationManaging"
     }
 }
 extension ForecastListComponent: Registration {
     public func registerItems() {
-        keyPathToName[\ForecastListDependency.weatherFetcher] = "weatherFetcher-ForecastFetching"
-        keyPathToName[\ForecastListDependency.photoFetcher] = "photoFetcher-PhotoStockFetching"
+        keyPathToName[\ForecastListDependency.locationStorage] = "locationStorage-LocationStoring"
         localTable["view-AnyView"] = { [unowned self] in self.view as Any }
     }
 }
@@ -166,6 +166,8 @@ extension RootComponent: Registration {
         localTable["networkService-NetworkServiceProtocol"] = { [unowned self] in self.networkService as Any }
         localTable["apiKeyProvider-FlickrAPIKeyProviding"] = { [unowned self] in self.apiKeyProvider as Any }
         localTable["photoFetcher-PhotoStockFetching"] = { [unowned self] in self.photoFetcher as Any }
+        localTable["locationStorage-LocationStoring"] = { [unowned self] in self.locationStorage as Any }
+        localTable["locationManager-LocationManaging"] = { [unowned self] in self.locationManager as Any }
     }
 }
 
@@ -186,9 +188,9 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
 @inline(never) private func register1() {
     registerProviderFactory("^->RootComponent->ForecastComponent", factory86564a6fad5198b6d013b3a8f24c1d289f2c0f2e)
     registerProviderFactory("^->RootComponent->ForecastComponent->ForecastListComponent->ForecastAddLocationComponent->ForecastLocationSearchComponent", factory608345bf27adcb4b08a7675656a41af65a05573c)
-    registerProviderFactory("^->RootComponent->ForecastComponent->ForecastListComponent->ForecastAddLocationComponent", factory2cea3293fe90ce11468ee3b0c44298fc1c149afb)
+    registerProviderFactory("^->RootComponent->ForecastComponent->ForecastListComponent->ForecastAddLocationComponent", factory2cea3293fe90ce11468e42f5655bf2362a8495f6)
     registerProviderFactory("^->RootComponent->ForecastComponent->ForecastListComponent->ForecastLocationItemComponent", factory7b5a985098510ca0e8780ddef189803d21e8f8d8)
-    registerProviderFactory("^->RootComponent->ForecastComponent->ForecastListComponent", factoryce735b6ba16cf6375ceca64e87904111336e27d0)
+    registerProviderFactory("^->RootComponent->ForecastComponent->ForecastListComponent", factoryce735b6ba16cf6375ceca9403e3301bb54f80df0)
     registerProviderFactory("^->RootComponent->PhotoStockComponent", factory18332b7f0337893519d5b3a8f24c1d289f2c0f2e)
     registerProviderFactory("^->RootComponent", factoryEmptyDependencyProvider)
 }

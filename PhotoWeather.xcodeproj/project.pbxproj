@@ -73,6 +73,9 @@
 		A3BE116D2B8501430091ECC0 /* LocationFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BE116C2B8501430091ECC0 /* LocationFinder.swift */; };
 		A3BE116F2B8501980091ECC0 /* ForecastLocationSearchComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BE116E2B8501980091ECC0 /* ForecastLocationSearchComponent.swift */; };
 		A3BE11712B85103D0091ECC0 /* ForecastAddLocationComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BE11702B85103D0091ECC0 /* ForecastAddLocationComponent.swift */; };
+		A3BE11732B851A4D0091ECC0 /* NamedLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BE11722B851A4D0091ECC0 /* NamedLocation.swift */; };
+		A3BE11752B87B6440091ECC0 /* LocationStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BE11742B87B6440091ECC0 /* LocationStorage.swift */; };
+		A3BE11782B88EC7B0091ECC0 /* LocationStoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BE11762B88EC760091ECC0 /* LocationStoring.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -262,6 +265,9 @@
 		A3BE116C2B8501430091ECC0 /* LocationFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationFinder.swift; sourceTree = "<group>"; };
 		A3BE116E2B8501980091ECC0 /* ForecastLocationSearchComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLocationSearchComponent.swift; sourceTree = "<group>"; };
 		A3BE11702B85103D0091ECC0 /* ForecastAddLocationComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastAddLocationComponent.swift; sourceTree = "<group>"; };
+		A3BE11722B851A4D0091ECC0 /* NamedLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedLocation.swift; sourceTree = "<group>"; };
+		A3BE11742B87B6440091ECC0 /* LocationStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationStorage.swift; sourceTree = "<group>"; };
+		A3BE11762B88EC760091ECC0 /* LocationStoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationStoring.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -406,6 +412,7 @@
 				A3A83E622B73E119000D0FB7 /* View */,
 				A3A83E632B73E127000D0FB7 /* Model */,
 				A374CA2A2B7FC96E0063F7C3 /* ForecastComponent.swift */,
+				A3BE11762B88EC760091ECC0 /* LocationStoring.swift */,
 				A3BE11632B83A2BE0091ECC0 /* Assets.xcassets */,
 			);
 			path = Forecast;
@@ -508,6 +515,7 @@
 			isa = PBXGroup;
 			children = (
 				A374CA242B7FC20F0063F7C3 /* RootComponent.swift */,
+				A3BE11742B87B6440091ECC0 /* LocationStorage.swift */,
 				A374CA222B7FC1F70063F7C3 /* NetworkService.swift */,
 				A352AE532B7E75B50013FEAF /* NeedleGenerated.swift */,
 			);
@@ -528,6 +536,7 @@
 			isa = PBXGroup;
 			children = (
 				A3A83E522B71547E000D0FB7 /* ForecastFetcher.swift */,
+				A3BE11722B851A4D0091ECC0 /* NamedLocation.swift */,
 				A352AE3F2B7A714C0013FEAF /* ForecastLocation.swift */,
 				A3A83E6C2B7516EF000D0FB7 /* WeatherCode+WMO.swift */,
 				A3A83E502B714FE9000D0FB7 /* ForecastItem.swift */,
@@ -927,6 +936,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3BE11732B851A4D0091ECC0 /* NamedLocation.swift in Sources */,
 				A3BE116D2B8501430091ECC0 /* LocationFinder.swift in Sources */,
 				A3BE11682B83ACA30091ECC0 /* ForecastLocationSearchView.swift in Sources */,
 				A3BE11622B83A15F0091ECC0 /* ForecastAddLocationView.swift in Sources */,
@@ -945,6 +955,7 @@
 				A3BE116B2B83B31A0091ECC0 /* ForecastLocationSearchViewModel.swift in Sources */,
 				A374CAF42B8397B40063F7C3 /* WeatherCode+WMO.swift in Sources */,
 				A374CAF82B8397B40063F7C3 /* ForecastListViewModel.swift in Sources */,
+				A3BE11782B88EC7B0091ECC0 /* LocationStoring.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -957,6 +968,7 @@
 				A374CA252B7FC20F0063F7C3 /* RootComponent.swift in Sources */,
 				A352AE562B7E76FF0013FEAF /* AppDelegate.swift in Sources */,
 				A352AE542B7E75B50013FEAF /* NeedleGenerated.swift in Sources */,
+				A3BE11752B87B6440091ECC0 /* LocationStorage.swift in Sources */,
 				A3A83E202B714420000D0FB7 /* PhotoWeatherApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

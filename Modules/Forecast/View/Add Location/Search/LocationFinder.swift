@@ -10,6 +10,7 @@ import MapKit
 
 public protocol LocationSearching {
     func search(query: String) async throws -> [String]
+    func location(for query: String) async throws -> NamedLocation
 }
 
 @globalActor
@@ -19,6 +20,7 @@ final class LocationFinder: NSObject, LocationSearching {
     
     enum Error: Swift.Error {
         case cancelled
+        case locationNotFound
     }
     
     private let completer = MKLocalSearchCompleter()
@@ -39,27 +41,42 @@ final class LocationFinder: NSObject, LocationSearching {
         }
         return try await withCheckedThrowingContinuation { continuation in
             resultContinuation = continuation
-            DispatchQueue.main.async {
+            Task { @MainActor in
                 self.completer.resultTypes = .address
                 self.completer.queryFragment = query
             }
         }
+    }
+    
+    func location(for query: String) async throws -> NamedLocation {
+        let searchRequest = MKLocalSearch.Request()
+        searchRequest.naturalLanguageQuery = query
+        searchRequest.resultTypes = .address
+        let search = MKLocalSearch(request: searchRequest)
+        guard let result = try await search.start()
+            .mapItems
+            .first
+            .map({ item in
+                NamedLocation(id: UUID().uuidString, name: item.name ?? "N/A", location: item.placemark)
+            })
+        else {
+            throw Error.locationNotFound
+        }
+        return result
     }
 }
 
 extension LocationFinder: MKLocalSearchCompleterDelegate {
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         let searchResults = completer.results.map { item in
-            return item.title + " " + item.subtitle
+            return item.title + ", " + item.subtitle
         }
-        let continuation = resultContinuation
+        resultContinuation?.resume(returning: searchResults)
         resultContinuation = nil
-        continuation?.resume(returning: searchResults)
     }
     
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Swift.Error) {
-        let continuation = resultContinuation
+        resultContinuation?.resume(throwing: error)
         resultContinuation = nil
-        continuation?.resume(throwing: error)
     }
 }

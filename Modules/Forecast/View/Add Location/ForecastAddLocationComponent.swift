@@ -15,7 +15,7 @@ public protocol ForecastAddLocationViewBuilder {
 
 public class ForecastAddLocationComponent: Component<ForecastAddLocationDependency>, ForecastAddLocationViewBuilder {
     var viewModel: ForecastAddLocationView.ViewModel {
-        ForecastAddLocationView.ViewModel()
+        ForecastAddLocationView.ViewModel(locationStorage: dependency.locationStorage)
     }
     
     public var view: AnyView {

@@ -51,9 +51,6 @@ struct ForecastListView: View {
         .background(.black)
         .scrollIndicators(.hidden)
         .scrollTargetBehavior(.paging)
-        .onAppear {
-            viewModel.onAppear()
-        }
     }
     
     private static func topGradient() -> some View {
@@ -108,10 +105,18 @@ struct PhotoStockPreviewFetcher: PhotoStockFetching {
     }
 }
 
+struct LocationStoragePreview: LocationStoring, LocationManaging {
+    func locations() async -> AsyncStream<[NamedLocation]> {
+        AsyncStream { _ in }
+    }
+    func add(location _: NamedLocation) { }
+    func addLocationsObserver(_ observer: ([NamedLocation]) -> ()) { }
+    func remove(location id: NamedLocation.ID) { }
+}
+
 extension ForecastListView.ViewModel {
     static let preview: ForecastListView.ViewModel = ForecastListView.ViewModel(
-        weatherFetcher: ForecastListPreviewFetcher(),
-        photoFetcher: PhotoStockPreviewFetcher()
+        locationStorage: LocationStoragePreview()
     )
 }
 

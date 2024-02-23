@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 import NeedleFoundation
 
 public protocol ForecastLocationSearchDependency: Dependency {
@@ -15,9 +16,20 @@ public protocol ForecastLocationSearchDependency: Dependency {
 
 extension ForecastLocationSearchView {
     class ViewModel: ObservableObject {
+        @MainActor
         @Published var text: String = ""
         @MainActor
         @Published var searchResults: [String] = []
+        @MainActor
+        @Published var selection: String? {
+            didSet {
+                handleSelection()
+            }
+        }
+        @MainActor
+        @Published var dismiss: Bool = false
+        @MainActor
+        @Published var location: NamedLocation?
         
         private let locationFinder: LocationSearching
         private var subscriptions: [AnyCancellable] = []
@@ -33,21 +45,26 @@ extension ForecastLocationSearchView {
                 .removeDuplicates()
                 .sink { [weak self] output in
                     guard let self else { return }
-                    Task {
-                        await self.search(query: output)
-                    }
+                    self.search(query: output)
                 }
                 .store(in: &subscriptions)
         }
         
-        @MainActor
         private func search(query: String) {
-            Task {
+            Task { @MainActor in
                 do {
                     searchResults = try await locationFinder.search(query: query)
                 } catch {
                     searchResults = []
                 }
+            }
+        }
+        
+        private func handleSelection() {
+            Task { @MainActor in
+                guard let selection, !selection.isEmpty else { return }
+                location = try await locationFinder.location(for: selection)
+                dismiss = true
             }
         }
     }

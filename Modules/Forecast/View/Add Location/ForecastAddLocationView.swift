@@ -33,7 +33,7 @@ struct ForecastAddLocationView: View {
                 }
                 .font(.largeTitle)
                 .sheet(isPresented: $showingSearch) {
-                    searchBuilder.view
+                    searchBuilder.view(locationBinding: $viewModel.location)
                 }
             }
             .foregroundColor(.black)
@@ -55,7 +55,7 @@ struct ForecastAddLocationView: View {
 
 /// Preview
 extension ForecastAddLocationView.ViewModel {
-    static let preview: ForecastAddLocationView.ViewModel = ForecastAddLocationView.ViewModel()
+    static let preview: ForecastAddLocationView.ViewModel = ForecastAddLocationView.ViewModel(locationStorage: LocationStoragePreview())
 }
 
 struct ForecastAddLocationViewBuilderPreview: ForecastAddLocationViewBuilder {
