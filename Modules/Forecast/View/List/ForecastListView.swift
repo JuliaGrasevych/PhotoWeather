@@ -9,6 +9,7 @@ import SwiftUI
 import Core
 
 import PhotoStockDependency
+import ForecastDependency
 
 struct ForecastListView: View {
     @StateObject private var viewModel: ViewModel
@@ -94,7 +95,7 @@ fileprivate extension View {
 
 /// Preview
 struct ForecastListPreviewFetcher: ForecastFetching {
-    func forecast(for location: ForecastLocation) async throws -> ForecastItem {
+    func forecast(for location: any ForecastLocation) async throws -> ForecastItem {
         return ForecastItem.preview
     }
 }

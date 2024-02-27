@@ -11,6 +11,7 @@ import NeedleFoundation
 import Core
 
 import PhotoStockDependency
+import ForecastDependency
 
 public protocol ForecastLocationItemDependency: Dependency {
     var weatherFetcher: ForecastFetching { get }
@@ -44,7 +45,7 @@ extension ForecastLocationItemView {
         private let weatherFetcher: ForecastFetching
         private let photoFetcher: PhotoStockFetching
         private let locationManager: LocationManaging
-        private let location: NamedLocation
+        private let location: any ForecastLocation
         
         // TODO: wrap this in 1 struct
         private(set) lazy var locationName = location.name
@@ -62,7 +63,7 @@ extension ForecastLocationItemView {
         @Published private(set) var imageURL: URL? = nil
         
         init(
-            location: NamedLocation,
+            location: any ForecastLocation,
             weatherFetcher: ForecastFetching,
             photoFetcher: PhotoStockFetching,
             locationManager: LocationManaging
@@ -74,7 +75,7 @@ extension ForecastLocationItemView {
             onLoad()
         }
         
-        private func fetchForecast(for location: ForecastLocation) async -> ForecastItem? {
+        private func fetchForecast(for location: any ForecastLocation) async -> ForecastItem? {
             do {
                 return try await self.weatherFetcher.forecast(for: location)
             } catch {
@@ -82,8 +83,9 @@ extension ForecastLocationItemView {
             }
         }
         
-        private func fetchImage(for location: ForecastLocation, forecast: ForecastItem?) async -> URL? {
+        private func fetchImage(for location: any ForecastLocation, forecast: ForecastItem?) async -> URL? {
             let tags = [
+                // TODO: use location's timezone
                 try? location.season(for: Date.now, calendar: Calendar.current).tag,
                 forecast?.current.weatherCode.description,
                 forecast.map { $0.current.isDay ? "day" : "night" }
@@ -105,13 +107,13 @@ extension ForecastLocationItemView.ViewModel {
     func onLoad() {
         Task { @MainActor in
             isFetching = true
-            let forecast = await fetchForecast(for: location.location)
+            let forecast = await fetchForecast(for: location)
             currentWeather = ForecastLocationItemView.CurrentWeather(model: forecast)
             todayForecast = Self.todayForecast(with: forecast)
             hourlyForecast = Self.hourlyForecast(with: forecast)
             dailyForecast = Self.dailyForecast(with: forecast)
             imageURL = await fetchImage(
-                for: location.location,
+                for: location,
                 forecast: forecast
             )
             isFetching = false

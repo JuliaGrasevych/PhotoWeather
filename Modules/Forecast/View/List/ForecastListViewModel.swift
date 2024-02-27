@@ -10,6 +10,7 @@ import CoreLocation
 import NeedleFoundation
 
 import PhotoStockDependency
+import ForecastDependency
 
 public protocol ForecastListDependency: Dependency {
     var locationStorage: LocationStoring { get }
@@ -34,19 +35,5 @@ extension ForecastListView {
                 }
             }
         }
-    }
-}
-
-extension CLPlacemark: ForecastLocation, @unchecked Sendable {
-    public var latitude: Float {
-        Float(self.location?.coordinate.latitude ?? 0)
-    }
-    
-    public var longitude: Float {
-        Float(self.location?.coordinate.longitude ?? 0)
-    }
-    
-    public var timeZoneIdentifier: String? {
-        self.timeZone?.identifier
     }
 }

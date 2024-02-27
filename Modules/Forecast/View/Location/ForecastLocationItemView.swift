@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreLocation
+import ForecastDependency
 
 struct ForecastLocationItemView: View {
     @StateObject private var viewModel: ViewModel
@@ -219,6 +220,8 @@ fileprivate extension View {
 
 /// Preview
 fileprivate struct PreviewLocation: ForecastLocation {
+    var id: String = UUID().uuidString
+    var name: String = "Kyiv"
     var latitude: Float = 0
     var longitude: Float = 0
     var timeZoneIdentifier: String? = nil
@@ -226,11 +229,7 @@ fileprivate struct PreviewLocation: ForecastLocation {
 
 extension ForecastLocationItemView.ViewModel {
     static let preview: ForecastLocationItemView.ViewModel = ForecastLocationItemView.ViewModel(
-        location: NamedLocation(
-            id: "1",
-            name: "Kyiv",
-            location: PreviewLocation()
-        ),
+        location: PreviewLocation(),
         weatherFetcher: ForecastListPreviewFetcher(),
         photoFetcher: PhotoStockPreviewFetcher(),
         locationManager: LocationStoragePreview()

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import ForecastDependency
 
 struct ForecastLocationSearchView: View {
     @Environment(\.dismiss) var dismiss

@@ -9,6 +9,7 @@ import Foundation
 import Combine
 import SwiftUI
 import NeedleFoundation
+import ForecastDependency
 
 public protocol ForecastLocationSearchDependency: Dependency {
     var locationFinder: LocationSearching { get }

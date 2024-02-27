@@ -4,10 +4,12 @@ import Combine
 import Core
 import CoreLocation
 import Forecast
+import ForecastDependency
 import Foundation
 import NeedleFoundation
 import PhotoStock
 import PhotoStockDependency
+import Storage
 import SwiftUI
 
 // swiftlint:disable unused_declaration
@@ -122,6 +124,11 @@ private func factory18332b7f0337893519d5b3a8f24c1d289f2c0f2e(_ component: Needle
 }
 
 #else
+extension StorageComponent: Registration {
+    public func registerItems() {
+
+    }
+}
 extension ForecastComponent: Registration {
     public func registerItems() {
         keyPathToName[\ForecastComponentDependency.networkService] = "networkService-NetworkServiceProtocol"
@@ -186,6 +193,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
 #if !NEEDLE_DYNAMIC
 
 @inline(never) private func register1() {
+    registerProviderFactory("^->RootComponent->StorageComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->RootComponent->ForecastComponent", factory86564a6fad5198b6d013b3a8f24c1d289f2c0f2e)
     registerProviderFactory("^->RootComponent->ForecastComponent->ForecastListComponent->ForecastAddLocationComponent->ForecastLocationSearchComponent", factory608345bf27adcb4b08a7675656a41af65a05573c)
     registerProviderFactory("^->RootComponent->ForecastComponent->ForecastListComponent->ForecastAddLocationComponent", factory2cea3293fe90ce11468e42f5655bf2362a8495f6)

@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import NeedleFoundation
+import ForecastDependency
 
 public protocol ForecastAddLocationDependency: Dependency {
     var locationStorage: LocationStoring { get }

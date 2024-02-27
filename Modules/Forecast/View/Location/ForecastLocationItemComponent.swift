@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import NeedleFoundation
+import ForecastDependency
 
 public protocol ForecastLocationItemBuilder {
     func view(location: NamedLocation) -> AnyView

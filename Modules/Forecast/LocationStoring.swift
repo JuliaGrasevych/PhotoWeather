@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import ForecastDependency
 
 public protocol LocationStoring {
     func add(location: NamedLocation) async

@@ -7,6 +7,7 @@
 
 import Foundation
 import MapKit
+import ForecastDependency
 
 public protocol LocationSearching {
     func search(query: String) async throws -> [String]
@@ -24,7 +25,6 @@ final class LocationFinder: NSObject, LocationSearching {
     }
     
     private let completer = MKLocalSearchCompleter()
-    
     private var resultContinuation: CheckedContinuation<[String], Swift.Error>?
     
     override init() {
@@ -57,7 +57,11 @@ final class LocationFinder: NSObject, LocationSearching {
             .mapItems
             .first
             .map({ item in
-                NamedLocation(id: UUID().uuidString, name: item.name ?? "N/A", location: item.placemark)
+                NamedLocation(
+                    id: UUID().uuidString,
+                    name: item.name ?? "N/A",
+                    placemark: item.placemark
+                )
             })
         else {
             throw Error.locationNotFound

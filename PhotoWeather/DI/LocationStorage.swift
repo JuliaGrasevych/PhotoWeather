@@ -7,8 +7,10 @@
 
 import Foundation
 import Forecast
+import ForecastDependency
 
 actor LocationStorage: LocationStoring, LocationManaging {
+    private let externalStore: ExternalLocationStore
     private var continuation: AsyncStream<[NamedLocation]>.Continuation?
     private lazy var locationsStream: AsyncStream<[NamedLocation]> = {
         AsyncStream { continuation in
@@ -17,33 +19,33 @@ actor LocationStorage: LocationStoring, LocationManaging {
         }
     }()
     
-    var internalLocationStore: Set<Forecast.NamedLocation> = [] {
+    var internalLocationStore: [NamedLocation] = [] {
         didSet {
-            continuation?.yield(Array(internalLocationStore))
+            guard oldValue != internalLocationStore else { return }
+            continuation?.yield(internalLocationStore)
         }
     }
     
+    init(externalStore: ExternalLocationStore) {
+        self.externalStore = externalStore
+    }
+    
     func locations() async -> AsyncStream<[NamedLocation]> {
-        locationsStream
+        internalLocationStore = await externalStore.locations
+        return locationsStream
     }
     
-    func add(location: Forecast.NamedLocation) {
-        internalLocationStore.insert(location)
+    func add(location: NamedLocation) async {
+        internalLocationStore = await externalStore.add(location: location)
     }
     
-    func remove(location id: NamedLocation.ID) {
-        guard let index = internalLocationStore.firstIndex(where: { $0.id == id }) else { return }
-        internalLocationStore.remove(at: index)
+    func remove(location id: NamedLocation.ID) async {
+        internalLocationStore = await externalStore.remove(location: id)
     }
 }
 
-extension Forecast.NamedLocation: Hashable {
-    public static func == (lhs: Forecast.NamedLocation, rhs: Forecast.NamedLocation) -> Bool {
+extension NamedLocation: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.id == rhs.id
     }
-    
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
 }
-
