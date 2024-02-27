@@ -27,31 +27,24 @@ struct ForecastListView: View {
     }
     
     var body: some View {
-        ScrollView(.horizontal) {
-            ZStack {
-                LazyHStack(spacing: 0) {
-                    ForEach(viewModel.locations, id: \.name) { item in
-                        itemBuilder.view(location: item)
-                            .containerRelativeFrame([.horizontal, .vertical])
-                    }
-                    .fadeScrollTransition()
-                    
-                    addLocationBuilder.view
-                        .containerRelativeFrame([.horizontal, .vertical])
-                        .clipped()
-                        .fadeScrollTransition()
-                }
-                .overlay(alignment: .top) {
-                    Self.topGradient()
-                }
-                .overlay(alignment: .bottom) {
-                    Self.bottomGradient()
-                }
+        TabView {
+            ForEach(viewModel.locations, id: \.name) { item in
+                itemBuilder.view(location: item)
+                    .containerRelativeFrame([.horizontal, .vertical])
             }
+            
+            addLocationBuilder.view
+                .containerRelativeFrame([.horizontal, .vertical])
+                .clipped()
+        }
+        .overlay(alignment: .top) {
+            Self.topGradient()
+        }
+        .overlay(alignment: .bottom) {
+            Self.bottomGradient()
         }
         .background(.black)
-        .scrollIndicators(.hidden)
-        .scrollTargetBehavior(.paging)
+        .tabViewStyle(.page(indexDisplayMode: .always))
     }
     
     private static func topGradient() -> some View {
@@ -81,15 +74,6 @@ struct ForecastListView: View {
                 endPoint: .bottom
             ))
             .frame(height: 20)
-    }
-}
-
-fileprivate extension View {
-    func fadeScrollTransition() -> some View {
-        self.scrollTransition { effect, phase in
-            effect
-                .opacity(phase.isIdentity ? 1.0 : 0.3)
-        }
     }
 }
 

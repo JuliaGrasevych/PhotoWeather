@@ -100,7 +100,7 @@ struct ForecastLocationItemView: View {
         .background(.ultraThinMaterial.opacity(0.85))
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .shadow(color: .white.opacity(0.25), radius: 4)
-        .padding()
+        .padding(EdgeInsets(top: 8, leading: 8, bottom: 40, trailing: 8))
     }
     
     private func todaysForecastTopView() -> some View {
