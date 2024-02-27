@@ -11,18 +11,15 @@ import NeedleFoundation
 import Core
 
 import PhotoStockDependency
+import ForecastDependency
 
 public protocol ForecastLocationItemDependency: Dependency {
     var weatherFetcher: ForecastFetching { get }
     var photoFetcher: PhotoStockFetching { get }
+    var locationManager: LocationManaging { get }
 }
 
-public struct Location {
-    let name: String
-    let location: ForecastLocation
-}
-
-extension ForecastLocationItem {
+extension ForecastLocationItemView {
     struct CurrentWeather {
         let temperature: String
         let weatherIcon: String
@@ -47,38 +44,48 @@ extension ForecastLocationItem {
     class ViewModel: ObservableObject {
         private let weatherFetcher: ForecastFetching
         private let photoFetcher: PhotoStockFetching
-        private let location: Location
+        private let locationManager: LocationManaging
+        private let location: any ForecastLocation
         
+        // TODO: wrap this in 1 struct
         private(set) lazy var locationName = location.name
+        @MainActor
         @Published private(set) var isFetching = false
+        @MainActor
         @Published private(set) var currentWeather: CurrentWeather = .default
+        @MainActor
         @Published private(set) var todayForecast: TodayForecast = .default
+        @MainActor
         @Published private(set) var hourlyForecast: [HourlyForecast] = [.default]
+        @MainActor
         @Published private(set) var dailyForecast: [DailyForecast] = [.default]
+        @MainActor
         @Published private(set) var imageURL: URL? = nil
         
         init(
-            location: Location,
+            location: any ForecastLocation,
             weatherFetcher: ForecastFetching,
-            photoFetcher: PhotoStockFetching
+            photoFetcher: PhotoStockFetching,
+            locationManager: LocationManaging
         ) {
             self.weatherFetcher = weatherFetcher
             self.photoFetcher = photoFetcher
+            self.locationManager = locationManager
             self.location = location
+            onLoad()
         }
         
-        private nonisolated func fetchForecast(for location: ForecastLocation) async -> ForecastItem? {
+        private func fetchForecast(for location: any ForecastLocation) async -> ForecastItem? {
             do {
-                let weather = try await self.weatherFetcher.forecast(for: location)
-                print(weather)
-                return weather
+                return try await self.weatherFetcher.forecast(for: location)
             } catch {
                 return nil
             }
         }
         
-        private nonisolated func fetchImage(for location: ForecastLocation, forecast: ForecastItem?) async -> URL? {
+        private func fetchImage(for location: any ForecastLocation, forecast: ForecastItem?) async -> URL? {
             let tags = [
+                // TODO: use location's timezone
                 try? location.season(for: Date.now, calendar: Calendar.current).tag,
                 forecast?.current.weatherCode.description,
                 forecast.map { $0.current.isDay ? "day" : "night" }
@@ -96,26 +103,30 @@ extension ForecastLocationItem {
     }
 }
 
-extension ForecastLocationItem.ViewModel {
-    @MainActor
-    func onAppear() {
-        Task { [weak self] in
-            guard let self else { return }
-            self.isFetching = true
-            let forecast = await self.fetchForecast(for: location.location)
-            self.currentWeather = ForecastLocationItem.CurrentWeather(model: forecast)
-            self.todayForecast = Self.todayForecast(with: forecast)
-            self.hourlyForecast = Self.hourlyForecast(with: forecast)
-            self.dailyForecast = Self.dailyForecast(with: forecast)
-            self.imageURL = await self.fetchImage(
-                for: location.location,
+extension ForecastLocationItemView.ViewModel {
+    func onLoad() {
+        Task { @MainActor in
+            isFetching = true
+            let forecast = await fetchForecast(for: location)
+            currentWeather = ForecastLocationItemView.CurrentWeather(model: forecast)
+            todayForecast = Self.todayForecast(with: forecast)
+            hourlyForecast = Self.hourlyForecast(with: forecast)
+            dailyForecast = Self.dailyForecast(with: forecast)
+            imageURL = await fetchImage(
+                for: location,
                 forecast: forecast
             )
-            self.isFetching = false
+            isFetching = false
         }
     }
     
-    private static func todayForecast(with forecast: ForecastItem?) -> ForecastLocationItem.TodayForecast {
+    func deleteLocation() {
+        Task {
+            await locationManager.remove(location: location.id)
+        }
+    }
+    
+    private static func todayForecast(with forecast: ForecastItem?) -> ForecastLocationItemView.TodayForecast {
         guard let forecast,
               let today = forecast.daily
             .weather
@@ -135,12 +146,12 @@ extension ForecastLocationItem.ViewModel {
         )
     }
     
-    private static func hourlyForecast(with forecast: ForecastItem?) -> [ForecastLocationItem.HourlyForecast] {
+    private static func hourlyForecast(with forecast: ForecastItem?) -> [ForecastLocationItemView.HourlyForecast] {
         guard let forecast, !forecast.hourly.weather.isEmpty else { return [.default] }
         let temperatureUnit = forecast.hourlyUnits.temperature
         return forecast.hourly.weather
             .map { item in
-                ForecastLocationItem.HourlyForecast(
+                ForecastLocationItemView.HourlyForecast(
                     time: item.time.formatted(date: .omitted, time: .shortened),
                     temperature: item.temperature.formatted(.temperature) + temperatureUnit,
                     weatherIcon: item.formatted(.weatherIcon)
@@ -148,12 +159,12 @@ extension ForecastLocationItem.ViewModel {
         }
     }
     
-    private static func dailyForecast(with forecast: ForecastItem?) -> [ForecastLocationItem.DailyForecast] {
+    private static func dailyForecast(with forecast: ForecastItem?) -> [ForecastLocationItemView.DailyForecast] {
         guard let forecast, !forecast.daily.weather.isEmpty else { return [.default] }
         let temperatureUnits = forecast.dailyUnits
         return forecast.daily.weather
             .map { item in
-                ForecastLocationItem.DailyForecast(
+                ForecastLocationItemView.DailyForecast(
                     date: item.time.formatted(Date.FormatStyle().day().month()),
                     temperatureMin: item.temperatureMin.formatted(.temperature) + temperatureUnits.temperatureMin,
                     temperatureMax: item.temperatureMax.formatted(.temperature) + temperatureUnits.temperatureMax,
@@ -164,14 +175,14 @@ extension ForecastLocationItem.ViewModel {
 }
 
 // MARK: - Defaults
-extension ForecastLocationItem.CurrentWeather {
+extension ForecastLocationItemView.CurrentWeather {
     private enum Defaults {
         static let temperature = "n/a"
         static let weatherIcon = "n/a"
         static let weatherDescription = "n/a"
     }
     
-    static let `default` = ForecastLocationItem.CurrentWeather(
+    static let `default` = ForecastLocationItemView.CurrentWeather(
         temperature: Defaults.temperature,
         weatherIcon: Defaults.weatherIcon,
         weatherDescription: Defaults.weatherDescription
@@ -192,23 +203,23 @@ extension ForecastLocationItem.CurrentWeather {
     }
 }
 
-extension ForecastLocationItem.TodayForecast {
-    static let `default` = ForecastLocationItem.TodayForecast(
+extension ForecastLocationItemView.TodayForecast {
+    static let `default` = ForecastLocationItemView.TodayForecast(
         temperatureMin: "n/a",
         temperatureMax: "n/a"
     )
 }
 
-extension ForecastLocationItem.HourlyForecast {
-    static let `default` = ForecastLocationItem.HourlyForecast(
+extension ForecastLocationItemView.HourlyForecast {
+    static let `default` = ForecastLocationItemView.HourlyForecast(
         time: "12:00",
         temperature: "n/a",
         weatherIcon: "n/a"
     )
 }
 
-extension ForecastLocationItem.DailyForecast {
-    static let `default` = ForecastLocationItem.DailyForecast(
+extension ForecastLocationItemView.DailyForecast {
+    static let `default` = ForecastLocationItemView.DailyForecast(
         date: "01 Jan",
         temperatureMin: "n/a",
         temperatureMax: "n/a",
@@ -216,13 +227,13 @@ extension ForecastLocationItem.DailyForecast {
     )
 }
 
-extension ForecastLocationItem.HourlyForecast: Identifiable {
+extension ForecastLocationItemView.HourlyForecast: Identifiable {
     var id: String {
         time
     }
 }
 
-extension ForecastLocationItem.DailyForecast: Identifiable {
+extension ForecastLocationItemView.DailyForecast: Identifiable {
     var id: String {
         date
     }

@@ -1,5 +1,5 @@
 //
-//  ForecastList.swift
+//  ForecastListView.swift
 //  Forecast
 //
 //  Created by Julia Grasevych on 05.02.2024.
@@ -9,46 +9,42 @@ import SwiftUI
 import Core
 
 import PhotoStockDependency
+import ForecastDependency
 
-struct ForecastList: View {
+struct ForecastListView: View {
     @StateObject private var viewModel: ViewModel
     private let itemBuilder: ForecastLocationItemBuilder
+    private let addLocationBuilder: ForecastAddLocationViewBuilder
     
     init(
         viewModel: @escaping @autoclosure () -> ViewModel,
-        itemBuilder: ForecastLocationItemBuilder
+        itemBuilder: ForecastLocationItemBuilder,
+        addLocationBuilder: ForecastAddLocationViewBuilder
     ) {
         _viewModel = .init(wrappedValue: viewModel())
         self.itemBuilder = itemBuilder
+        self.addLocationBuilder = addLocationBuilder
     }
     
     var body: some View {
-        ScrollView(.horizontal) {
-            ZStack {
-                LazyHStack(spacing: 0) {
-                    ForEach(viewModel.locations, id: \.name) { item in
-                        itemBuilder.view(location: item)
-                        .containerRelativeFrame([.horizontal, .vertical])
-                    }
-                    .scrollTransition { effect, phase in
-                        effect
-                            .opacity(phase.isIdentity ? 1.0 : 0.8)
-                    }
-                }
-                .overlay(alignment: .top) {
-                    Self.topGradient()
-                }
-                .overlay(alignment: .bottom) {
-                    Self.bottomGradient()
-                }
+        TabView {
+            ForEach(viewModel.locations, id: \.name) { item in
+                itemBuilder.view(location: item)
+                    .containerRelativeFrame([.horizontal, .vertical])
             }
+            
+            addLocationBuilder.view
+                .containerRelativeFrame([.horizontal, .vertical])
+                .clipped()
+        }
+        .overlay(alignment: .top) {
+            Self.topGradient()
+        }
+        .overlay(alignment: .bottom) {
+            Self.bottomGradient()
         }
         .background(.black)
-        .scrollIndicators(.hidden)
-        .scrollTargetBehavior(.paging)
-        .onAppear {
-            viewModel.onAppear()
-        }
+        .tabViewStyle(.page(indexDisplayMode: .always))
     }
     
     private static func topGradient() -> some View {
@@ -83,27 +79,36 @@ struct ForecastList: View {
 
 /// Preview
 struct ForecastListPreviewFetcher: ForecastFetching {
-    func forecast(for location: ForecastLocation) async throws -> ForecastItem {
+    func forecast(for location: any ForecastLocation) async throws -> ForecastItem {
         return ForecastItem.preview
     }
 }
 
 struct PhotoStockPreviewFetcher: PhotoStockFetching {
     func photoURL(for location: LocationProtocol, tags: [String]) async throws -> URL {
-        URL(string: "https://cdn.vectorstock.com/i/preview-1x/65/30/default-image-icon-missing-picture-page-vector-40546530.jpg")!
+        URL(string: "https://th.bing.com/th/id/OIG3._lMZO_nHk.Lnpcc0Q0cT?w=1024&h=1024&rs=1&pid=ImgDetMain")!
     }
 }
 
-extension ForecastList.ViewModel {
-    static let preview: ForecastList.ViewModel = ForecastList.ViewModel(
-        weatherFetcher: ForecastListPreviewFetcher(),
-        photoFetcher: PhotoStockPreviewFetcher()
+struct LocationStoragePreview: LocationStoring, LocationManaging {
+    func locations() async -> AsyncStream<[NamedLocation]> {
+        AsyncStream { _ in }
+    }
+    func add(location _: NamedLocation) { }
+    func addLocationsObserver(_ observer: ([NamedLocation]) -> ()) { }
+    func remove(location id: NamedLocation.ID) { }
+}
+
+extension ForecastListView.ViewModel {
+    static let preview: ForecastListView.ViewModel = ForecastListView.ViewModel(
+        locationStorage: LocationStoragePreview()
     )
 }
 
 #Preview {
-    ForecastList(
+    ForecastListView(
         viewModel: .preview,
-        itemBuilder: ForecastLocationItemBuilderPreview()
+        itemBuilder: ForecastLocationItemBuilderPreview(),
+        addLocationBuilder: ForecastAddLocationViewBuilderPreview()
     )
 }

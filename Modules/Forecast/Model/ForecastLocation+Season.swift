@@ -7,10 +7,7 @@
 
 import Foundation
 import Core
-
-public protocol ForecastLocation: LocationProtocol {
-    var timeZoneIdentifier: String? { get }
-}
+import ForecastDependency
 
 public enum Season: String {
     case spring

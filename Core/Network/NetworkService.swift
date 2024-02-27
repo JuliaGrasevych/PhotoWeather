@@ -25,7 +25,6 @@ public extension NetworkServiceProtocol {
         let request = URLRequest(url: url)
         let response = try await URLSession.shared.data(for: request)
         let transformedData = try transform(response.0)
-        print("===transformedData = \(String(data: transformedData, encoding: .utf8))")
         let item = try decoder.decode(DataType.self, from: transformedData)
         return item
     }

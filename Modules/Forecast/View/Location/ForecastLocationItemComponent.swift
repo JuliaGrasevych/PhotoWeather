@@ -8,23 +8,25 @@
 import Foundation
 import SwiftUI
 import NeedleFoundation
+import ForecastDependency
 
 public protocol ForecastLocationItemBuilder {
-    func view(location: Location) -> AnyView
+    func view(location: NamedLocation) -> AnyView
 }
 
 public class ForecastLocationItemComponent: Component<ForecastLocationItemDependency>, ForecastLocationItemBuilder {
-    func viewModel(location: Location) -> ForecastLocationItem.ViewModel {
-        ForecastLocationItem.ViewModel(
+    func viewModel(location: NamedLocation) -> ForecastLocationItemView.ViewModel {
+        ForecastLocationItemView.ViewModel(
             location: location,
             weatherFetcher: dependency.weatherFetcher,
-            photoFetcher: dependency.photoFetcher
+            photoFetcher: dependency.photoFetcher,
+            locationManager: dependency.locationManager
         )
     }
     
-    public func view(location: Location) -> AnyView {
+    public func view(location: NamedLocation) -> AnyView {
         AnyView(
-            ForecastLocationItem(viewModel: self.viewModel(location: location))
+            ForecastLocationItemView(viewModel: self.viewModel(location: location))
         )
     }
 }

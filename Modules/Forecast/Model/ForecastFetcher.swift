@@ -7,9 +7,10 @@
 
 import Foundation
 import Core
+import ForecastDependency
 
 public protocol ForecastFetching {
-    func forecast(for location: ForecastLocation) async throws -> ForecastItem
+    func forecast(for location: any ForecastLocation) async throws -> ForecastItem
 }
 
 class ForecastFetcher: ForecastFetching {
@@ -19,13 +20,13 @@ class ForecastFetcher: ForecastFetching {
         self.networkService = networkService
     }
     
-    func forecast(for location: ForecastLocation) async throws -> ForecastItem {
+    func forecast(for location: any ForecastLocation) async throws -> ForecastItem {
         let url = Self.fetchURL(for: location)
         return try await networkService.requestData(for: url)
     }
     
     // MARK: - Requests
-    private static func fetchURL(for location: ForecastLocation) -> URL? {
+    private static func fetchURL(for location: any ForecastLocation) -> URL? {
         let queryItems = [
             QueryItemKeys.latitude: "\(location.latitude)",
             QueryItemKeys.longitude: "\(location.longitude)",

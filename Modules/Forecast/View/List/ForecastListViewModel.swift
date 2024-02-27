@@ -10,57 +10,30 @@ import CoreLocation
 import NeedleFoundation
 
 import PhotoStockDependency
+import ForecastDependency
 
 public protocol ForecastListDependency: Dependency {
-    var weatherFetcher: ForecastFetching { get }
-    var photoFetcher: PhotoStockFetching { get }
+    var locationStorage: LocationStoring { get }
 }
 
-extension ForecastList {
+extension ForecastListView {
     class ViewModel: ObservableObject {
-        private let weatherFetcher: ForecastFetching
-        private let photoFetcher: PhotoStockFetching
+        private let locationStorage: LocationStoring
         
-        @Published var locations: [Location] = []
+        @MainActor
+        @Published var locations: [NamedLocation] = []
         
         init(
-            weatherFetcher: ForecastFetching,
-            photoFetcher: PhotoStockFetching
+            locationStorage: LocationStoring
         ) {
-            self.weatherFetcher = weatherFetcher
-            self.photoFetcher = photoFetcher
-        }
-        
-        private nonisolated func fetch() async -> [Location] {
-            guard let locations = try? await CLGeocoder().geocodeAddressString("Kyiv, Ukraine"),
-                  let loc = locations.first else {
-                return []
+            self.locationStorage = locationStorage
+            
+            Task { @MainActor in
+                let locations = await locationStorage.locations()
+                for await changes in locations {
+                    self.locations = changes
+                }
             }
-            return [Location(name: "Kyiv", location: loc)]
         }
-    }
-}
-
-extension ForecastList.ViewModel {
-    @MainActor 
-    func onAppear() {
-        Task { [weak self] in
-            guard let self else { return }
-            self.locations = await self.fetch()
-        }
-    }
-}
-
-extension CLPlacemark: ForecastLocation {
-    public var latitude: Float {
-        Float(self.location?.coordinate.latitude ?? 0)
-    }
-    
-    public var longitude: Float {
-        Float(self.location?.coordinate.longitude ?? 0)
-    }
-    
-    public var timeZoneIdentifier: String? {
-        self.timeZone?.identifier
     }
 }

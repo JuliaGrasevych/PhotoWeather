@@ -1,5 +1,5 @@
 //
-//  ForecastLocationItem.swift
+//  ForecastLocationItemView.swift
 //  Forecast
 //
 //  Created by Julia Grasevych on 07.02.2024.
@@ -7,10 +7,12 @@
 
 import SwiftUI
 import CoreLocation
+import ForecastDependency
 
-struct ForecastLocationItem: View {
+struct ForecastLocationItemView: View {
     @StateObject private var viewModel: ViewModel
-    @State private var showForecast = false
+    @State private var showingForecast = false
+    @State private var showingDeleteAlert = false
     
     init(viewModel: @escaping @autoclosure () -> ViewModel) {
         _viewModel = .init(wrappedValue: viewModel())
@@ -29,6 +31,7 @@ struct ForecastLocationItem: View {
                             .tint(.white)
                     })
                 }
+                .contentShape(Rectangle())
                 .clipped()
             
             VStack {
@@ -42,8 +45,11 @@ struct ForecastLocationItem: View {
             )
         }
         .background(.black)
-        .onAppear {
-            viewModel.onAppear()
+        .alert("Delete current location?", isPresented: $showingDeleteAlert) {
+            Button("Delete", role: .destructive) {
+                viewModel.deleteLocation()
+            }
+            Button("Cancel", role: .cancel) { }
         }
     }
     
@@ -73,7 +79,7 @@ struct ForecastLocationItem: View {
             VStack(spacing: 20) {
                 todaysForecastTopView()
                 
-                if showForecast {
+                if showingForecast {
                     ScrollView(.vertical) {
                         VStack(alignment: .leading) {
                             hourlyWeatherView(forecast: viewModel.hourlyForecast)
@@ -83,7 +89,7 @@ struct ForecastLocationItem: View {
                     .transition(.push(from: .bottom))
                 }
                 Button("Delete location", role: .destructive) {
-                    
+                    showingDeleteAlert = true
                 }
                 .buttonStyle(.borderless)
                 .shadow(color: .red, radius: 20)
@@ -94,13 +100,13 @@ struct ForecastLocationItem: View {
         .background(.ultraThinMaterial.opacity(0.85))
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .shadow(color: .white.opacity(0.25), radius: 4)
-        .padding()
+        .padding(EdgeInsets(top: 8, leading: 8, bottom: 40, trailing: 8))
     }
     
     private func todaysForecastTopView() -> some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading) {
-                Text(showForecast ? "Today" : "Forecast")
+                Text(showingForecast ? "Today" : "Forecast")
                     .font(.headline)
                 HStack(spacing: 16) {
                     Self.dailyTemperatureView(value: viewModel.todayForecast.temperatureMin, isMax: false)
@@ -111,10 +117,10 @@ struct ForecastLocationItem: View {
             Spacer()
             Button {
                 withAnimation {
-                    showForecast.toggle()
+                    showingForecast.toggle()
                 }
             } label: {
-                Image(systemName: showForecast ? "arrow.down.circle.fill" : "arrow.up.circle.fill")
+                Image(systemName: showingForecast ? "arrow.down.circle.fill" : "arrow.up.circle.fill")
             }
             .font(.title)
         }
@@ -190,13 +196,13 @@ struct ForecastLocationItem: View {
     }
 }
 
-extension Font {
+fileprivate extension Font {
     static func weatherIconFont(size: CGFloat) -> Font {
         .custom("weather-icons-lite", size: size)
     }
 }
 
-extension View {
+fileprivate extension View {
     func defaultContentShadow() -> some View {
         self.shadow(color: .white, radius: 10)
     }
@@ -214,31 +220,31 @@ extension View {
 
 /// Preview
 fileprivate struct PreviewLocation: ForecastLocation {
+    var id: String = UUID().uuidString
+    var name: String = "Kyiv"
     var latitude: Float = 0
     var longitude: Float = 0
     var timeZoneIdentifier: String? = nil
 }
 
-extension ForecastLocationItem.ViewModel {
-    static let preview: ForecastLocationItem.ViewModel = ForecastLocationItem.ViewModel(
-        location: Location(
-            name: "Kyiv",
-            location: PreviewLocation()
-        ),
+extension ForecastLocationItemView.ViewModel {
+    static let preview: ForecastLocationItemView.ViewModel = ForecastLocationItemView.ViewModel(
+        location: PreviewLocation(),
         weatherFetcher: ForecastListPreviewFetcher(),
-        photoFetcher: PhotoStockPreviewFetcher()
+        photoFetcher: PhotoStockPreviewFetcher(),
+        locationManager: LocationStoragePreview()
     )
 }
 
 struct ForecastLocationItemBuilderPreview: ForecastLocationItemBuilder {
-    func view(location: Location) -> AnyView {
+    func view(location: NamedLocation) -> AnyView {
         AnyView(
-            ForecastLocationItem(viewModel: .preview)
+            ForecastLocationItemView(viewModel: .preview)
         )
     }
 }
 
 #Preview {
-    ForecastLocationItem(viewModel: .preview)
+    ForecastLocationItemView(viewModel: .preview)
 }
 

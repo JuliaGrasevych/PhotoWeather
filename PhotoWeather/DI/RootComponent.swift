@@ -13,8 +13,12 @@ import Core
 import PhotoStock
 import PhotoStockDependency
 import Forecast
+import ForecastDependency
+import Storage
 
 final class RootComponent: BootstrapComponent {
+    lazy var locationStore = LocationStorage(externalStore: storageComponent.userDefaultsStorage)
+    
     // MARK: - Child Dependencies
     public var networkService: NetworkServiceProtocol {
         shared {
@@ -34,6 +38,18 @@ final class RootComponent: BootstrapComponent {
         }
     }
     
+    public var locationStorage: LocationStoring {
+        shared {
+            locationStore
+        }
+    }
+    
+    public var locationManager: LocationManaging {
+        shared {
+            locationStore
+        }
+    }
+    
     // MARK: - Child components
     var forecastComponent: ForecastComponent {
         ForecastComponent(parent: self)
@@ -41,6 +57,10 @@ final class RootComponent: BootstrapComponent {
     
     var photoStockComponent: PhotoStockComponent {
         PhotoStockComponent(parent: self)
+    }
+    
+    var storageComponent: StorageComponent {
+        StorageComponent(parent: self)
     }
     
     /// Root view
