@@ -61,3 +61,20 @@ extension Calendar {
         }
     }
 }
+
+extension Calendar {
+    enum TimeZoneError: Error {
+        case invalidIdentifier
+    }
+    
+    static func currentCalendar(for location: any ForecastLocation) throws -> Calendar {
+        guard let timeZoneIdentifier = location.timeZoneIdentifier,
+              let timeZone = TimeZone(identifier: timeZoneIdentifier)
+        else {
+            throw TimeZoneError.invalidIdentifier
+        }
+        var calendar = Calendar.current
+        calendar.timeZone = timeZone
+        return calendar
+    }
+}

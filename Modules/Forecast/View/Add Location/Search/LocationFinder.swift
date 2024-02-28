@@ -60,7 +60,8 @@ final class LocationFinder: NSObject, LocationSearching {
                 NamedLocation(
                     id: UUID().uuidString,
                     name: item.name ?? "N/A",
-                    placemark: item.placemark
+                    placemark: item.placemark,
+                    timeZoneIdentifier: item.timeZone?.identifier
                 )
             })
         else {

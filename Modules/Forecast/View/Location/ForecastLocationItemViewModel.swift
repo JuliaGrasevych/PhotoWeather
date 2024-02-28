@@ -61,8 +61,6 @@ extension ForecastLocationItemView {
         // TODO: wrap this in 1 struct
         private(set) lazy var locationName = location.name
         @MainActor
-        @Published private(set) var isFetching = false
-        @MainActor
         @Published private(set) var currentWeather: CurrentWeather = .default
         @MainActor
         @Published private(set) var todayForecast: TodayForecast = .default
@@ -97,9 +95,9 @@ extension ForecastLocationItemView {
         }
         
         private func fetchImage(for location: any ForecastLocation, forecast: ForecastItem?) async -> URL? {
+            let calendar = (try? Calendar.currentCalendar(for: location)) ?? Calendar.current
             let tags = [
-                // TODO: use location's timezone
-                try? location.season(for: Date.now, calendar: Calendar.current).tag,
+                try? location.season(for: Date.now, calendar: calendar).tag,
                 forecast?.current.weatherCode.description,
                 forecast.map { $0.current.isDay ? "day" : "night" }
             ].compactMap { $0 }
@@ -119,17 +117,15 @@ extension ForecastLocationItemView {
 extension ForecastLocationItemView.ViewModel {
     func onLoad() {
         Task { @MainActor in
-            isFetching = true
             let forecast = await fetchForecast(for: location)
             currentWeather = ForecastLocationItemView.CurrentWeather(model: forecast)
-            todayForecast = Self.todayForecast(with: forecast)
+            todayForecast = Self.todayForecast(with: forecast, location: location)
             hourlyForecast = Self.hourlyForecast(with: forecast)
             dailyForecast = Self.dailyForecast(with: forecast)
             imageURL = await fetchImage(
                 for: location,
                 forecast: forecast
             )
-            isFetching = false
         }
     }
     
@@ -143,12 +139,13 @@ extension ForecastLocationItemView.ViewModel {
         }
     }
     
-    private static func todayForecast(with forecast: ForecastItem?) -> ForecastLocationItemView.TodayForecast {
+    private static func todayForecast(with forecast: ForecastItem?, location: any ForecastLocation) -> ForecastLocationItemView.TodayForecast {
+        let calendar = (try? Calendar.currentCalendar(for: location)) ?? Calendar.current
         guard let forecast,
               let today = forecast.daily
             .weather
             .first(where: { item in
-                Calendar.current.isDateInToday(item.time)
+                calendar.isDateInToday(item.time)
             })
         else { return .default }
 
