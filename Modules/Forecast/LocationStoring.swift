@@ -9,10 +9,10 @@ import Foundation
 import ForecastDependency
 
 public protocol LocationStoring {
-    func add(location: NamedLocation) async
-    func locations() async -> AsyncStream<[NamedLocation]>
+    func add(location: NamedLocation) async throws
+    func locations() async throws -> AsyncStream<[NamedLocation]>
 }
 
 public protocol LocationManaging {
-    func remove(location id: NamedLocation.ID) async
+    func remove(location id: NamedLocation.ID) async throws
 }

@@ -39,10 +39,6 @@ struct ForecastLocationSearchView: View {
                 }
             }
             .foregroundColor(.black)
-            .onReceive(viewModel.$dismiss) { shouldDismiss in
-                guard shouldDismiss else { return }
-                dismiss()
-            }
             .onReceive(viewModel.$location) { location in
                 guard let location else { return }
                 self.location = location

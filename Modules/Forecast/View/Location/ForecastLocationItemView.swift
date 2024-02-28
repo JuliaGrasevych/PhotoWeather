@@ -13,6 +13,7 @@ struct ForecastLocationItemView: View {
     @StateObject private var viewModel: ViewModel
     @State private var showingForecast = false
     @State private var showingDeleteAlert = false
+    @State private var showingErrorAlert = false
     
     init(viewModel: @escaping @autoclosure () -> ViewModel) {
         _viewModel = .init(wrappedValue: viewModel())
@@ -50,6 +51,13 @@ struct ForecastLocationItemView: View {
                 viewModel.deleteLocation()
             }
             Button("Cancel", role: .cancel) { }
+        }
+        .alert(isPresented: $showingErrorAlert, error: viewModel.error) {
+            Button("Ok", role: .cancel) { }
+        }
+        .onReceive(viewModel.$error) { error in
+            guard error != nil else { return }
+            showingErrorAlert = true
         }
     }
     

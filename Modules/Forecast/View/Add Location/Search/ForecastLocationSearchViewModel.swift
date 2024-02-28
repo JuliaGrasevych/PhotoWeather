@@ -28,8 +28,6 @@ extension ForecastLocationSearchView {
             }
         }
         @MainActor
-        @Published var dismiss: Bool = false
-        @MainActor
         @Published var location: NamedLocation?
         
         private let locationFinder: LocationSearching
@@ -65,7 +63,6 @@ extension ForecastLocationSearchView {
             Task { @MainActor in
                 guard let selection, !selection.isEmpty else { return }
                 location = try await locationFinder.location(for: selection)
-                dismiss = true
             }
         }
     }

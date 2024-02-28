@@ -17,7 +17,25 @@ import ForecastDependency
 import Storage
 
 final class RootComponent: BootstrapComponent {
-    lazy var locationStore = LocationStorage(externalStore: storageComponent.userDefaultsStorage)
+    struct Configuration {
+        enum Storage {
+            case userDefaults
+            case swiftData
+        }
+        let storage: Storage
+    }
+    
+    private let configuration: Configuration
+    private lazy var locationStore: LocationStorage = {
+        let externalStore: ExternalLocationStoring
+        switch configuration.storage {
+        case .userDefaults:
+            externalStore = storageComponent.userDefaultsStorage
+        case .swiftData:
+            externalStore = storageComponent.swiftDataStorge
+        }
+        return LocationStorage(externalStore: externalStore)
+    }()
     
     // MARK: - Child Dependencies
     public var networkService: NetworkServiceProtocol {
@@ -66,5 +84,9 @@ final class RootComponent: BootstrapComponent {
     /// Root view
     var rootView: some View {
         forecastComponent.view
+    }
+    
+    init(configuration: Configuration) {
+        self.configuration = configuration
     }
 }
