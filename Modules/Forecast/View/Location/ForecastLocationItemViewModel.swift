@@ -41,6 +41,17 @@ extension ForecastLocationItemView {
         let weatherIcon: String
     }
     
+    enum Error: LocalizedError {
+        case deleteFailed(any ForecastLocation)
+        
+        var errorDescription: String? {
+            switch self {
+            case .deleteFailed(let location):
+                return "Failed to delete the location \(location.name)"
+            }
+        }
+    }
+    
     class ViewModel: ObservableObject {
         private let weatherFetcher: ForecastFetching
         private let photoFetcher: PhotoStockFetching
@@ -61,6 +72,8 @@ extension ForecastLocationItemView {
         @Published private(set) var dailyForecast: [DailyForecast] = [.default]
         @MainActor
         @Published private(set) var imageURL: URL? = nil
+        @MainActor
+        @Published var error: Error?
         
         init(
             location: any ForecastLocation,
@@ -121,8 +134,12 @@ extension ForecastLocationItemView.ViewModel {
     }
     
     func deleteLocation() {
-        Task {
-            await locationManager.remove(location: location.id)
+        Task { @MainActor in
+            do {
+                try await locationManager.remove(location: location.id)
+            } catch {
+                self.error = ForecastLocationItemView.Error.deleteFailed(location)
+            }
         }
     }
     

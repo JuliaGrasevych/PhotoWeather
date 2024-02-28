@@ -6,12 +6,12 @@
 //
 
 import SwiftUI
-import SwiftData
+import ForecastDependency
 
 @main
 final class PhotoWeatherApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    lazy var rootComponent = RootComponent()
+    lazy var rootComponent = RootComponent(configuration: .init(storage: .swiftData))
     
     var body: some Scene {
         return WindowGroup {

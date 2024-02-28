@@ -10,7 +10,11 @@ import NeedleFoundation
 import ForecastDependency
 
 public class StorageComponent: Component<EmptyDependency> {
-    public var userDefaultsStorage: ExternalLocationStore {
+    public var userDefaultsStorage: ExternalLocationStoring {
         UserDefaultsStore(userDefaults: .standard)
+    }
+    
+    public var swiftDataStorge: ExternalLocationStoring {
+        SwiftDataStore()
     }
 }

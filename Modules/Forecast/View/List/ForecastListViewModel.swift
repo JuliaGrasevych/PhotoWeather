@@ -29,7 +29,10 @@ extension ForecastListView {
             self.locationStorage = locationStorage
             
             Task { @MainActor in
-                let locations = await locationStorage.locations()
+                guard let locations = try? await locationStorage.locations() else {
+                    self.locations = []
+                    return
+                }
                 for await changes in locations {
                     self.locations = changes
                 }

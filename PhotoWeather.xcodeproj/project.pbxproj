@@ -78,7 +78,7 @@
 		A3BE117A2B8E240F0091ECC0 /* UserDefaults+ObjectSavable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BE11792B8E240F0091ECC0 /* UserDefaults+ObjectSavable.swift */; };
 		A3BE11982B8E258C0091ECC0 /* ForecastDependency.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3BE11922B8E258C0091ECC0 /* ForecastDependency.framework */; };
 		A3BE11992B8E258C0091ECC0 /* ForecastDependency.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A3BE11922B8E258C0091ECC0 /* ForecastDependency.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A3BE119D2B8E25940091ECC0 /* ExternalLocationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BE118B2B8E24C20091ECC0 /* ExternalLocationStore.swift */; };
+		A3BE119D2B8E25940091ECC0 /* ExternalLocationStoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BE118B2B8E24C20091ECC0 /* ExternalLocationStoring.swift */; };
 		A3BE119E2B8E25B30091ECC0 /* NamedLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BE11722B851A4D0091ECC0 /* NamedLocation.swift */; };
 		A3BE11A02B8E25D00091ECC0 /* ForecastLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BE119F2B8E25D00091ECC0 /* ForecastLocation.swift */; };
 		A3BE11A12B8E25EA0091ECC0 /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A374CA812B7FD3B40063F7C3 /* Core.framework */; };
@@ -95,6 +95,7 @@
 		A3BE11C52B8E29D70091ECC0 /* ForecastDependency.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A3BE11922B8E258C0091ECC0 /* ForecastDependency.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A3BE11C92B8E29FD0091ECC0 /* StorageComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BE11C82B8E29FD0091ECC0 /* StorageComponent.swift */; };
 		A3BE11CB2B8E2A0C0091ECC0 /* NeedleFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = A3BE11CA2B8E2A0C0091ECC0 /* NeedleFoundation */; };
+		A3BE11CD2B8F77280091ECC0 /* SwiftDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BE11CC2B8F77280091ECC0 /* SwiftDataStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -363,12 +364,13 @@
 		A3BE11742B87B6440091ECC0 /* LocationStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationStorage.swift; sourceTree = "<group>"; };
 		A3BE11762B88EC760091ECC0 /* LocationStoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationStoring.swift; sourceTree = "<group>"; };
 		A3BE11792B8E240F0091ECC0 /* UserDefaults+ObjectSavable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+ObjectSavable.swift"; sourceTree = "<group>"; };
-		A3BE118B2B8E24C20091ECC0 /* ExternalLocationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLocationStore.swift; sourceTree = "<group>"; };
+		A3BE118B2B8E24C20091ECC0 /* ExternalLocationStoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLocationStoring.swift; sourceTree = "<group>"; };
 		A3BE11922B8E258C0091ECC0 /* ForecastDependency.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ForecastDependency.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3BE119F2B8E25D00091ECC0 /* ForecastLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLocation.swift; sourceTree = "<group>"; };
 		A3BE11B22B8E29AD0091ECC0 /* Storage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Storage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3BE11BD2B8E29C50091ECC0 /* UserDefaultsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsStore.swift; sourceTree = "<group>"; };
 		A3BE11C82B8E29FD0091ECC0 /* StorageComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageComponent.swift; sourceTree = "<group>"; };
+		A3BE11CC2B8F77280091ECC0 /* SwiftDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -706,7 +708,7 @@
 			children = (
 				A3BE11722B851A4D0091ECC0 /* NamedLocation.swift */,
 				A3BE119F2B8E25D00091ECC0 /* ForecastLocation.swift */,
-				A3BE118B2B8E24C20091ECC0 /* ExternalLocationStore.swift */,
+				A3BE118B2B8E24C20091ECC0 /* ExternalLocationStoring.swift */,
 			);
 			path = ForecastDependency;
 			sourceTree = "<group>";
@@ -715,6 +717,7 @@
 			isa = PBXGroup;
 			children = (
 				A3BE11BD2B8E29C50091ECC0 /* UserDefaultsStore.swift */,
+				A3BE11CC2B8F77280091ECC0 /* SwiftDataStore.swift */,
 				A3BE11C82B8E29FD0091ECC0 /* StorageComponent.swift */,
 			);
 			path = Storage;
@@ -1227,7 +1230,7 @@
 			files = (
 				A3BE11A02B8E25D00091ECC0 /* ForecastLocation.swift in Sources */,
 				A3BE119E2B8E25B30091ECC0 /* NamedLocation.swift in Sources */,
-				A3BE119D2B8E25940091ECC0 /* ExternalLocationStore.swift in Sources */,
+				A3BE119D2B8E25940091ECC0 /* ExternalLocationStoring.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1235,6 +1238,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3BE11CD2B8F77280091ECC0 /* SwiftDataStore.swift in Sources */,
 				A3BE11BE2B8E29C50091ECC0 /* UserDefaultsStore.swift in Sources */,
 				A3BE11C92B8E29FD0091ECC0 /* StorageComponent.swift in Sources */,
 			);
