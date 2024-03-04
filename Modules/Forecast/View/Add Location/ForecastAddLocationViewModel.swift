@@ -7,7 +7,9 @@
 
 import Foundation
 import SwiftUI
+import Combine
 import NeedleFoundation
+import Core
 import ForecastDependency
 
 public protocol ForecastAddLocationDependency: Dependency {
@@ -26,9 +28,17 @@ extension ForecastAddLocationView {
         }
     }
     
-    class ViewModel: ObservableObject {
+    @MainActor
+    class Output: ObservableObject {
+        @Published var error: Error?
+        @Published var dismissSearch: Bool = false
+    }
+    
+    class ViewModel: ObservableObject, NestedObservedObjectOutputContainer {
         private let locationStorage: LocationStoring
         
+        @MainActor
+        @ObservedObject var output = ForecastAddLocationView.Output()
         @MainActor
         @Published var location: NamedLocation? {
             didSet {
@@ -36,10 +46,7 @@ extension ForecastAddLocationView {
                 add(location: location)
             }
         }
-        @MainActor
-        @Published var error: Error?
-        @MainActor
-        @Published var dismissSearch: Bool = false
+        var nestedObservedObjectsSubscription: [AnyCancellable] = []
         
         init(locationStorage: LocationStoring) {
             self.locationStorage = locationStorage
@@ -49,9 +56,9 @@ extension ForecastAddLocationView {
             Task { @MainActor in
                 do {
                     try await locationStorage.add(location: location)
-                    dismissSearch = true
+                    output.dismissSearch = true
                 } catch {
-                    self.error = Error.addFailed(location)
+                    output.error = Error.addFailed(location)
                 }
             }
         }

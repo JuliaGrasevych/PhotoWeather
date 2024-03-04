@@ -24,12 +24,12 @@ struct ForecastLocationSearchView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                List($viewModel.searchResults, id: \.self, selection: $viewModel.selection) { $item in
+                List(viewModel.$output.searchResults, id: \.self, selection: viewModel.$input.selection) { $item in
                     VStack(alignment: .leading) {
                         Text(item)
                     }
                 }
-                .searchable(text: $viewModel.text, prompt: Text("Search"))
+                .searchable(text: viewModel.$input.text, prompt: Text("Search"))
                 .autocorrectionDisabled()
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
@@ -40,7 +40,7 @@ struct ForecastLocationSearchView: View {
                 }
             }
             .foregroundColor(.black)
-            .onReceive(viewModel.$location) { location in
+            .onReceive(viewModel.output.$location) { location in
                 guard let location else { return }
                 self.location = location
             }

@@ -24,7 +24,7 @@ struct ForecastLocationItemView: View {
         ZStack {
             Color.clear
                 .background {
-                    AsyncImage(url: viewModel.imageURL, content: { image in
+                    AsyncImage(url: viewModel.output.imageURL, content: { image in
                         image
                             .resizable()
                             .aspectRatio(contentMode: .fill)
@@ -53,10 +53,10 @@ struct ForecastLocationItemView: View {
             }
             Button("Cancel", role: .cancel) { }
         }
-        .alert(isPresented: $showingErrorAlert, error: viewModel.error) {
+        .alert(isPresented: $showingErrorAlert, error: viewModel.output.error) {
             Button("Ok", role: .cancel) { }
         }
-        .onReceive(viewModel.$error) { error in
+        .onReceive(viewModel.output.$error) { error in
             guard error != nil else { return }
             showingErrorAlert = true
         }
@@ -64,14 +64,14 @@ struct ForecastLocationItemView: View {
     
     private func currentWeatherView() -> some View {
         VStack {
-            Text(viewModel.locationName)
+            Text(viewModel.output.locationName)
                 .font(.system(.largeTitle, design: .rounded))
                 .fontWeight(.bold)
-            Text(viewModel.currentWeather.temperature)
+            Text(viewModel.output.currentWeather.temperature)
                 .font(.system(.title, design: .rounded))
-            Text(viewModel.currentWeather.weatherIcon)
+            Text(viewModel.output.currentWeather.weatherIcon)
                 .font(Font.weatherIconFont(size: 80))
-            Text(viewModel.currentWeather.weatherDescription)
+            Text(viewModel.output.currentWeather.weatherDescription)
                 .font(.system(.body, design: .rounded))
                 .fontWeight(.medium)
         }
@@ -91,8 +91,8 @@ struct ForecastLocationItemView: View {
                 if showingForecast {
                     ScrollView(.vertical) {
                         VStack(alignment: .leading) {
-                            hourlyWeatherView(forecast: viewModel.hourlyForecast)
-                            dailyWeatherView(forecast: viewModel.dailyForecast)
+                            hourlyWeatherView(forecast: viewModel.output.hourlyForecast)
+                            dailyWeatherView(forecast: viewModel.output.dailyForecast)
                         }
                     }
                     .transition(.push(from: .bottom))
@@ -118,8 +118,8 @@ struct ForecastLocationItemView: View {
                 Text(showingForecast ? "Today" : "Forecast")
                     .font(.headline)
                 HStack(spacing: 16) {
-                    Self.dailyTemperatureView(value: viewModel.todayForecast.temperatureMin, isMax: false)
-                    Self.dailyTemperatureView(value: viewModel.todayForecast.temperatureMax, isMax: true)
+                    Self.dailyTemperatureView(value: viewModel.output.todayForecast.temperatureMin, isMax: false)
+                    Self.dailyTemperatureView(value: viewModel.output.todayForecast.temperatureMax, isMax: true)
                 }
                 .font(.body)
             }

@@ -9,6 +9,7 @@ import Foundation
 import Combine
 import SwiftUI
 import NeedleFoundation
+import Core
 import ForecastDependency
 
 public protocol ForecastLocationSearchDependency: Dependency {
@@ -16,55 +17,67 @@ public protocol ForecastLocationSearchDependency: Dependency {
 }
 
 extension ForecastLocationSearchView {
-    class ViewModel: ObservableObject {
-        @MainActor
-        @Published var text: String = ""
-        @MainActor
+    @MainActor
+    class Output: ObservableObject {
         @Published var searchResults: [String] = []
-        @MainActor
-        @Published var selection: String? {
-            didSet {
-                handleSelection()
-            }
-        }
-        @MainActor
         @Published var location: NamedLocation?
+    }
+    
+    @MainActor
+    class Input: ObservableObject {
+        @Published var text: String = ""
+        @Published var selection: String?
+    }
+    
+    class ViewModel: ObservableObject, NestedObservedObjectContainer {
+        @MainActor
+        @ObservedObject var input = ForecastLocationSearchView.Input()
+        @MainActor
+        @ObservedObject var output = ForecastLocationSearchView.Output()
         
         private let locationFinder: LocationSearching
-        private var subscriptions: [AnyCancellable] = []
+        private var searchSubscriptions: [AnyCancellable] = []
+        private var selectionSubscription: AnyCancellable?
+        var nestedObservedObjectsSubscription: [AnyCancellable] = []
         
         init(locationFinder: LocationSearching) {
             self.locationFinder = locationFinder
+            subscribeNestedObservedObjects()
             setupSearchQueryDebounce()
+            handleSelection()
         }
         
         private func setupSearchQueryDebounce() {
-            $text
+            input.$text
                 .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
                 .removeDuplicates()
                 .sink { [weak self] output in
                     guard let self else { return }
                     self.search(query: output)
                 }
-                .store(in: &subscriptions)
+                .store(in: &searchSubscriptions)
         }
         
         private func search(query: String) {
             Task { @MainActor in
                 do {
                     // TODO: mark locations that are already in the list
-                    searchResults = try await locationFinder.search(query: query)
+                    output.searchResults = try await locationFinder.search(query: query)
                 } catch {
-                    searchResults = []
+                    output.searchResults = []
                 }
             }
         }
         
         private func handleSelection() {
-            Task { @MainActor in
-                guard let selection, !selection.isEmpty else { return }
-                location = try await locationFinder.location(for: selection)
-            }
+            selectionSubscription = input.$selection
+                .sink { [weak self] selection in
+                    guard let self else { return }
+                    Task { @MainActor in
+                        guard let selection, !selection.isEmpty else { return }
+                        self.output.location = try await self.locationFinder.location(for: selection)
+                    }
+                }
         }
     }
 }
