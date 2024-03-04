@@ -9,6 +9,7 @@ import SwiftUI
 import CoreLocation
 import ForecastDependency
 
+@MainActor
 struct ForecastLocationItemView: View {
     @StateObject private var viewModel: ViewModel
     @State private var showingForecast = false
@@ -245,6 +246,7 @@ extension ForecastLocationItemView.ViewModel {
 }
 
 struct ForecastLocationItemBuilderPreview: ForecastLocationItemBuilder {
+    @MainActor
     func view(location: NamedLocation) -> AnyView {
         AnyView(
             ForecastLocationItemView(viewModel: .preview)

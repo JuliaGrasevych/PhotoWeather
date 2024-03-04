@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+@MainActor
 struct ForecastAddLocationView: View {
     @State private var showingSearch = false
     @State private var showingAlert = false
@@ -71,12 +72,15 @@ extension ForecastAddLocationView.ViewModel {
 }
 
 struct ForecastAddLocationViewBuilderPreview: ForecastAddLocationViewBuilder {
-    let view: AnyView = AnyView(
-        ForecastAddLocationView(
-            viewModel: .preview,
-            searchBuilder: ForecastLocationSearchViewBuilderPreview()
+    @MainActor
+    var view: AnyView {
+        AnyView(
+            ForecastAddLocationView(
+                viewModel: .preview,
+                searchBuilder: ForecastLocationSearchViewBuilderPreview()
+            )
         )
-    )
+    }
 }
 
 #Preview {

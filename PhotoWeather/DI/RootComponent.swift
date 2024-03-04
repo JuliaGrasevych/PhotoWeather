@@ -82,6 +82,7 @@ final class RootComponent: BootstrapComponent {
     }
     
     /// Root view
+    @MainActor
     var rootView: some View {
         forecastComponent.view
     }

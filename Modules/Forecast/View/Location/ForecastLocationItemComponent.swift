@@ -24,6 +24,7 @@ public class ForecastLocationItemComponent: Component<ForecastLocationItemDepend
         )
     }
     
+    @MainActor
     public func view(location: NamedLocation) -> AnyView {
         AnyView(
             ForecastLocationItemView(viewModel: self.viewModel(location: location))

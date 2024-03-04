@@ -11,8 +11,11 @@ import Core
 import PhotoStockDependency
 import ForecastDependency
 
+@MainActor
 struct ForecastListView: View {
     @StateObject private var viewModel: ViewModel
+    @State private var selectedTab: String = ""
+    
     private let itemBuilder: ForecastLocationItemBuilder
     private let addLocationBuilder: ForecastAddLocationViewBuilder
     
@@ -27,16 +30,18 @@ struct ForecastListView: View {
     }
     
     var body: some View {
-        TabView {
-            ForEach(viewModel.locations, id: \.name) { item in
+        TabView(selection: $selectedTab) {
+            ForEach(viewModel.locations) { item in
                 itemBuilder.view(location: item)
                     .containerRelativeFrame([.horizontal, .vertical])
+                    .id(item.id)
             }
             
             addLocationBuilder.view
                 .containerRelativeFrame([.horizontal, .vertical])
                 .clipped()
         }
+        
         .overlay(alignment: .top) {
             Self.topGradient()
         }
@@ -45,6 +50,39 @@ struct ForecastListView: View {
         }
         .background(.black)
         .tabViewStyle(.page(indexDisplayMode: .always))
+        .onChange(of: viewModel.locations, initial: false) { (old, new) in
+            didUpdateContent(oldContent: old, newContent: new)
+        }
+    }
+    
+    private func didUpdateContent(oldContent: [NamedLocation], newContent: [NamedLocation]) {
+        // if not content - return
+        guard !newContent.isEmpty else { return }
+        // if oldContent is empty - scroll to 1st new item
+        guard !oldContent.isEmpty else {
+            if let firstId = newContent.first?.id {
+                selectedTab = firstId
+            }
+            return
+        }
+        let diff = newContent.difference(from: oldContent)
+        // if has insertions - scroll to 1st insertion
+        if !diff.insertions.isEmpty,
+            case let .insert(_, first, _) = diff.insertions.first {
+                selectedTab = first.id
+                return
+        }
+        // if has removals - scroll to nearest item before the 1st removal
+        if !diff.removals.isEmpty,
+           case let .remove(_, first, _) = diff.removals.first,
+           let firstRemoval = oldContent.firstIndex(where: { $0.id == first.id }) {
+            let idx = firstRemoval > oldContent.startIndex
+            ? oldContent.index(before: firstRemoval)
+            : oldContent.startIndex
+            let value = oldContent[idx]
+            selectedTab = value.id
+            return
+        }
     }
     
     private static func topGradient() -> some View {
@@ -55,7 +93,7 @@ struct ForecastListView: View {
                     Gradient.Stop(color: .black.opacity(0.8), location: 0.1),
                     Gradient.Stop(color: .black.opacity(0.5), location: 0.4),
                     Gradient.Stop(color: .clear, location: 1.0),
-                       ],
+                ],
                 startPoint: .top,
                 endPoint: .bottom
             ))
@@ -69,7 +107,7 @@ struct ForecastListView: View {
                     Gradient.Stop(color: .clear, location: 0.0),
                     Gradient.Stop(color: .black.opacity(0.5), location: 0.75),
                     Gradient.Stop(color: .black, location: 1.0),
-                       ],
+                ],
                 startPoint: .top,
                 endPoint: .bottom
             ))

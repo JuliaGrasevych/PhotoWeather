@@ -16,6 +16,7 @@ public class ForecastListComponent: Component<ForecastListDependency> {
         )
     }
     
+    @MainActor
     public var view: AnyView {
         AnyView(
             ForecastListView(

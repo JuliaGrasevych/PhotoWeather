@@ -18,6 +18,7 @@ public class ForecastAddLocationComponent: Component<ForecastAddLocationDependen
         ForecastAddLocationView.ViewModel(locationStorage: dependency.locationStorage)
     }
     
+    @MainActor
     public var view: AnyView {
         AnyView(
             ForecastAddLocationView(

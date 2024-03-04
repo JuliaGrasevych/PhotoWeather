@@ -22,6 +22,7 @@ public class ForecastComponent: Component<ForecastComponentDependency> {
         }
     }
     
+    @MainActor
     public var view: AnyView {
         AnyView(
             childComponent.view

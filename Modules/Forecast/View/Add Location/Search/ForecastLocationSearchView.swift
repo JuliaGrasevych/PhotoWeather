@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import ForecastDependency
 
+@MainActor
 struct ForecastLocationSearchView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject private var viewModel: ViewModel
@@ -69,6 +70,7 @@ struct ForecastLocationSearchView_Preview: PreviewProvider {
 }
 
 struct ForecastLocationSearchViewBuilderPreview: ForecastLocationSearchViewBuilder {
+    @MainActor
     func view(locationBinding: Binding<NamedLocation?>) -> AnyView {
         AnyView(
             ForecastLocationSearchView(viewModel: .preview, location: .constant(nil))
