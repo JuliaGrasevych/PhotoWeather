@@ -17,6 +17,7 @@ public struct NamedLocation: ForecastLocation {
     public let latitude: Float
     public let longitude: Float
     public let timeZoneIdentifier: String?
+    public var isUserLocation: Bool { false }
     
     public init(
         id: String,

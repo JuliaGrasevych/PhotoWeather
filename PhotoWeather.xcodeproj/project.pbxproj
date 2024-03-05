@@ -97,6 +97,8 @@
 		A3BE11CB2B8E2A0C0091ECC0 /* NeedleFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = A3BE11CA2B8E2A0C0091ECC0 /* NeedleFoundation */; };
 		A3BE11CD2B8F77280091ECC0 /* SwiftDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BE11CC2B8F77280091ECC0 /* SwiftDataStore.swift */; };
 		A3BE11CF2B96309C0091ECC0 /* NestedObservedObjectContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BE11CE2B96309C0091ECC0 /* NestedObservedObjectContainer.swift */; };
+		A3BE11D12B9768490091ECC0 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BE11D02B9768490091ECC0 /* LocationManager.swift */; };
+		A3BE11D32B9778C90091ECC0 /* LocationProvider+NamedLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BE11D22B9778C90091ECC0 /* LocationProvider+NamedLocation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -373,6 +375,8 @@
 		A3BE11C82B8E29FD0091ECC0 /* StorageComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageComponent.swift; sourceTree = "<group>"; };
 		A3BE11CC2B8F77280091ECC0 /* SwiftDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataStore.swift; sourceTree = "<group>"; };
 		A3BE11CE2B96309C0091ECC0 /* NestedObservedObjectContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestedObservedObjectContainer.swift; sourceTree = "<group>"; };
+		A3BE11D02B9768490091ECC0 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		A3BE11D22B9778C90091ECC0 /* LocationProvider+NamedLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocationProvider+NamedLocation.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -488,6 +492,7 @@
 				A3A83E5C2B73CAC4000D0FB7 /* Network */,
 				A3A83E562B73C455000D0FB7 /* Extensions */,
 				A3BE11CE2B96309C0091ECC0 /* NestedObservedObjectContainer.swift */,
+				A3BE11D02B9768490091ECC0 /* LocationManager.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -542,6 +547,7 @@
 				A3A83E632B73E127000D0FB7 /* Model */,
 				A374CA2A2B7FC96E0063F7C3 /* ForecastComponent.swift */,
 				A3BE11762B88EC760091ECC0 /* LocationStoring.swift */,
+				A3BE11D22B9778C90091ECC0 /* LocationProvider+NamedLocation.swift */,
 				A3BE11632B83A2BE0091ECC0 /* Assets.xcassets */,
 			);
 			path = Forecast;
@@ -1150,6 +1156,7 @@
 				A3BE11CF2B96309C0091ECC0 /* NestedObservedObjectContainer.swift in Sources */,
 				A374CA942B7FD3C30063F7C3 /* Double+TemperatureFormat.swift in Sources */,
 				A374CA922B7FD3C30063F7C3 /* URLQueryItem+KeyInit.swift in Sources */,
+				A3BE11D12B9768490091ECC0 /* LocationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1183,6 +1190,7 @@
 				A3BE116F2B8501980091ECC0 /* ForecastLocationSearchComponent.swift in Sources */,
 				A374CAF62B8397B40063F7C3 /* ForecastComponent.swift in Sources */,
 				A374CAF32B8397B40063F7C3 /* ForecastLocationItemViewModel.swift in Sources */,
+				A3BE11D32B9778C90091ECC0 /* LocationProvider+NamedLocation.swift in Sources */,
 				A3BE11662B83ABBD0091ECC0 /* ForecastAddLocationViewModel.swift in Sources */,
 				A374CAFD2B8397B40063F7C3 /* ForecastLocationItemView.swift in Sources */,
 				A374CAF92B8397B40063F7C3 /* ForecastListComponent.swift in Sources */,
@@ -1736,6 +1744,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoWeather/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1768,6 +1777,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoWeather/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

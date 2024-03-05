@@ -44,7 +44,7 @@ public final class SwiftDataStore: ExternalLocationStoring {
 }
 
 @Model
-final class NamedLocationModel: ForecastLocation {
+final class NamedLocationModel {
     public typealias ID = String
     
     @Attribute(.unique) public let id: String

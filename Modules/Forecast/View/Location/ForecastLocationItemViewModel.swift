@@ -56,6 +56,7 @@ extension ForecastLocationItemView {
     @MainActor
     class Output: ObservableObject {
         @Published var locationName: String = ""
+        @Published var isUserLocation: Bool = false
         @Published var currentWeather: CurrentWeather = .default
         @Published var todayForecast: TodayForecast = .default
         @Published var hourlyForecast: [HourlyForecast] = [.default]
@@ -88,6 +89,7 @@ extension ForecastLocationItemView {
             
             Task { @MainActor in
                 output.locationName = location.name
+                output.isUserLocation = location.isUserLocation
             }
             onLoad()
         }
@@ -114,6 +116,7 @@ extension ForecastLocationItemView {
                 )
                 return url
             } catch {
+                // TODO: handle error and show default image
                 return nil
             }
         }

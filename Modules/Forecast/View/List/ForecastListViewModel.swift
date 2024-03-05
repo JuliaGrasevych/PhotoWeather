@@ -6,27 +6,41 @@
 //
 
 import SwiftUI
-import CoreLocation
 import NeedleFoundation
+import Core
 
 import PhotoStockDependency
 import ForecastDependency
 
 public protocol ForecastListDependency: Dependency {
     var locationStorage: LocationStoring { get }
+    var locationProvider: LocationProviding { get }
 }
 
 extension ForecastListView {
     class ViewModel: ObservableObject {
         private let locationStorage: LocationStoring
+        private let locationProvider: LocationProviding
         
+        @MainActor @Published var locations: [NamedLocation] = [] {
+            didSet {
+                updateAllLocations()
+            }
+        }
+        @MainActor var currentLocation: (any ForecastLocation)? {
+            didSet {
+                updateAllLocations()
+            }
+        }
         @MainActor
-        @Published var locations: [NamedLocation] = []
+        @Published var allLocations: [any ForecastLocation] = []
         
         init(
-            locationStorage: LocationStoring
+            locationStorage: LocationStoring,
+            locationProvider: LocationProviding
         ) {
             self.locationStorage = locationStorage
+            self.locationProvider = locationProvider
             
             Task { @MainActor in
                 guard let locations = try? await locationStorage.locations() else {
@@ -37,6 +51,25 @@ extension ForecastListView {
                     self.locations = changes
                 }
             }
+        }
+        @MainActor
+        func onAppear() {
+            Task {
+                do {
+                    if await locationProvider.isAuthorized() {
+                        currentLocation = try await locationProvider.currentForecastLocation
+                    } else {
+                        currentLocation = nil
+                    }
+                } catch {
+                    currentLocation = nil
+                }
+            }
+        }
+        
+        @MainActor
+        func updateAllLocations() {
+            allLocations = [currentLocation].compactMap { $0 } + locations
         }
     }
 }

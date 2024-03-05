@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import CoreLocation
 import NeedleFoundation
 import Core
 
@@ -59,6 +60,12 @@ final class RootComponent: BootstrapComponent {
     public var locationStorage: LocationStoring {
         shared {
             locationStore
+        }
+    }
+    
+    public var locationProvider: LocationProviding {
+        shared {
+            LocationProvider(locationManager: CLLocationManager())
         }
     }
     

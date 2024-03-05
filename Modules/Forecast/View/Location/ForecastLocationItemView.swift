@@ -24,13 +24,17 @@ struct ForecastLocationItemView: View {
         ZStack {
             Color.clear
                 .background {
-                    AsyncImage(url: viewModel.output.imageURL, content: { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    }, placeholder: {
-                        ProgressView().progressViewStyle(.circular)
-                            .tint(.white)
+                    AsyncImage(url: viewModel.output.imageURL, content: { phase in
+                        if let image = phase.image {
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                        } else if phase.error != nil {
+                            EmptyView()
+                        } else {
+                            ProgressView().progressViewStyle(.circular)
+                                .tint(.white)
+                        }
                     })
                 }
                 .contentShape(Rectangle())
@@ -64,9 +68,14 @@ struct ForecastLocationItemView: View {
     
     private func currentWeatherView() -> some View {
         VStack {
-            Text(viewModel.output.locationName)
-                .font(.system(.largeTitle, design: .rounded))
-                .fontWeight(.bold)
+            HStack {
+                if viewModel.output.isUserLocation {
+                    Image(systemName: "location.fill")
+                }
+                Text(viewModel.output.locationName)
+                    .font(.system(.largeTitle, design: .rounded))
+                    .fontWeight(.bold)
+            }
             Text(viewModel.output.currentWeather.temperature)
                 .font(.system(.title, design: .rounded))
             Text(viewModel.output.currentWeather.weatherIcon)
@@ -97,11 +106,13 @@ struct ForecastLocationItemView: View {
                     }
                     .transition(.push(from: .bottom))
                 }
-                Button("Delete location", role: .destructive) {
-                    showingDeleteAlert = true
+                if !viewModel.output.isUserLocation {
+                    Button("Delete location", role: .destructive) {
+                        showingDeleteAlert = true
+                    }
+                    .buttonStyle(.borderless)
+                    .shadow(color: .red, radius: 20)
                 }
-                .buttonStyle(.borderless)
-                .shadow(color: .red, radius: 20)
             }
             .padding()
             Spacer()
@@ -230,6 +241,7 @@ fileprivate extension View {
 /// Preview
 fileprivate struct PreviewLocation: ForecastLocation {
     var id: String = UUID().uuidString
+    var isUserLocation: Bool = false
     var name: String = "Kyiv"
     var latitude: Float = 0
     var longitude: Float = 0
@@ -247,7 +259,7 @@ extension ForecastLocationItemView.ViewModel {
 
 struct ForecastLocationItemBuilderPreview: ForecastLocationItemBuilder {
     @MainActor
-    func view(location: NamedLocation) -> AnyView {
+    func view(location: any ForecastLocation) -> AnyView {
         AnyView(
             ForecastLocationItemView(viewModel: .preview)
         )

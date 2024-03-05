@@ -8,7 +8,9 @@
 import Foundation
 import Core
 
-public protocol ForecastLocation: LocationProtocol, Identifiable where ID == String {
+public protocol ForecastLocation: LocationProtocol, Equatable, Identifiable where ID == String {
+    var id: String { get }
     var name: String { get }
+    var isUserLocation: Bool { get }
     var timeZoneIdentifier: String? { get }
 }

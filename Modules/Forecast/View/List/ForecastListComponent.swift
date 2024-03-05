@@ -12,7 +12,8 @@ import NeedleFoundation
 public class ForecastListComponent: Component<ForecastListDependency> {
     var viewModel: ForecastListView.ViewModel {
         ForecastListView.ViewModel(
-            locationStorage: dependency.locationStorage
+            locationStorage: dependency.locationStorage, 
+            locationProvider: dependency.locationProvider
         )
     }
     
