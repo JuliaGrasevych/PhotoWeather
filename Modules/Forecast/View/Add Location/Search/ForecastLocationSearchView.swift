@@ -12,6 +12,7 @@ import ForecastDependency
 @MainActor
 struct ForecastLocationSearchView: View {
     @Environment(\.dismiss) var dismiss
+    @State private var isPresented = true
     @StateObject private var viewModel: ViewModel
     
     @Binding var location: NamedLocation?
@@ -29,7 +30,7 @@ struct ForecastLocationSearchView: View {
                         Text(item)
                     }
                 }
-                .searchable(text: viewModel.$input.text, prompt: Text("Search"))
+                .searchable(text: viewModel.$input.text, isPresented: $isPresented, prompt: Text("Search"))
                 .autocorrectionDisabled()
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
