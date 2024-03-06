@@ -61,7 +61,6 @@ extension ForecastLocationSearchView {
         private func search(query: String) {
             Task { @MainActor in
                 do {
-                    // TODO: mark locations that are already in the list
                     output.searchResults = try await locationFinder.search(query: query)
                 } catch {
                     output.searchResults = []
