@@ -19,6 +19,7 @@ public class ForecastLocationSearchComponent: Component<ForecastLocationSearchDe
         ForecastLocationSearchView.ViewModel(locationFinder: dependency.locationFinder)
     }
     
+    @MainActor
     public func view(locationBinding: Binding<NamedLocation?>) -> AnyView {
         AnyView(
             ForecastLocationSearchView(

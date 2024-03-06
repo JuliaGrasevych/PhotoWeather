@@ -9,8 +9,10 @@ import Foundation
 import SwiftUI
 import ForecastDependency
 
+@MainActor
 struct ForecastLocationSearchView: View {
     @Environment(\.dismiss) var dismiss
+    @State private var isPresented = true
     @StateObject private var viewModel: ViewModel
     
     @Binding var location: NamedLocation?
@@ -23,12 +25,12 @@ struct ForecastLocationSearchView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                List($viewModel.searchResults, id: \.self, selection: $viewModel.selection) { $item in
+                List(viewModel.$output.searchResults, id: \.self, selection: viewModel.$input.selection) { $item in
                     VStack(alignment: .leading) {
                         Text(item)
                     }
                 }
-                .searchable(text: $viewModel.text, prompt: Text("Search"))
+                .searchable(text: viewModel.$input.text, isPresented: $isPresented, prompt: Text("Search"))
                 .autocorrectionDisabled()
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
@@ -39,7 +41,7 @@ struct ForecastLocationSearchView: View {
                 }
             }
             .foregroundColor(.black)
-            .onReceive(viewModel.$location) { location in
+            .onReceive(viewModel.output.$location) { location in
                 guard let location else { return }
                 self.location = location
             }
@@ -69,6 +71,7 @@ struct ForecastLocationSearchView_Preview: PreviewProvider {
 }
 
 struct ForecastLocationSearchViewBuilderPreview: ForecastLocationSearchViewBuilder {
+    @MainActor
     func view(locationBinding: Binding<NamedLocation?>) -> AnyView {
         AnyView(
             ForecastLocationSearchView(viewModel: .preview, location: .constant(nil))

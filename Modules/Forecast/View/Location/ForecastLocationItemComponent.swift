@@ -11,11 +11,11 @@ import NeedleFoundation
 import ForecastDependency
 
 public protocol ForecastLocationItemBuilder {
-    func view(location: NamedLocation) -> AnyView
+    func view(location: any ForecastLocation) -> AnyView
 }
 
 public class ForecastLocationItemComponent: Component<ForecastLocationItemDependency>, ForecastLocationItemBuilder {
-    func viewModel(location: NamedLocation) -> ForecastLocationItemView.ViewModel {
+    func viewModel(location: any ForecastLocation) -> ForecastLocationItemView.ViewModel {
         ForecastLocationItemView.ViewModel(
             location: location,
             weatherFetcher: dependency.weatherFetcher,
@@ -24,7 +24,8 @@ public class ForecastLocationItemComponent: Component<ForecastLocationItemDepend
         )
     }
     
-    public func view(location: NamedLocation) -> AnyView {
+    @MainActor
+    public func view(location: any ForecastLocation) -> AnyView {
         AnyView(
             ForecastLocationItemView(viewModel: self.viewModel(location: location))
         )

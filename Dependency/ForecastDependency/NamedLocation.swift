@@ -17,13 +17,19 @@ public struct NamedLocation: ForecastLocation {
     public let latitude: Float
     public let longitude: Float
     public let timeZoneIdentifier: String?
+    public var isUserLocation: Bool { false }
     
-    public init(id: String, name: String, placemark: CLPlacemark) {
+    public init(
+        id: String,
+        name: String,
+        placemark: CLPlacemark,
+        timeZoneIdentifier: String?
+    ) {
         self.id = id
         self.name = name
         self.latitude = Float(placemark.location?.coordinate.latitude ?? 0)
         self.longitude = Float(placemark.location?.coordinate.longitude ?? 0)
-        self.timeZoneIdentifier = placemark.timeZone?.identifier
+        self.timeZoneIdentifier = timeZoneIdentifier
     }
     
     public init(

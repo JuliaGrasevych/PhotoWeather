@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import CoreLocation
 import NeedleFoundation
 import Core
 
@@ -62,6 +63,12 @@ final class RootComponent: BootstrapComponent {
         }
     }
     
+    public var locationProvider: LocationProviding {
+        shared {
+            LocationProvider(locationManager: CLLocationManager())
+        }
+    }
+    
     public var locationManager: LocationManaging {
         shared {
             locationStore
@@ -82,6 +89,7 @@ final class RootComponent: BootstrapComponent {
     }
     
     /// Root view
+    @MainActor
     var rootView: some View {
         forecastComponent.view
     }

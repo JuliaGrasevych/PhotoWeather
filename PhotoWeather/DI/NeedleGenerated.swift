@@ -97,6 +97,9 @@ private class ForecastListDependency5440bb37a7e976e93088Provider: ForecastListDe
     var locationStorage: LocationStoring {
         return rootComponent.locationStorage
     }
+    var locationProvider: LocationProviding {
+        return rootComponent.locationProvider
+    }
     private let rootComponent: RootComponent
     init(rootComponent: RootComponent) {
         self.rootComponent = rootComponent
@@ -158,6 +161,7 @@ extension ForecastLocationItemComponent: Registration {
 extension ForecastListComponent: Registration {
     public func registerItems() {
         keyPathToName[\ForecastListDependency.locationStorage] = "locationStorage-LocationStoring"
+        keyPathToName[\ForecastListDependency.locationProvider] = "locationProvider-LocationProviding"
         localTable["view-AnyView"] = { [unowned self] in self.view as Any }
     }
 }
@@ -174,6 +178,7 @@ extension RootComponent: Registration {
         localTable["apiKeyProvider-FlickrAPIKeyProviding"] = { [unowned self] in self.apiKeyProvider as Any }
         localTable["photoFetcher-PhotoStockFetching"] = { [unowned self] in self.photoFetcher as Any }
         localTable["locationStorage-LocationStoring"] = { [unowned self] in self.locationStorage as Any }
+        localTable["locationProvider-LocationProviding"] = { [unowned self] in self.locationProvider as Any }
         localTable["locationManager-LocationManaging"] = { [unowned self] in self.locationManager as Any }
     }
 }

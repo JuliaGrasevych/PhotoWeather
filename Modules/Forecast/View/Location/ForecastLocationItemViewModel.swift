@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 import CoreLocation
 import NeedleFoundation
 import Core
@@ -52,28 +53,27 @@ extension ForecastLocationItemView {
         }
     }
     
-    class ViewModel: ObservableObject {
+    @MainActor
+    class Output: ObservableObject {
+        @Published var locationName: String = ""
+        @Published var isUserLocation: Bool = false
+        @Published var currentWeather: CurrentWeather = .default
+        @Published var todayForecast: TodayForecast = .default
+        @Published var hourlyForecast: [HourlyForecast] = [.default]
+        @Published var dailyForecast: [DailyForecast] = [.default]
+        @Published var imageURL: URL?
+        @Published var error: Error?
+    }
+    
+    class ViewModel: ObservableObject, NestedObservedObjectOutputContainer {
         private let weatherFetcher: ForecastFetching
         private let photoFetcher: PhotoStockFetching
         private let locationManager: LocationManaging
         private let location: any ForecastLocation
         
-        // TODO: wrap this in 1 struct
-        private(set) lazy var locationName = location.name
         @MainActor
-        @Published private(set) var isFetching = false
-        @MainActor
-        @Published private(set) var currentWeather: CurrentWeather = .default
-        @MainActor
-        @Published private(set) var todayForecast: TodayForecast = .default
-        @MainActor
-        @Published private(set) var hourlyForecast: [HourlyForecast] = [.default]
-        @MainActor
-        @Published private(set) var dailyForecast: [DailyForecast] = [.default]
-        @MainActor
-        @Published private(set) var imageURL: URL? = nil
-        @MainActor
-        @Published var error: Error?
+        @ObservedObject var output: Output = Output()
+        var nestedObservedObjectsSubscription: [AnyCancellable] = []
         
         init(
             location: any ForecastLocation,
@@ -85,6 +85,12 @@ extension ForecastLocationItemView {
             self.photoFetcher = photoFetcher
             self.locationManager = locationManager
             self.location = location
+            subscribeNestedObservedObjects()
+            
+            Task { @MainActor in
+                output.locationName = location.name
+                output.isUserLocation = location.isUserLocation
+            }
             onLoad()
         }
         
@@ -97,9 +103,9 @@ extension ForecastLocationItemView {
         }
         
         private func fetchImage(for location: any ForecastLocation, forecast: ForecastItem?) async -> URL? {
+            let calendar = (try? Calendar.currentCalendar(for: location)) ?? Calendar.current
             let tags = [
-                // TODO: use location's timezone
-                try? location.season(for: Date.now, calendar: Calendar.current).tag,
+                try? location.season(for: Date.now, calendar: calendar).tag,
                 forecast?.current.weatherCode.description,
                 forecast.map { $0.current.isDay ? "day" : "night" }
             ].compactMap { $0 }
@@ -110,6 +116,7 @@ extension ForecastLocationItemView {
                 )
                 return url
             } catch {
+                // TODO: handle error and show default image
                 return nil
             }
         }
@@ -119,17 +126,15 @@ extension ForecastLocationItemView {
 extension ForecastLocationItemView.ViewModel {
     func onLoad() {
         Task { @MainActor in
-            isFetching = true
             let forecast = await fetchForecast(for: location)
-            currentWeather = ForecastLocationItemView.CurrentWeather(model: forecast)
-            todayForecast = Self.todayForecast(with: forecast)
-            hourlyForecast = Self.hourlyForecast(with: forecast)
-            dailyForecast = Self.dailyForecast(with: forecast)
-            imageURL = await fetchImage(
+            output.currentWeather = ForecastLocationItemView.CurrentWeather(model: forecast)
+            output.todayForecast = Self.todayForecast(with: forecast, location: location)
+            output.hourlyForecast = Self.hourlyForecast(with: forecast)
+            output.dailyForecast = Self.dailyForecast(with: forecast)
+            output.imageURL = await fetchImage(
                 for: location,
                 forecast: forecast
             )
-            isFetching = false
         }
     }
     
@@ -138,17 +143,18 @@ extension ForecastLocationItemView.ViewModel {
             do {
                 try await locationManager.remove(location: location.id)
             } catch {
-                self.error = ForecastLocationItemView.Error.deleteFailed(location)
+                output.error = ForecastLocationItemView.Error.deleteFailed(location)
             }
         }
     }
     
-    private static func todayForecast(with forecast: ForecastItem?) -> ForecastLocationItemView.TodayForecast {
+    private static func todayForecast(with forecast: ForecastItem?, location: any ForecastLocation) -> ForecastLocationItemView.TodayForecast {
+        let calendar = (try? Calendar.currentCalendar(for: location)) ?? Calendar.current
         guard let forecast,
               let today = forecast.daily
             .weather
             .first(where: { item in
-                Calendar.current.isDateInToday(item.time)
+                calendar.isDateInToday(item.time)
             })
         else { return .default }
 

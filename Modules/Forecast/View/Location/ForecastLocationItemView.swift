@@ -9,6 +9,7 @@ import SwiftUI
 import CoreLocation
 import ForecastDependency
 
+@MainActor
 struct ForecastLocationItemView: View {
     @StateObject private var viewModel: ViewModel
     @State private var showingForecast = false
@@ -23,13 +24,17 @@ struct ForecastLocationItemView: View {
         ZStack {
             Color.clear
                 .background {
-                    AsyncImage(url: viewModel.imageURL, content: { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    }, placeholder: {
-                        ProgressView().progressViewStyle(.circular)
-                            .tint(.white)
+                    AsyncImage(url: viewModel.output.imageURL, content: { phase in
+                        if let image = phase.image {
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                        } else if phase.error != nil {
+                            EmptyView()
+                        } else {
+                            ProgressView().progressViewStyle(.circular)
+                                .tint(.white)
+                        }
                     })
                 }
                 .contentShape(Rectangle())
@@ -52,10 +57,10 @@ struct ForecastLocationItemView: View {
             }
             Button("Cancel", role: .cancel) { }
         }
-        .alert(isPresented: $showingErrorAlert, error: viewModel.error) {
+        .alert(isPresented: $showingErrorAlert, error: viewModel.output.error) {
             Button("Ok", role: .cancel) { }
         }
-        .onReceive(viewModel.$error) { error in
+        .onReceive(viewModel.output.$error) { error in
             guard error != nil else { return }
             showingErrorAlert = true
         }
@@ -63,14 +68,19 @@ struct ForecastLocationItemView: View {
     
     private func currentWeatherView() -> some View {
         VStack {
-            Text(viewModel.locationName)
-                .font(.system(.largeTitle, design: .rounded))
-                .fontWeight(.bold)
-            Text(viewModel.currentWeather.temperature)
+            HStack {
+                if viewModel.output.isUserLocation {
+                    Image(systemName: "location.fill")
+                }
+                Text(viewModel.output.locationName)
+                    .font(.system(.largeTitle, design: .rounded))
+                    .fontWeight(.bold)
+            }
+            Text(viewModel.output.currentWeather.temperature)
                 .font(.system(.title, design: .rounded))
-            Text(viewModel.currentWeather.weatherIcon)
+            Text(viewModel.output.currentWeather.weatherIcon)
                 .font(Font.weatherIconFont(size: 80))
-            Text(viewModel.currentWeather.weatherDescription)
+            Text(viewModel.output.currentWeather.weatherDescription)
                 .font(.system(.body, design: .rounded))
                 .fontWeight(.medium)
         }
@@ -90,17 +100,19 @@ struct ForecastLocationItemView: View {
                 if showingForecast {
                     ScrollView(.vertical) {
                         VStack(alignment: .leading) {
-                            hourlyWeatherView(forecast: viewModel.hourlyForecast)
-                            dailyWeatherView(forecast: viewModel.dailyForecast)
+                            hourlyWeatherView(forecast: viewModel.output.hourlyForecast)
+                            dailyWeatherView(forecast: viewModel.output.dailyForecast)
                         }
                     }
                     .transition(.push(from: .bottom))
                 }
-                Button("Delete location", role: .destructive) {
-                    showingDeleteAlert = true
+                if !viewModel.output.isUserLocation {
+                    Button("Delete location", role: .destructive) {
+                        showingDeleteAlert = true
+                    }
+                    .buttonStyle(.borderless)
+                    .shadow(color: .red, radius: 20)
                 }
-                .buttonStyle(.borderless)
-                .shadow(color: .red, radius: 20)
             }
             .padding()
             Spacer()
@@ -117,8 +129,8 @@ struct ForecastLocationItemView: View {
                 Text(showingForecast ? "Today" : "Forecast")
                     .font(.headline)
                 HStack(spacing: 16) {
-                    Self.dailyTemperatureView(value: viewModel.todayForecast.temperatureMin, isMax: false)
-                    Self.dailyTemperatureView(value: viewModel.todayForecast.temperatureMax, isMax: true)
+                    Self.dailyTemperatureView(value: viewModel.output.todayForecast.temperatureMin, isMax: false)
+                    Self.dailyTemperatureView(value: viewModel.output.todayForecast.temperatureMax, isMax: true)
                 }
                 .font(.body)
             }
@@ -229,6 +241,7 @@ fileprivate extension View {
 /// Preview
 fileprivate struct PreviewLocation: ForecastLocation {
     var id: String = UUID().uuidString
+    var isUserLocation: Bool = false
     var name: String = "Kyiv"
     var latitude: Float = 0
     var longitude: Float = 0
@@ -245,7 +258,8 @@ extension ForecastLocationItemView.ViewModel {
 }
 
 struct ForecastLocationItemBuilderPreview: ForecastLocationItemBuilder {
-    func view(location: NamedLocation) -> AnyView {
+    @MainActor
+    func view(location: any ForecastLocation) -> AnyView {
         AnyView(
             ForecastLocationItemView(viewModel: .preview)
         )

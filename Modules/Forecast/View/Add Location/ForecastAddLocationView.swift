@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+@MainActor
 struct ForecastAddLocationView: View {
     @State private var showingSearch = false
     @State private var showingAlert = false
@@ -50,15 +51,15 @@ struct ForecastAddLocationView: View {
             .clipped()
             .sheet(isPresented: $showingSearch) {
                 searchBuilder.view(locationBinding: $viewModel.location)
-                    .alert(isPresented: $showingAlert, error: viewModel.error) {
+                    .alert(isPresented: $showingAlert, error: viewModel.output.error) {
                         Button("Ok", role: .cancel) { }
                     }
             }
-            .onReceive(viewModel.$error) { error in
+            .onReceive(viewModel.output.$error) { error in
                 guard error != nil else { return }
                 showingAlert = true
             }
-            .onReceive(viewModel.$dismissSearch) { dismissSearch in
+            .onReceive(viewModel.output.$dismissSearch) { dismissSearch in
                 guard dismissSearch else { return }
                 showingSearch = false
             }
@@ -71,12 +72,15 @@ extension ForecastAddLocationView.ViewModel {
 }
 
 struct ForecastAddLocationViewBuilderPreview: ForecastAddLocationViewBuilder {
-    let view: AnyView = AnyView(
-        ForecastAddLocationView(
-            viewModel: .preview,
-            searchBuilder: ForecastLocationSearchViewBuilderPreview()
+    @MainActor
+    var view: AnyView {
+        AnyView(
+            ForecastAddLocationView(
+                viewModel: .preview,
+                searchBuilder: ForecastLocationSearchViewBuilderPreview()
+            )
         )
-    )
+    }
 }
 
 #Preview {
