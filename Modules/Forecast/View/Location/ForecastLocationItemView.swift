@@ -148,10 +148,7 @@ struct ForecastLocationItemView: View {
     }
     
     private static func dailyTemperatureView(value: String, isMax: Bool) -> some View {
-        HStack {
-            Image(systemName: isMax ? "arrow.up" : "arrow.down")
-            Text(value)
-        }
+        Label(value, systemImage: isMax ? "arrow.up" : "arrow.down")
     }
     
     private func hourlyWeatherView(forecast: [HourlyForecast]) -> some View {
@@ -223,18 +220,10 @@ fileprivate extension Font {
 }
 
 fileprivate extension View {
-    func defaultContentShadow() -> some View {
-        self.shadow(color: .white, radius: 10)
-    }
-    
-    func defaultContentColor() -> some View {
-        self.foregroundStyle(.black)
-    }
-    
     func defaultContentStyle() -> some View {
         self
-            .defaultContentColor()
-            .defaultContentShadow()
+            .foregroundStyle(.black)
+            .whiteContentShadow()
     }
 }
 
@@ -269,4 +258,3 @@ struct ForecastLocationItemBuilderPreview: ForecastLocationItemBuilder {
 #Preview {
     ForecastLocationItemView(viewModel: .preview)
 }
-
