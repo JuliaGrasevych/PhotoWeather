@@ -30,7 +30,7 @@ class PhotoStockFetcher: PhotoStockFetching {
         self.apiKeyProvider = apiKeyProvider
     }
     
-    func photoURL(for location: LocationProtocol, tags: [String]) async throws -> URL {
+    func photo(for location: LocationProtocol, tags: [String]) async throws -> Photo {
         let apiKey = try apiKeyProvider.flickrAPIKey()
         let fetchURL = Self.fetchURL(
             for: location,
@@ -46,7 +46,10 @@ class PhotoStockFetcher: PhotoStockFetching {
         else {
             throw PhotoStockFetchingError.noResultsFound
         }
-        return photoUrl
+        return Photo(
+            url: photoUrl,
+            author: photo.owner
+        )
     }
     
     private static func transformResponse(data: Data) -> Data {

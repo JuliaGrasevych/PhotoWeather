@@ -24,4 +24,10 @@ public extension View {
     func whiteContentShadow() -> some View {
         modifier(ContentShadow(color: .white))
     }
+    
+    func defaultContentStyle() -> some View {
+        self
+            .foregroundStyle(.black)
+            .whiteContentShadow()
+    }
 }

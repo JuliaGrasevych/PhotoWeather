@@ -43,6 +43,7 @@ struct ForecastLocationItemView: View {
             VStack {
                 currentWeatherView()
                 Spacer()
+                photoAuthorView()
                 forecastView()
             }
             .frame(
@@ -211,19 +212,21 @@ struct ForecastLocationItemView: View {
             }
         }
     }
+    
+    private func photoAuthorView() -> some View {
+        VStack {
+            Label(viewModel.output.imageAuthorTitle ?? "", systemImage: "camera.fill")
+                .defaultContentStyle()
+                .font(.caption)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+        }
+    }
 }
 
 fileprivate extension Font {
     static func weatherIconFont(size: CGFloat) -> Font {
         .custom("weather-icons-lite", size: size)
-    }
-}
-
-fileprivate extension View {
-    func defaultContentStyle() -> some View {
-        self
-            .foregroundStyle(.black)
-            .whiteContentShadow()
     }
 }
 

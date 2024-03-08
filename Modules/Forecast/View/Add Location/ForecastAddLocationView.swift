@@ -38,8 +38,7 @@ struct ForecastAddLocationView: View {
             .labelStyle(VerticalLabelStyle())
         }
         .font(.largeTitle)
-        .foregroundColor(.black)
-        .whiteContentShadow()
+        .defaultContentStyle()
         .frame(
             maxWidth: .infinity,
             maxHeight: .infinity
