@@ -85,7 +85,6 @@
 		A3BE11A22B8E25EA0091ECC0 /* Core.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A374CA812B7FD3B40063F7C3 /* Core.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A3BE11A62B8E26180091ECC0 /* ForecastDependency.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3BE11922B8E258C0091ECC0 /* ForecastDependency.framework */; };
 		A3BE11A72B8E26180091ECC0 /* ForecastDependency.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A3BE11922B8E258C0091ECC0 /* ForecastDependency.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A3BE11AA2B8E26200091ECC0 /* ForecastDependency.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3BE11922B8E258C0091ECC0 /* ForecastDependency.framework */; };
 		A3BE11B82B8E29AD0091ECC0 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3BE11B22B8E29AD0091ECC0 /* Storage.framework */; };
 		A3BE11B92B8E29AD0091ECC0 /* Storage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A3BE11B22B8E29AD0091ECC0 /* Storage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A3BE11BE2B8E29C50091ECC0 /* UserDefaultsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BE11BD2B8E29C50091ECC0 /* UserDefaultsStore.swift */; };
@@ -427,7 +426,6 @@
 				A374CAEE2B8397730063F7C3 /* Forecast.framework in Frameworks */,
 				A3BE11982B8E258C0091ECC0 /* ForecastDependency.framework in Frameworks */,
 				A3BE11B82B8E29AD0091ECC0 /* Storage.framework in Frameworks */,
-				A3BE11AA2B8E26200091ECC0 /* ForecastDependency.framework in Frameworks */,
 				A374CAA12B8393640063F7C3 /* PhotoStock.framework in Frameworks */,
 				A374CAD02B8396720063F7C3 /* PhotoStockDependency.framework in Frameworks */,
 				A3BE115D2B839AF70091ECC0 /* Core.framework in Frameworks */,
@@ -998,7 +996,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1520;
-				LastUpgradeCheck = 1520;
+				LastUpgradeCheck = 1530;
 				TargetAttributes = {
 					A374CA802B7FD3B40063F7C3 = {
 						CreatedOnToolsVersion = 15.2;
@@ -1371,6 +1369,7 @@
 		A374CA8A2B7FD3B40063F7C3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -1403,6 +1402,7 @@
 		A374CA8B2B7FD3B40063F7C3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -1435,6 +1435,7 @@
 		A374CAA42B8393640063F7C3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -1467,6 +1468,7 @@
 		A374CAA52B8393640063F7C3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -1500,6 +1502,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -1534,6 +1537,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -1566,6 +1570,7 @@
 		A374CAF12B8397730063F7C3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -1598,6 +1603,7 @@
 		A374CAF22B8397730063F7C3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -1898,6 +1904,7 @@
 		A3BE119B2B8E258C0091ECC0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -1930,6 +1937,7 @@
 		A3BE119C2B8E258C0091ECC0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -1963,6 +1971,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -1997,6 +2006,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
