@@ -8,6 +8,16 @@
 import Foundation
 import Core
 
+public struct Photo {
+    public let url: URL
+    public let author: String
+    
+    public init(url: URL, author: String) {
+        self.url = url
+        self.author = author
+    }
+}
+
 public protocol PhotoStockFetching {
-    func photoURL(for location: LocationProtocol, tags: [String]) async throws -> URL
+    func photo(for location: LocationProtocol, tags: [String]) async throws -> Photo
 }

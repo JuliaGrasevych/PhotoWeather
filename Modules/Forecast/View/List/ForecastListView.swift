@@ -126,8 +126,11 @@ struct ForecastListPreviewFetcher: ForecastFetching {
 }
 
 struct PhotoStockPreviewFetcher: PhotoStockFetching {
-    func photoURL(for location: LocationProtocol, tags: [String]) async throws -> URL {
-        URL(string: "https://th.bing.com/th/id/OIG3._lMZO_nHk.Lnpcc0Q0cT?w=1024&h=1024&rs=1&pid=ImgDetMain")!
+    func photo(for location: LocationProtocol, tags: [String]) async throws -> Photo {
+        Photo(
+            url: URL(string: "https://th.bing.com/th/id/OIG3._lMZO_nHk.Lnpcc0Q0cT?w=1024&h=1024&rs=1&pid=ImgDetMain")!,
+            author: "John Doe"
+            )
     }
 }
 

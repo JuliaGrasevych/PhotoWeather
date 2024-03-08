@@ -40,7 +40,7 @@ struct ForecastLocationSearchView: View {
                     }
                 }
             }
-            .foregroundColor(.black)
+            .foregroundStyle(.black)
             .onReceive(viewModel.output.$location) { location in
                 guard let location else { return }
                 self.location = location

@@ -43,6 +43,7 @@ struct ForecastLocationItemView: View {
             VStack {
                 currentWeatherView()
                 Spacer()
+                photoAuthorView()
                 forecastView()
             }
             .frame(
@@ -148,10 +149,7 @@ struct ForecastLocationItemView: View {
     }
     
     private static func dailyTemperatureView(value: String, isMax: Bool) -> some View {
-        HStack {
-            Image(systemName: isMax ? "arrow.up" : "arrow.down")
-            Text(value)
-        }
+        Label(value, systemImage: isMax ? "arrow.up" : "arrow.down")
     }
     
     private func hourlyWeatherView(forecast: [HourlyForecast]) -> some View {
@@ -214,27 +212,21 @@ struct ForecastLocationItemView: View {
             }
         }
     }
+    
+    private func photoAuthorView() -> some View {
+        VStack {
+            Label(viewModel.output.imageAuthorTitle ?? "", systemImage: "camera.fill")
+                .defaultContentStyle()
+                .font(.caption)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+        }
+    }
 }
 
 fileprivate extension Font {
     static func weatherIconFont(size: CGFloat) -> Font {
         .custom("weather-icons-lite", size: size)
-    }
-}
-
-fileprivate extension View {
-    func defaultContentShadow() -> some View {
-        self.shadow(color: .white, radius: 10)
-    }
-    
-    func defaultContentColor() -> some View {
-        self.foregroundStyle(.black)
-    }
-    
-    func defaultContentStyle() -> some View {
-        self
-            .defaultContentColor()
-            .defaultContentShadow()
     }
 }
 
@@ -269,4 +261,3 @@ struct ForecastLocationItemBuilderPreview: ForecastLocationItemBuilder {
 #Preview {
     ForecastLocationItemView(viewModel: .preview)
 }
-

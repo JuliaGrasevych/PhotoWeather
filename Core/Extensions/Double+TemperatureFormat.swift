@@ -15,19 +15,10 @@ public struct TemperatureFormatStyle: FormatStyle {
         .number
         .precision(.fractionLength(.zero))
         .rounded(rule: .toNearestOrAwayFromZero)
+        .sign(strategy: .always(includingZero: false))
     
     public func format(_ value: Double) -> String {
-        let formattedNumber = value.formatted(Self.numberFormatStyle)
-        switch value {
-        case 0:
-            return formattedNumber
-        case ..<0:
-            return formattedNumber
-        case 0...:
-            return "+\(formattedNumber)"
-        default:
-            return formattedNumber
-        }
+        value.formatted(Self.numberFormatStyle)
     }
 }
 
