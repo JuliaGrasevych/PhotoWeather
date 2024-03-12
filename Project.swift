@@ -133,7 +133,9 @@ let project = Project(
                     with: [
                         "FLICKR_API_KEY": "$(FLICKR_API_KEY)",
                         "UIAppFonts": ["weather-icons-lite.ttf"],
-                        "CFBundleVersion": "0.1"
+                        "NSLocationWhenInUseUsageDescription": "Allow access to user location to get weather for your city",
+                        "CFBundleVersion": "0.1",
+                        "CFBundleShortVersionString": "0.1"
                     ]
                 ),
                 scripts: [
