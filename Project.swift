@@ -93,8 +93,8 @@ let project = Project(
     name: "PhotoWeather",
     settings: .settings(
         configurations: [
-            .debug(name: "Debug", xcconfig: "PhotoWeatherProject.xcconfig"),
-            .release(name: "Release", xcconfig: "PhotoWeatherProject.xcconfig")
+            .debug(name: "Debug", xcconfig: "Configs/PhotoWeatherProject.xcconfig"),
+            .release(name: "Release", xcconfig: "Configs/PhotoWeatherProject.xcconfig")
         ]
     ),
     targets: [
@@ -154,7 +154,7 @@ let project = Project(
                 ],
                 settings: .settings(
                     configurations: [
-                        .debug(name: "Debug", xcconfig: "PhotoWeatherApp.xcconfig")
+                        .debug(name: "Debug", xcconfig: "Configs/PhotoWeatherApp.xcconfig")
                     ]
                 )
             )

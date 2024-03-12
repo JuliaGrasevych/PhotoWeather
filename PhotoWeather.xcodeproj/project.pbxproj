@@ -317,7 +317,6 @@
 		5DD47CEE2C5D0C6FCB9AEFE6 /* PhotoStock-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "PhotoStock-Info.plist"; sourceTree = "<group>"; };
 		64C092CD506BAF7C9C42051A /* ForecastListComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastListComponent.swift; sourceTree = "<group>"; };
 		65133E790BC812F1E2BDCA42 /* LocationFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationFinder.swift; sourceTree = "<group>"; };
-		66C90A72E268EC27CC1854F5 /* PhotoWeatherProject.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = PhotoWeatherProject.xcconfig; sourceTree = "<group>"; };
 		67259C8987B8F4929CB82084 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		674282B2299D450BE5C73156 /* Double+TemperatureFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+TemperatureFormat.swift"; sourceTree = "<group>"; };
 		67C22E82FC44EAE9EF5CC355 /* View+RoundedBorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RoundedBorder.swift"; sourceTree = "<group>"; };
@@ -333,6 +332,7 @@
 		7FF04FD2D137363601EDD2D3 /* ForecastLocationSearchComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLocationSearchComponent.swift; sourceTree = "<group>"; };
 		803032929DCCC18B6EE58E48 /* URLQueryItem+KeyInit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLQueryItem+KeyInit.swift"; sourceTree = "<group>"; };
 		81F9230DAC37A1A6ED600B5C /* ForecastAddLocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastAddLocationViewModel.swift; sourceTree = "<group>"; };
+		8335166EFFD49E5C80A1E469 /* PhotoWeatherApp.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = PhotoWeatherApp.xcconfig; sourceTree = "<group>"; };
 		855948002512BA00B2DD8753 /* LocationProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationProtocol.swift; sourceTree = "<group>"; };
 		85E328315E900219ECD18F37 /* NeedleGenerated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeedleGenerated.swift; sourceTree = "<group>"; };
 		87CAC1ACCA3393C4ABCDDAF5 /* ForecastDependency-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "ForecastDependency-Info.plist"; sourceTree = "<group>"; };
@@ -348,6 +348,7 @@
 		C5C710307D129F28B9D37CE1 /* ForecastComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastComponent.swift; sourceTree = "<group>"; };
 		CFB3782F388E9B2517FD09CA /* Storage-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Storage-Info.plist"; sourceTree = "<group>"; };
 		D17D79622EC79DB46A60322C /* TuistFonts+PhotoWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistFonts+PhotoWeather.swift"; sourceTree = "<group>"; };
+		D2807D12E8DC2881EEE3C6AE /* PhotoWeatherProject.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = PhotoWeatherProject.xcconfig; sourceTree = "<group>"; };
 		D8C777B2DC6F07B37198C23F /* Bool+IntCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bool+IntCodable.swift"; sourceTree = "<group>"; };
 		DA67EACCFFAAE73AFAF7E55E /* ForecastLocationSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLocationSearchViewModel.swift; sourceTree = "<group>"; };
 		DCA974BF2B7816E78F705A99 /* UserDefaults+ObjectSavable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+ObjectSavable.swift"; sourceTree = "<group>"; };
@@ -360,7 +361,6 @@
 		F9ADA8700F52665D8F600159 /* Optional+Tuple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Tuple.swift"; sourceTree = "<group>"; };
 		FD0123501C458520547D3E43 /* ContentShadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentShadow.swift; sourceTree = "<group>"; };
 		FD516C62D7FA9663E6AC0F3E /* ForecastListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastListViewModel.swift; sourceTree = "<group>"; };
-		FEB8578AE50B1E61A2CE9AD6 /* PhotoWeatherApp.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = PhotoWeatherApp.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -517,14 +517,13 @@
 		5F73CFBD5D2543D55CE411ED /* Project */ = {
 			isa = PBXGroup;
 			children = (
+				B95C7041195522E1BEA69745 /* Configs */,
 				CD4CA8C7613693134A853C54 /* Core */,
 				F241290C8E37F715B5AB77BE /* Dependency */,
 				B25BA7446DF177B9E722F929 /* Derived */,
 				B85FB2AB88F8EEFCC7222789 /* Modules */,
 				C3F3A92397091A36C76ECA96 /* PhotoWeather */,
 				0D1EB1178E5F711148E9054E /* Storage */,
-				FEB8578AE50B1E61A2CE9AD6 /* PhotoWeatherApp.xcconfig */,
-				66C90A72E268EC27CC1854F5 /* PhotoWeatherProject.xcconfig */,
 			);
 			name = Project;
 			sourceTree = "<group>";
@@ -626,6 +625,15 @@
 				7C85E8843B8450C7A85D9EDD /* PhotoStock */,
 			);
 			path = Modules;
+			sourceTree = "<group>";
+		};
+		B95C7041195522E1BEA69745 /* Configs */ = {
+			isa = PBXGroup;
+			children = (
+				8335166EFFD49E5C80A1E469 /* PhotoWeatherApp.xcconfig */,
+				D2807D12E8DC2881EEE3C6AE /* PhotoWeatherProject.xcconfig */,
+			);
+			path = Configs;
 			sourceTree = "<group>";
 		};
 		C3534C780C69E30646DB8144 /* Add Location */ = {
@@ -1243,7 +1251,7 @@
 		};
 		2373BAC5D898FD0147E047C4 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 66C90A72E268EC27CC1854F5 /* PhotoWeatherProject.xcconfig */;
+			baseConfigurationReference = D2807D12E8DC2881EEE3C6AE /* PhotoWeatherProject.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -1540,7 +1548,7 @@
 		};
 		AC2448CEFCD25A7A03843063 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 66C90A72E268EC27CC1854F5 /* PhotoWeatherProject.xcconfig */;
+			baseConfigurationReference = D2807D12E8DC2881EEE3C6AE /* PhotoWeatherProject.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -1637,7 +1645,7 @@
 		};
 		BA454EBDB85C34550BECAA91 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FEB8578AE50B1E61A2CE9AD6 /* PhotoWeatherApp.xcconfig */;
+			baseConfigurationReference = 8335166EFFD49E5C80A1E469 /* PhotoWeatherApp.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
