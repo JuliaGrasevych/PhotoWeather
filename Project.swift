@@ -135,7 +135,8 @@ let project = Project(
                         "UIAppFonts": ["weather-icons-lite.ttf"],
                         "NSLocationWhenInUseUsageDescription": "Allow access to user location to get weather for your city",
                         "CFBundleVersion": "0.1",
-                        "CFBundleShortVersionString": "0.1"
+                        "CFBundleShortVersionString": "0.1",
+                        "UILaunchStoryboardName": "Launch Screen.storyboard"
                     ]
                 ),
                 scripts: [
