@@ -14,17 +14,38 @@ public protocol LocationProviding {
 }
 
 public class LocationProvider: NSObject, LocationProviding {
+    private typealias LocationContinuation = CheckedContinuation<CLLocation, Error>
+    private enum LocationState {
+        case empty
+        case pending([LocationContinuation])
+    }
+    
     private let locationManager: CLLocationManager
-    private var locationContinuation: CheckedContinuation<CLLocation, Error>?
     private var authorizationContinuation: CheckedContinuation<Bool, Never>?
+    
+    private var locationState = LocationState.empty
     
     public var currentLocation: CLLocation {
         get async throws {
-            try await withCheckedThrowingContinuation { continuation in
-                self.locationContinuation = continuation
-                locationManager.requestLocation()
+            switch locationState {
+            case .pending:
+                return try await withCheckedThrowingContinuation { continuation in
+                    trackContinuation(continuation)
+                }
+            case .empty:
+                self.locationState = .pending([])
+                return try await withCheckedThrowingContinuation { continuation in
+                    trackContinuation(continuation)
+                    locationManager.requestLocation()
+                }
             }
         }
+    }
+    
+    private func trackContinuation(_ continuation: LocationContinuation) {
+        guard case var .pending(array) = locationState else { return }
+        array.append(continuation)
+        self.locationState = .pending(array)
     }
     
     public init(locationManager: CLLocationManager) {
@@ -58,13 +79,19 @@ extension LocationProvider: CLLocationManagerDelegate {
         guard let lastLocation = locations.last else {
             return
         }
-        locationContinuation?.resume(returning: lastLocation)
-        locationContinuation = nil
+        guard case let .pending(array) = locationState else { return }
+        array.forEach { continuation in
+            continuation.resume(returning: lastLocation)
+        }
+        self.locationState = .empty
     }
     
     public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        locationContinuation?.resume(throwing: error)
-        locationContinuation = nil
+        guard case let .pending(array) = locationState else { return }
+        array.forEach { continuation in
+            continuation.resume(throwing: error)
+        }
+        self.locationState = .empty
     }
     
     public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {

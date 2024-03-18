@@ -61,7 +61,7 @@ extension ForecastLocationItemView {
         @Published var todayForecast: TodayForecast = .default
         @Published var hourlyForecast: [HourlyForecast] = [.default]
         @Published var dailyForecast: [DailyForecast] = [.default]
-        @Published var imageURL: URL?
+        @Published var image: LocationPhoto?
         @Published var imageAuthorTitle: String?
         @Published var error: Error?
     }
@@ -103,7 +103,7 @@ extension ForecastLocationItemView {
             }
         }
         
-        private func fetchImage(for location: any ForecastLocation, forecast: ForecastItem?) async -> Photo? {
+        private func fetchImage(for location: any ForecastLocation, forecast: ForecastItem?) async -> LocationPhoto {
             let calendar = (try? Calendar.currentCalendar(for: location)) ?? Calendar.current
             let tags = [
                 try? location.season(for: Date.now, calendar: calendar).tag,
@@ -115,10 +115,9 @@ extension ForecastLocationItemView {
                     for: location,
                     tags: tags
                 )
-                return photo
+                return .stockPhoto(photo)
             } catch {
-                // TODO: handle error and show default image
-                return nil
+                return .default
             }
         }
     }
@@ -136,8 +135,10 @@ extension ForecastLocationItemView.ViewModel {
                 for: location,
                 forecast: forecast
             )
-            output.imageURL = photo?.url
-            output.imageAuthorTitle = photo?.author
+            output.image = photo
+            if case .stockPhoto(let stockPhoto) = photo {
+                output.imageAuthorTitle = stockPhoto.author
+            }
         }
     }
     

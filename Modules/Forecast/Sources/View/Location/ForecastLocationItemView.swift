@@ -8,6 +8,12 @@
 import SwiftUI
 import CoreLocation
 import ForecastDependency
+import PhotoStockDependency
+
+enum LocationPhoto {
+    case stockPhoto(Photo)
+    case `default`
+}
 
 @MainActor
 struct ForecastLocationItemView: View {
@@ -24,18 +30,7 @@ struct ForecastLocationItemView: View {
         ZStack {
             Color.clear
                 .background {
-                    AsyncImage(url: viewModel.output.imageURL, content: { phase in
-                        if let image = phase.image {
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                        } else if phase.error != nil {
-                            EmptyView()
-                        } else {
-                            ProgressView().progressViewStyle(.circular)
-                                .tint(.white)
-                        }
-                    })
+                    locationImage()
                 }
                 .contentShape(Rectangle())
                 .clipped()
@@ -64,6 +59,34 @@ struct ForecastLocationItemView: View {
         .onReceive(viewModel.output.$error) { error in
             guard error != nil else { return }
             showingErrorAlert = true
+        }
+    }
+    
+    private func locationImage() -> some View {
+        switch viewModel.output.image {
+        case .stockPhoto(let photo):
+            AnyView(
+                AsyncImage(url: photo.url, content: { phase in
+                if let image = phase.image {
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } else if phase.error != nil {
+                    defaultImage()
+                } else {
+                    ProgressView().progressViewStyle(.circular)
+                        .tint(.white)
+                }
+                })
+            )
+        case .default:
+            AnyView(
+                defaultImage()
+            )
+        case .none:
+            AnyView(
+                EmptyView()
+            )
         }
     }
     
@@ -221,6 +244,12 @@ struct ForecastLocationItemView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
         }
+    }
+    
+    private func defaultImage() -> some View {
+        Image(.defaultCity)
+            .resizable()
+            .aspectRatio(contentMode: .fill)
     }
 }
 

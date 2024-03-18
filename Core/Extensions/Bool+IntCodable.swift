@@ -9,7 +9,7 @@ import Foundation
 
 @propertyWrapper
 public struct BoolIntDecodable: Codable {
-    public let wrappedValue: Bool
+    public var wrappedValue: Bool
     
     public init(wrappedValue: Bool) {
         self.wrappedValue = wrappedValue
