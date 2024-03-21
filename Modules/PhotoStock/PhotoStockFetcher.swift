@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 import Core
 
 import PhotoStockDependency
@@ -97,6 +98,24 @@ class PhotoStockFetcher: PhotoStockFetching {
             with: url,
             size: .large
         )
+    }
+}
+
+extension PhotoStockFetcher: PhotoStockFetchingReactive {
+    func photo(for location: any LocationProtocol, tags: [String]) -> AnyPublisher<Photo, any Error> {
+        Deferred {
+            Future { promise in
+                Task {
+                    do {
+                        let photo = try await self.photo(for: location, tags: tags)
+                        promise(.success(photo))
+                    } catch {
+                        promise(.failure(error))
+                    }
+                }
+            }
+        }
+        .eraseToAnyPublisher()
     }
 }
 

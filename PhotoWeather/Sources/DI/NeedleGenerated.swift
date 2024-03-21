@@ -33,6 +33,19 @@ private func parent3(_ component: NeedleFoundation.Scope) -> NeedleFoundation.Sc
 
 #if !NEEDLE_DYNAMIC
 
+private class ForecastComponentDependency342ec1246a5e0294e566Provider: ForecastComponentDependency {
+    var networkService: NetworkServiceProtocol {
+        return rootReactiveComponent.networkService
+    }
+    private let rootReactiveComponent: RootReactiveComponent
+    init(rootReactiveComponent: RootReactiveComponent) {
+        self.rootReactiveComponent = rootReactiveComponent
+    }
+}
+/// ^->RootReactiveComponent->ForecastReactiveComponent
+private func factory1e61e324b043bdbac345bacfcca18711825e3a4e(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ForecastComponentDependency342ec1246a5e0294e566Provider(rootReactiveComponent: parent1(component) as! RootReactiveComponent)
+}
 private class ForecastComponentDependencye48cb9656c6785df1822Provider: ForecastComponentDependency {
     var networkService: NetworkServiceProtocol {
         return rootComponent.networkService
@@ -72,6 +85,40 @@ private class ForecastAddLocationDependency842a162c523bcbb0bb93Provider: Forecas
 private func factory2cea3293fe90ce11468e42f5655bf2362a8495f6(_ component: NeedleFoundation.Scope) -> AnyObject {
     return ForecastAddLocationDependency842a162c523bcbb0bb93Provider(rootComponent: parent3(component) as! RootComponent)
 }
+private class ForecastAddLocationDependencyc32bec6b25785cf02aa2Provider: ForecastAddLocationDependency {
+    var locationStorage: LocationStoring {
+        return rootReactiveComponent.locationStorage
+    }
+    private let rootReactiveComponent: RootReactiveComponent
+    init(rootReactiveComponent: RootReactiveComponent) {
+        self.rootReactiveComponent = rootReactiveComponent
+    }
+}
+/// ^->RootReactiveComponent->ForecastReactiveComponent->ForecastListReactiveComponent->ForecastAddLocationComponent
+private func factory370540fbe645e4d0233d0c7717717e1dd9313958(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ForecastAddLocationDependencyc32bec6b25785cf02aa2Provider(rootReactiveComponent: parent3(component) as! RootReactiveComponent)
+}
+private class ForecastLocationItemReactiveDependencyeb8f9ee901751345c023Provider: ForecastLocationItemReactiveDependency {
+    var weatherFetcher: ForecastFetchingReactive {
+        return forecastReactiveComponent.weatherFetcher
+    }
+    var photoFetcher: PhotoStockFetchingReactive {
+        return rootReactiveComponent.photoFetcher
+    }
+    var locationManager: LocationManagingReactive {
+        return rootReactiveComponent.locationManager
+    }
+    private let forecastReactiveComponent: ForecastReactiveComponent
+    private let rootReactiveComponent: RootReactiveComponent
+    init(forecastReactiveComponent: ForecastReactiveComponent, rootReactiveComponent: RootReactiveComponent) {
+        self.forecastReactiveComponent = forecastReactiveComponent
+        self.rootReactiveComponent = rootReactiveComponent
+    }
+}
+/// ^->RootReactiveComponent->ForecastReactiveComponent->ForecastListReactiveComponent->ForecastLocationItemReactiveComponent
+private func factory7d25b2b487d4fb91d8420406837a51b780cb807e(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ForecastLocationItemReactiveDependencyeb8f9ee901751345c023Provider(forecastReactiveComponent: parent2(component) as! ForecastReactiveComponent, rootReactiveComponent: parent3(component) as! RootReactiveComponent)
+}
 private class ForecastLocationItemDependency82611c29f5e1ee9b87d6Provider: ForecastLocationItemDependency {
     var weatherFetcher: ForecastFetching {
         return forecastComponent.weatherFetcher
@@ -109,6 +156,22 @@ private class ForecastListDependency5440bb37a7e976e93088Provider: ForecastListDe
 private func factoryce735b6ba16cf6375ceca9403e3301bb54f80df0(_ component: NeedleFoundation.Scope) -> AnyObject {
     return ForecastListDependency5440bb37a7e976e93088Provider(rootComponent: parent2(component) as! RootComponent)
 }
+private class ForecastListDependency54e9f58408d545ba4c5fProvider: ForecastListDependency {
+    var locationStorage: LocationStoring {
+        return rootReactiveComponent.locationStorage
+    }
+    var locationProvider: LocationProviding {
+        return rootReactiveComponent.locationProvider
+    }
+    private let rootReactiveComponent: RootReactiveComponent
+    init(rootReactiveComponent: RootReactiveComponent) {
+        self.rootReactiveComponent = rootReactiveComponent
+    }
+}
+/// ^->RootReactiveComponent->ForecastReactiveComponent->ForecastListReactiveComponent
+private func factory7e39831331b9c28ce6f628de26410d04920966c4(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ForecastListDependency54e9f58408d545ba4c5fProvider(rootReactiveComponent: parent2(component) as! RootReactiveComponent)
+}
 private class PhotoStockComponentDependency4c4ae33c040d2d8a8bfcProvider: PhotoStockComponentDependency {
     var networkService: NetworkServiceProtocol {
         return rootComponent.networkService
@@ -125,11 +188,34 @@ private class PhotoStockComponentDependency4c4ae33c040d2d8a8bfcProvider: PhotoSt
 private func factory18332b7f0337893519d5b3a8f24c1d289f2c0f2e(_ component: NeedleFoundation.Scope) -> AnyObject {
     return PhotoStockComponentDependency4c4ae33c040d2d8a8bfcProvider(rootComponent: parent1(component) as! RootComponent)
 }
+private class PhotoStockComponentDependencydf2f587c24fceb89d64cProvider: PhotoStockComponentDependency {
+    var networkService: NetworkServiceProtocol {
+        return rootReactiveComponent.networkService
+    }
+    var apiKeyProvider: FlickrAPIKeyProviding {
+        return rootReactiveComponent.apiKeyProvider
+    }
+    private let rootReactiveComponent: RootReactiveComponent
+    init(rootReactiveComponent: RootReactiveComponent) {
+        self.rootReactiveComponent = rootReactiveComponent
+    }
+}
+/// ^->RootReactiveComponent->PhotoStockComponent
+private func factoryfc279b909075d4277b33bacfcca18711825e3a4e(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return PhotoStockComponentDependencydf2f587c24fceb89d64cProvider(rootReactiveComponent: parent1(component) as! RootReactiveComponent)
+}
 
 #else
 extension StorageComponent: Registration {
     public func registerItems() {
 
+    }
+}
+extension ForecastReactiveComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\ForecastComponentDependency.networkService] = "networkService-NetworkServiceProtocol"
+        localTable["weatherFetcher-ForecastFetchingReactive"] = { [unowned self] in self.weatherFetcher as Any }
+        localTable["view-AnyView"] = { [unowned self] in self.view as Any }
     }
 }
 extension ForecastComponent: Registration {
@@ -151,6 +237,13 @@ extension ForecastAddLocationComponent: Registration {
         localTable["locationFinder-LocationSearching"] = { [unowned self] in self.locationFinder as Any }
     }
 }
+extension ForecastLocationItemReactiveComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\ForecastLocationItemReactiveDependency.weatherFetcher] = "weatherFetcher-ForecastFetchingReactive"
+        keyPathToName[\ForecastLocationItemReactiveDependency.photoFetcher] = "photoFetcher-PhotoStockFetchingReactive"
+        keyPathToName[\ForecastLocationItemReactiveDependency.locationManager] = "locationManager-LocationManagingReactive"
+    }
+}
 extension ForecastLocationItemComponent: Registration {
     public func registerItems() {
         keyPathToName[\ForecastLocationItemDependency.weatherFetcher] = "weatherFetcher-ForecastFetching"
@@ -159,6 +252,13 @@ extension ForecastLocationItemComponent: Registration {
     }
 }
 extension ForecastListComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\ForecastListDependency.locationStorage] = "locationStorage-LocationStoring"
+        keyPathToName[\ForecastListDependency.locationProvider] = "locationProvider-LocationProviding"
+        localTable["view-AnyView"] = { [unowned self] in self.view as Any }
+    }
+}
+extension ForecastListReactiveComponent: Registration {
     public func registerItems() {
         keyPathToName[\ForecastListDependency.locationStorage] = "locationStorage-LocationStoring"
         keyPathToName[\ForecastListDependency.locationProvider] = "locationProvider-LocationProviding"
@@ -182,6 +282,17 @@ extension RootComponent: Registration {
         localTable["locationManager-LocationManaging"] = { [unowned self] in self.locationManager as Any }
     }
 }
+extension RootReactiveComponent: Registration {
+    public func registerItems() {
+
+        localTable["networkService-NetworkServiceProtocol"] = { [unowned self] in self.networkService as Any }
+        localTable["apiKeyProvider-FlickrAPIKeyProviding"] = { [unowned self] in self.apiKeyProvider as Any }
+        localTable["photoFetcher-PhotoStockFetchingReactive"] = { [unowned self] in self.photoFetcher as Any }
+        localTable["locationStorage-LocationStoring"] = { [unowned self] in self.locationStorage as Any }
+        localTable["locationProvider-LocationProviding"] = { [unowned self] in self.locationProvider as Any }
+        localTable["locationManager-LocationManagingReactive"] = { [unowned self] in self.locationManager as Any }
+    }
+}
 
 
 #endif
@@ -199,13 +310,21 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
 
 @inline(never) private func register1() {
     registerProviderFactory("^->RootComponent->StorageComponent", factoryEmptyDependencyProvider)
+    registerProviderFactory("^->RootReactiveComponent->StorageComponent", factoryEmptyDependencyProvider)
+    registerProviderFactory("^->RootReactiveComponent->ForecastReactiveComponent", factory1e61e324b043bdbac345bacfcca18711825e3a4e)
     registerProviderFactory("^->RootComponent->ForecastComponent", factory86564a6fad5198b6d013b3a8f24c1d289f2c0f2e)
     registerProviderFactory("^->RootComponent->ForecastComponent->ForecastListComponent->ForecastAddLocationComponent->ForecastLocationSearchComponent", factory608345bf27adcb4b08a7675656a41af65a05573c)
+    registerProviderFactory("^->RootReactiveComponent->ForecastReactiveComponent->ForecastListReactiveComponent->ForecastAddLocationComponent->ForecastLocationSearchComponent", factory608345bf27adcb4b08a7675656a41af65a05573c)
     registerProviderFactory("^->RootComponent->ForecastComponent->ForecastListComponent->ForecastAddLocationComponent", factory2cea3293fe90ce11468e42f5655bf2362a8495f6)
+    registerProviderFactory("^->RootReactiveComponent->ForecastReactiveComponent->ForecastListReactiveComponent->ForecastAddLocationComponent", factory370540fbe645e4d0233d0c7717717e1dd9313958)
+    registerProviderFactory("^->RootReactiveComponent->ForecastReactiveComponent->ForecastListReactiveComponent->ForecastLocationItemReactiveComponent", factory7d25b2b487d4fb91d8420406837a51b780cb807e)
     registerProviderFactory("^->RootComponent->ForecastComponent->ForecastListComponent->ForecastLocationItemComponent", factory7b5a985098510ca0e8780ddef189803d21e8f8d8)
     registerProviderFactory("^->RootComponent->ForecastComponent->ForecastListComponent", factoryce735b6ba16cf6375ceca9403e3301bb54f80df0)
+    registerProviderFactory("^->RootReactiveComponent->ForecastReactiveComponent->ForecastListReactiveComponent", factory7e39831331b9c28ce6f628de26410d04920966c4)
     registerProviderFactory("^->RootComponent->PhotoStockComponent", factory18332b7f0337893519d5b3a8f24c1d289f2c0f2e)
+    registerProviderFactory("^->RootReactiveComponent->PhotoStockComponent", factoryfc279b909075d4277b33bacfcca18711825e3a4e)
     registerProviderFactory("^->RootComponent", factoryEmptyDependencyProvider)
+    registerProviderFactory("^->RootReactiveComponent", factoryEmptyDependencyProvider)
 }
 #endif
 

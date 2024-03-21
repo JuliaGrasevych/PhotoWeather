@@ -28,8 +28,36 @@ public class ForecastListComponent: Component<ForecastListDependency> {
         )
     }
     
-    var itemComponent: ForecastLocationItemComponent {
+    var itemComponent: ForecastLocationItemBuilder {
         ForecastLocationItemComponent(parent: self)
+    }
+    
+    var addLocationComponent: ForecastAddLocationComponent {
+        ForecastAddLocationComponent(parent: self)
+    }
+}
+
+public class ForecastListReactiveComponent: Component<ForecastListDependency> {
+    var viewModel: ForecastListView.ViewModel {
+        ForecastListView.ViewModel(
+            locationStorage: dependency.locationStorage,
+            locationProvider: dependency.locationProvider
+        )
+    }
+    
+    @MainActor
+    public var view: AnyView {
+        AnyView(
+            ForecastListView(
+                viewModel: self.viewModel,
+                itemBuilder: itemComponent,
+                addLocationBuilder: addLocationComponent
+            )
+        )
+    }
+    
+    var itemComponent: ForecastLocationItemBuilder {
+        ForecastLocationItemReactiveComponent(parent: self)
     }
     
     var addLocationComponent: ForecastAddLocationComponent {

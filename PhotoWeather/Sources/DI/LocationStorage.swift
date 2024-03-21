@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 import Forecast
 import ForecastDependency
 
@@ -41,5 +42,24 @@ actor LocationStorage: LocationStoring, LocationManaging {
     
     func remove(location id: NamedLocation.ID) async throws {
         internalLocationStore = try await externalStore.remove(location: id)
+    }
+}
+
+extension LocationStorage: LocationManagingReactive {
+    nonisolated func remove(location id: NamedLocation.ID) -> AnyPublisher<Void, any Error> {
+        Deferred {
+            Future { promise in
+                Task {
+                    do {
+                        try await self.remove(location: id)
+                        // TODO: how to access promise in async context?
+                        promise(.success(()))
+                    } catch {
+                        promise(.failure(error))
+                    }
+                }
+            }
+        }
+        .eraseToAnyPublisher()
     }
 }

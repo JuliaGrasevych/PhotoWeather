@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -68,6 +68,11 @@
 		97C520DEBCC305692830750A /* ForecastLocationSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD97938872B340856F2755A3 /* ForecastLocationSearchView.swift */; };
 		9CF866076614C8224665B7CD /* PhotoStockDependency.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 453D909A0C0C6217E1D30441 /* PhotoStockDependency.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A2E8AA19C765BE201F6E0E6A /* ForecastLocation+Season.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272EA5B6E39FAE7418DD7A4D /* ForecastLocation+Season.swift */; };
+		A37645A82BA9E92D009E69F5 /* ForecastLocationItemViewModelReactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645A72BA9E92D009E69F5 /* ForecastLocationItemViewModelReactive.swift */; };
+		A37645AA2BA9EF83009E69F5 /* ForecastLocationItemViewModelOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645A92BA9EF83009E69F5 /* ForecastLocationItemViewModelOutput.swift */; };
+		A37645AC2BAC82F0009E69F5 /* ForecastLocationItemReactiveComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645AB2BAC82F0009E69F5 /* ForecastLocationItemReactiveComponent.swift */; };
+		A37645AF2BAC8389009E69F5 /* ForecastReactiveComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645AE2BAC8389009E69F5 /* ForecastReactiveComponent.swift */; };
+		A37645B12BAC8AB3009E69F5 /* ForecastLocationItemViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645B02BAC8AB3009E69F5 /* ForecastLocationItemViewModelProtocol.swift */; };
 		A435411D13C3440BE6553BDB /* ExternalLocationStoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4C58C61369B7A533CABB39 /* ExternalLocationStoring.swift */; };
 		A57A12D83F672DB84516A08F /* StorageComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D27BFD6CCB1DB81218752D5 /* StorageComponent.swift */; };
 		A58AA252FE49EF6ECF015083 /* ForecastLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABFFD018DC354EAF2C9B338 /* ForecastLocation.swift */; };
@@ -341,6 +346,11 @@
 		9A80693542A52218D6C51594 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A06366A13D370FA33AE18F6C /* PhotoWeather-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "PhotoWeather-Info.plist"; sourceTree = "<group>"; };
 		A252969FAC048573FA87DCC4 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		A37645A72BA9E92D009E69F5 /* ForecastLocationItemViewModelReactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLocationItemViewModelReactive.swift; sourceTree = "<group>"; };
+		A37645A92BA9EF83009E69F5 /* ForecastLocationItemViewModelOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLocationItemViewModelOutput.swift; sourceTree = "<group>"; };
+		A37645AB2BAC82F0009E69F5 /* ForecastLocationItemReactiveComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLocationItemReactiveComponent.swift; sourceTree = "<group>"; };
+		A37645AE2BAC8389009E69F5 /* ForecastReactiveComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastReactiveComponent.swift; sourceTree = "<group>"; };
+		A37645B02BAC8AB3009E69F5 /* ForecastLocationItemViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLocationItemViewModelProtocol.swift; sourceTree = "<group>"; };
 		A40976A9763A8CA4490108E8 /* NestedObservedObjectContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestedObservedObjectContainer.swift; sourceTree = "<group>"; };
 		AE26FC41538B399968D0D594 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		B1FCBC23584C08B97E8E1CA9 /* ForecastFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastFetcher.swift; sourceTree = "<group>"; };
@@ -600,6 +610,23 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		A37645A62BA9E912009E69F5 /* Combine */ = {
+			isa = PBXGroup;
+			children = (
+				A37645A72BA9E92D009E69F5 /* ForecastLocationItemViewModelReactive.swift */,
+				A37645AB2BAC82F0009E69F5 /* ForecastLocationItemReactiveComponent.swift */,
+			);
+			path = Combine;
+			sourceTree = "<group>";
+		};
+		A37645AD2BAC8382009E69F5 /* Combine */ = {
+			isa = PBXGroup;
+			children = (
+				A37645AE2BAC8389009E69F5 /* ForecastReactiveComponent.swift */,
+			);
+			path = Combine;
+			sourceTree = "<group>";
+		};
 		AE367D8C82CE3559B3F07162 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -608,6 +635,7 @@
 				C5C710307D129F28B9D37CE1 /* ForecastComponent.swift */,
 				2D0427439EC4AA3AA9C463BC /* LocationProvider+NamedLocation.swift */,
 				5A25CC742A23FB4687F1AC10 /* LocationStoring.swift */,
+				A37645AD2BAC8382009E69F5 /* Combine */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -744,8 +772,11 @@
 			isa = PBXGroup;
 			children = (
 				557AE446555B129E6568FE0E /* ForecastLocationItemComponent.swift */,
+				A37645B02BAC8AB3009E69F5 /* ForecastLocationItemViewModelProtocol.swift */,
 				086AA05018207C0AB729C07D /* ForecastLocationItemView.swift */,
 				6D07779E1BD38ABBC00F946B /* ForecastLocationItemViewModel.swift */,
+				A37645A92BA9EF83009E69F5 /* ForecastLocationItemViewModelOutput.swift */,
+				A37645A62BA9E912009E69F5 /* Combine */,
 			);
 			path = Location;
 			sourceTree = "<group>";
@@ -921,8 +952,6 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				TargetAttributes = {
-				};
 			};
 			buildConfigurationList = F556F0E5EE08114259BFC3F6 /* Build configuration list for PBXProject "PhotoWeather" */;
 			compatibilityVersion = "Xcode 14.0";
@@ -1058,25 +1087,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAA4564943CBB4B4576903AB /* TuistAssets+Forecast.swift in Sources */,
+				A37645A82BA9E92D009E69F5 /* ForecastLocationItemViewModelReactive.swift in Sources */,
 				3DBB8F91049B001BDE3ADCEE /* TuistBundle+Forecast.swift in Sources */,
 				578A1386782885885D618106 /* ForecastComponent.swift in Sources */,
 				B600CBE25086CDC17060A2EB /* LocationProvider+NamedLocation.swift in Sources */,
 				95BFA17BDA75571462E8817B /* LocationStoring.swift in Sources */,
 				4699D9A828182B9E491C738F /* ForecastFetcher.swift in Sources */,
+				A37645B12BAC8AB3009E69F5 /* ForecastLocationItemViewModelProtocol.swift in Sources */,
 				2281A2BDC2F8ADF20660AE66 /* ForecastItem.swift in Sources */,
 				A2E8AA19C765BE201F6E0E6A /* ForecastLocation+Season.swift in Sources */,
 				3B7F09E2DA04540A76464386 /* WeatherCode+WMO.swift in Sources */,
 				038728B35BB5BEE18B78A74E /* ForecastAddLocationComponent.swift in Sources */,
 				59B0A156368AAD73DA686C41 /* ForecastAddLocationView.swift in Sources */,
+				A37645AC2BAC82F0009E69F5 /* ForecastLocationItemReactiveComponent.swift in Sources */,
 				6A6B94F46210E30193015219 /* ForecastAddLocationViewModel.swift in Sources */,
 				253547C6EFFCEB7CED77D6C5 /* ForecastLocationSearchComponent.swift in Sources */,
 				97C520DEBCC305692830750A /* ForecastLocationSearchView.swift in Sources */,
 				141F868AA9343F217A753360 /* ForecastLocationSearchViewModel.swift in Sources */,
+				A37645AA2BA9EF83009E69F5 /* ForecastLocationItemViewModelOutput.swift in Sources */,
 				0C7890F5703C1407E1B2FB82 /* LocationFinder.swift in Sources */,
 				92FA700ABE529284EC59648F /* ForecastListComponent.swift in Sources */,
 				C2EF0E2848404AEBBF67822E /* ForecastListView.swift in Sources */,
 				DF4CCDD3EED8FFF7D089BA61 /* ForecastListViewModel.swift in Sources */,
 				3EDFA3EE9118418515C32D47 /* ForecastLocationItemComponent.swift in Sources */,
+				A37645AF2BAC8389009E69F5 /* ForecastReactiveComponent.swift in Sources */,
 				8ACDE2DE0A0F23810A487B6F /* ForecastLocationItemView.swift in Sources */,
 				7F9DA96021B7A53415F318ED /* ForecastLocationItemViewModel.swift in Sources */,
 			);
@@ -1331,10 +1365,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1500,10 +1531,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1537,10 +1565,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1634,10 +1659,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1666,10 +1688,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1701,10 +1720,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1804,10 +1820,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;

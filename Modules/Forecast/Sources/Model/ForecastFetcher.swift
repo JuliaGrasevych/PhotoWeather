@@ -6,11 +6,16 @@
 //
 
 import Foundation
+import Combine
 import Core
 import ForecastDependency
 
 public protocol ForecastFetching {
     func forecast(for location: any ForecastLocation) async throws -> ForecastItem
+}
+
+public protocol ForecastFetchingReactive {
+    func forecast(for location: any ForecastLocation) -> AnyPublisher<ForecastItem, Error>
 }
 
 class ForecastFetcher: ForecastFetching {
@@ -39,6 +44,24 @@ class ForecastFetcher: ForecastFetching {
             .compactMapValues { $0 }
             .map(URLQueryItem.init)
         return Endpoint.openMeteoForecast(with: queryItems).url
+    }
+}
+
+extension ForecastFetcher: ForecastFetchingReactive {
+    func forecast(for location: any ForecastLocation) -> AnyPublisher<ForecastItem, Error> {
+        Deferred {
+            Future { promise in
+                Task {
+                    do {
+                        let forecast = try await self.forecast(for: location)
+                        promise(.success(forecast))
+                    } catch {
+                        promise(.failure(error))
+                    }
+                }
+            }
+        }
+        .eraseToAnyPublisher()
     }
 }
 

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 import ForecastDependency
 
 public protocol LocationStoring {
@@ -15,4 +16,8 @@ public protocol LocationStoring {
 
 public protocol LocationManaging {
     func remove(location id: NamedLocation.ID) async throws
+}
+
+public protocol LocationManagingReactive {
+    func remove(location id: NamedLocation.ID) -> AnyPublisher<Void, Error>
 }
