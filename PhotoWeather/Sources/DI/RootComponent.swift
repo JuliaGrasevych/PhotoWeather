@@ -139,13 +139,13 @@ final class RootReactiveComponent: BootstrapComponent {
         }
     }
     
-    public var locationStorage: LocationStoring {
+    public var locationStorage: LocationStoringReactive {
         shared {
             locationStore
         }
     }
     
-    public var locationProvider: LocationProviding {
+    public var locationProvider: LocationProvidingReactive {
         shared {
             LocationProvider(locationManager: CLLocationManager())
         }

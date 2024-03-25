@@ -10,15 +10,15 @@ import SwiftUI
 import Core
 
 @MainActor
-struct ForecastAddLocationView: View {
+struct ForecastAddLocationView<VM: ForecastAddLocationViewModelProtocol>: View {
     @State private var showingSearch = false
     @State private var showingAlert = false
     
-    @StateObject private var viewModel: ViewModel
+    @StateObject private var viewModel: VM
     private let searchBuilder: ForecastLocationSearchViewBuilder
     
     init(
-        viewModel: @escaping @autoclosure () -> ViewModel,
+        viewModel: @escaping @autoclosure () -> VM,
         searchBuilder: ForecastLocationSearchViewBuilder
     ) {
         _viewModel = .init(wrappedValue: viewModel())
@@ -69,8 +69,8 @@ struct ForecastAddLocationView: View {
 }
 
 /// Preview
-extension ForecastAddLocationView.ViewModel {
-    static let preview: ForecastAddLocationView.ViewModel = ForecastAddLocationView.ViewModel(locationStorage: LocationStoragePreview())
+extension ForecastAddLocationViewModel {
+    static let preview: ForecastAddLocationViewModel = ForecastAddLocationViewModel(locationStorage: LocationStoragePreview())
 }
 
 struct ForecastAddLocationViewBuilderPreview: ForecastAddLocationViewBuilder {
@@ -78,7 +78,7 @@ struct ForecastAddLocationViewBuilderPreview: ForecastAddLocationViewBuilder {
     var view: AnyView {
         AnyView(
             ForecastAddLocationView(
-                viewModel: .preview,
+                viewModel: ForecastAddLocationViewModel.preview,
                 searchBuilder: ForecastLocationSearchViewBuilderPreview()
             )
         )
@@ -87,7 +87,7 @@ struct ForecastAddLocationViewBuilderPreview: ForecastAddLocationViewBuilder {
 
 #Preview {
     ForecastAddLocationView(
-        viewModel: .preview,
+        viewModel: ForecastAddLocationViewModel.preview,
         searchBuilder: ForecastLocationSearchViewBuilderPreview()
     )
 }

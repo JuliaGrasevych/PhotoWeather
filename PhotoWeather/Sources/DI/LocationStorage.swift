@@ -63,3 +63,37 @@ extension LocationStorage: LocationManagingReactive {
         .eraseToAnyPublisher()
     }
 }
+
+extension LocationStorage: LocationStoringReactive {
+    nonisolated func add(location: NamedLocation) -> AnyPublisher<Void, any Error> {
+        // TODO: check Deferred vs ConnectablePublisher
+        Deferred {
+            Future { promise in
+                Task {
+                    do {
+                        try await self.add(location: location)
+                        promise(.success(()))
+                    } catch {
+                        promise(.failure(error))
+                    }
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    nonisolated func locations() -> AnyPublisher<[NamedLocation], any Error> {
+        let subject = PassthroughSubject<[NamedLocation], Error>()
+        Task {
+            do {
+                let asyncLocationsStream = try await self.locations()
+                for await element in asyncLocationsStream {
+                    subject.send(element)
+                }
+            } catch {
+                subject.send(completion: .failure(error))
+            }
+        }
+        return subject.eraseToAnyPublisher()
+    }
+}

@@ -6,11 +6,17 @@
 //
 
 import Foundation
+import Combine
 import CoreLocation
 
 public protocol LocationProviding {
     var currentLocation: CLLocation { get async throws }
     func isAuthorized() async -> Bool
+}
+
+public protocol LocationProvidingReactive {
+    var currentLocationPublisher: AnyPublisher<CLLocation, Error> { get }
+    func isAuthorized() -> AnyPublisher<Bool, Never>
 }
 
 public class LocationProvider: NSObject, LocationProviding {
@@ -71,6 +77,36 @@ public class LocationProvider: NSObject, LocationProviding {
         @unknown default:
             return false
         }
+    }
+}
+
+extension LocationProvider: LocationProvidingReactive {
+    public var currentLocationPublisher: AnyPublisher<CLLocation, any Error> {
+        Deferred {
+            Future { promise in
+                Task {
+                    do {
+                        let location = try await self.currentLocation
+                        promise(.success(location))
+                    } catch {
+                        promise(.failure(error))
+                    }
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    public func isAuthorized() -> AnyPublisher<Bool, Never> {
+        Deferred {
+            Future { promise in
+                Task {
+                    let isAuthorized = await self.isAuthorized()
+                    promise(.success(isAuthorized))
+                }
+            }
+        }
+        .eraseToAnyPublisher()
     }
 }
 

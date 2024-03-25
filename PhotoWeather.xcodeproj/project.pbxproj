@@ -73,6 +73,13 @@
 		A37645AC2BAC82F0009E69F5 /* ForecastLocationItemReactiveComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645AB2BAC82F0009E69F5 /* ForecastLocationItemReactiveComponent.swift */; };
 		A37645AF2BAC8389009E69F5 /* ForecastReactiveComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645AE2BAC8389009E69F5 /* ForecastReactiveComponent.swift */; };
 		A37645B12BAC8AB3009E69F5 /* ForecastLocationItemViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645B02BAC8AB3009E69F5 /* ForecastLocationItemViewModelProtocol.swift */; };
+		A37645B42BB1C238009E69F5 /* ForecastListViewModelReactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645B32BB1C238009E69F5 /* ForecastListViewModelReactive.swift */; };
+		A37645B62BB1C275009E69F5 /* ForecastListViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645B52BB1C275009E69F5 /* ForecastListViewModelProtocol.swift */; };
+		A37645B82BB1C422009E69F5 /* ForecastListReactiveComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645B72BB1C422009E69F5 /* ForecastListReactiveComponent.swift */; };
+		A37645BB2BB1DA7F009E69F5 /* ForecastAddLocationViewModelReactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645BA2BB1DA7F009E69F5 /* ForecastAddLocationViewModelReactive.swift */; };
+		A37645BD2BB1DA8E009E69F5 /* ForecastAddLocationViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645BC2BB1DA8E009E69F5 /* ForecastAddLocationViewModelProtocol.swift */; };
+		A37645BF2BB1DACC009E69F5 /* ForecastAddLocationViewModelOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645BE2BB1DACC009E69F5 /* ForecastAddLocationViewModelOutput.swift */; };
+		A37645C12BB1DC0F009E69F5 /* ForecastAddLocationReactiveComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645C02BB1DC0F009E69F5 /* ForecastAddLocationReactiveComponent.swift */; };
 		A435411D13C3440BE6553BDB /* ExternalLocationStoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4C58C61369B7A533CABB39 /* ExternalLocationStoring.swift */; };
 		A57A12D83F672DB84516A08F /* StorageComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D27BFD6CCB1DB81218752D5 /* StorageComponent.swift */; };
 		A58AA252FE49EF6ECF015083 /* ForecastLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABFFD018DC354EAF2C9B338 /* ForecastLocation.swift */; };
@@ -351,6 +358,13 @@
 		A37645AB2BAC82F0009E69F5 /* ForecastLocationItemReactiveComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLocationItemReactiveComponent.swift; sourceTree = "<group>"; };
 		A37645AE2BAC8389009E69F5 /* ForecastReactiveComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastReactiveComponent.swift; sourceTree = "<group>"; };
 		A37645B02BAC8AB3009E69F5 /* ForecastLocationItemViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLocationItemViewModelProtocol.swift; sourceTree = "<group>"; };
+		A37645B32BB1C238009E69F5 /* ForecastListViewModelReactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastListViewModelReactive.swift; sourceTree = "<group>"; };
+		A37645B52BB1C275009E69F5 /* ForecastListViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastListViewModelProtocol.swift; sourceTree = "<group>"; };
+		A37645B72BB1C422009E69F5 /* ForecastListReactiveComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastListReactiveComponent.swift; sourceTree = "<group>"; };
+		A37645BA2BB1DA7F009E69F5 /* ForecastAddLocationViewModelReactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastAddLocationViewModelReactive.swift; sourceTree = "<group>"; };
+		A37645BC2BB1DA8E009E69F5 /* ForecastAddLocationViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastAddLocationViewModelProtocol.swift; sourceTree = "<group>"; };
+		A37645BE2BB1DACC009E69F5 /* ForecastAddLocationViewModelOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastAddLocationViewModelOutput.swift; sourceTree = "<group>"; };
+		A37645C02BB1DC0F009E69F5 /* ForecastAddLocationReactiveComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastAddLocationReactiveComponent.swift; sourceTree = "<group>"; };
 		A40976A9763A8CA4490108E8 /* NestedObservedObjectContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestedObservedObjectContainer.swift; sourceTree = "<group>"; };
 		AE26FC41538B399968D0D594 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		B1FCBC23584C08B97E8E1CA9 /* ForecastFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastFetcher.swift; sourceTree = "<group>"; };
@@ -522,7 +536,9 @@
 			children = (
 				64C092CD506BAF7C9C42051A /* ForecastListComponent.swift */,
 				69534005F2CC57128B881306 /* ForecastListView.swift */,
+				A37645B52BB1C275009E69F5 /* ForecastListViewModelProtocol.swift */,
 				FD516C62D7FA9663E6AC0F3E /* ForecastListViewModel.swift */,
+				A37645B22BB1C22A009E69F5 /* Combine */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -627,6 +643,24 @@
 			path = Combine;
 			sourceTree = "<group>";
 		};
+		A37645B22BB1C22A009E69F5 /* Combine */ = {
+			isa = PBXGroup;
+			children = (
+				A37645B32BB1C238009E69F5 /* ForecastListViewModelReactive.swift */,
+				A37645B72BB1C422009E69F5 /* ForecastListReactiveComponent.swift */,
+			);
+			path = Combine;
+			sourceTree = "<group>";
+		};
+		A37645B92BB1DA72009E69F5 /* Combine */ = {
+			isa = PBXGroup;
+			children = (
+				A37645BA2BB1DA7F009E69F5 /* ForecastAddLocationViewModelReactive.swift */,
+				A37645C02BB1DC0F009E69F5 /* ForecastAddLocationReactiveComponent.swift */,
+			);
+			path = Combine;
+			sourceTree = "<group>";
+		};
 		AE367D8C82CE3559B3F07162 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -674,6 +708,9 @@
 				B6BE594B6651214F7BA45A40 /* ForecastAddLocationComponent.swift */,
 				52E61266025DA8A01B60D98D /* ForecastAddLocationView.swift */,
 				81F9230DAC37A1A6ED600B5C /* ForecastAddLocationViewModel.swift */,
+				A37645BC2BB1DA8E009E69F5 /* ForecastAddLocationViewModelProtocol.swift */,
+				A37645BE2BB1DACC009E69F5 /* ForecastAddLocationViewModelOutput.swift */,
+				A37645B92BB1DA72009E69F5 /* Combine */,
 			);
 			path = "Add Location";
 			sourceTree = "<group>";
@@ -1086,11 +1123,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A37645BB2BB1DA7F009E69F5 /* ForecastAddLocationViewModelReactive.swift in Sources */,
 				DAA4564943CBB4B4576903AB /* TuistAssets+Forecast.swift in Sources */,
+				A37645B82BB1C422009E69F5 /* ForecastListReactiveComponent.swift in Sources */,
+				A37645BF2BB1DACC009E69F5 /* ForecastAddLocationViewModelOutput.swift in Sources */,
 				A37645A82BA9E92D009E69F5 /* ForecastLocationItemViewModelReactive.swift in Sources */,
 				3DBB8F91049B001BDE3ADCEE /* TuistBundle+Forecast.swift in Sources */,
 				578A1386782885885D618106 /* ForecastComponent.swift in Sources */,
 				B600CBE25086CDC17060A2EB /* LocationProvider+NamedLocation.swift in Sources */,
+				A37645B62BB1C275009E69F5 /* ForecastListViewModelProtocol.swift in Sources */,
 				95BFA17BDA75571462E8817B /* LocationStoring.swift in Sources */,
 				4699D9A828182B9E491C738F /* ForecastFetcher.swift in Sources */,
 				A37645B12BAC8AB3009E69F5 /* ForecastLocationItemViewModelProtocol.swift in Sources */,
@@ -1098,6 +1139,7 @@
 				A2E8AA19C765BE201F6E0E6A /* ForecastLocation+Season.swift in Sources */,
 				3B7F09E2DA04540A76464386 /* WeatherCode+WMO.swift in Sources */,
 				038728B35BB5BEE18B78A74E /* ForecastAddLocationComponent.swift in Sources */,
+				A37645C12BB1DC0F009E69F5 /* ForecastAddLocationReactiveComponent.swift in Sources */,
 				59B0A156368AAD73DA686C41 /* ForecastAddLocationView.swift in Sources */,
 				A37645AC2BAC82F0009E69F5 /* ForecastLocationItemReactiveComponent.swift in Sources */,
 				6A6B94F46210E30193015219 /* ForecastAddLocationViewModel.swift in Sources */,
@@ -1110,6 +1152,8 @@
 				C2EF0E2848404AEBBF67822E /* ForecastListView.swift in Sources */,
 				DF4CCDD3EED8FFF7D089BA61 /* ForecastListViewModel.swift in Sources */,
 				3EDFA3EE9118418515C32D47 /* ForecastLocationItemComponent.swift in Sources */,
+				A37645B42BB1C238009E69F5 /* ForecastListViewModelReactive.swift in Sources */,
+				A37645BD2BB1DA8E009E69F5 /* ForecastAddLocationViewModelProtocol.swift in Sources */,
 				A37645AF2BAC8389009E69F5 /* ForecastReactiveComponent.swift in Sources */,
 				8ACDE2DE0A0F23810A487B6F /* ForecastLocationItemView.swift in Sources */,
 				7F9DA96021B7A53415F318ED /* ForecastLocationItemViewModel.swift in Sources */,

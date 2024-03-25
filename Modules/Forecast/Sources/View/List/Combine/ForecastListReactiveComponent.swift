@@ -1,18 +1,19 @@
 //
-//  ForecastListComponent.swift
+//  ForecastListReactiveComponent.swift
 //  Forecast
 //
-//  Created by Julia Grasevych on 16.02.2024.
+//  Created by Julia Grasevych on 25.03.2024.
 //
 
 import Foundation
 import SwiftUI
+
 import NeedleFoundation
 
-public class ForecastListComponent: Component<ForecastListDependency> {
-    var viewModel: ForecastListViewModel {
-        ForecastListViewModel(
-            locationStorage: dependency.locationStorage, 
+public class ForecastListReactiveComponent: Component<ForecastListReactiveDependency> {
+    var viewModel: ForecastListViewModelReactive {
+        ForecastListViewModelReactive(
+            locationStorage: dependency.locationStorage,
             locationProvider: dependency.locationProvider
         )
     }
@@ -29,10 +30,10 @@ public class ForecastListComponent: Component<ForecastListDependency> {
     }
     
     var itemComponent: ForecastLocationItemBuilder {
-        ForecastLocationItemComponent(parent: self)
+        ForecastLocationItemReactiveComponent(parent: self)
     }
     
-    var addLocationComponent: ForecastAddLocationComponent {
-        ForecastAddLocationComponent(parent: self)
+    var addLocationComponent: ForecastAddLocationViewBuilder {
+        ForecastAddLocationReactiveComponent(parent: self)
     }
 }

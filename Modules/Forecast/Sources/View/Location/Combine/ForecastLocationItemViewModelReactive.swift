@@ -117,8 +117,8 @@ extension ForecastLocationItemViewModelReactive {
         locationManager.remove(location: location.id)
             .receive(on: DispatchQueue.main)
             .sink(
-                receiveCompletion: { [weak self] error in
-                    switch error {
+                receiveCompletion: { [weak self] completion in
+                    switch completion {
                     case .finished:
                         break
                     case .failure:

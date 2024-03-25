@@ -1,21 +1,18 @@
 //
-//  ForecastAddLocationComponent.swift
+//  ForecastAddLocationReactiveComponent.swift
 //  Forecast
 //
-//  Created by Julia Grasevych on 20.02.2024.
+//  Created by Julia Grasevych on 25.03.2024.
 //
 
 import Foundation
 import SwiftUI
+
 import NeedleFoundation
 
-public protocol ForecastAddLocationViewBuilder {
-    var view: AnyView { get }
-}
-
-public class ForecastAddLocationComponent: Component<ForecastAddLocationDependency>, ForecastAddLocationViewBuilder {
-    var viewModel: ForecastAddLocationViewModel {
-        ForecastAddLocationViewModel(locationStorage: dependency.locationStorage)
+public class ForecastAddLocationReactiveComponent: Component<ForecastAddLocationReactiveDependency>, ForecastAddLocationViewBuilder {
+    var viewModel: ForecastAddLocationViewModelReactive {
+        ForecastAddLocationViewModelReactive(locationStorage: dependency.locationStorage)
     }
     
     @MainActor
@@ -36,4 +33,3 @@ public class ForecastAddLocationComponent: Component<ForecastAddLocationDependen
         ForecastLocationSearchComponent(parent: self)
     }
 }
-
