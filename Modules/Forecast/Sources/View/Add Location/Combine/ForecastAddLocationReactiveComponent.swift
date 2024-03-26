@@ -25,11 +25,11 @@ public class ForecastAddLocationReactiveComponent: Component<ForecastAddLocation
         )
     }
     
-    public var locationFinder: LocationSearching {
+    public var locationFinder: LocationSearchingReactive {
         LocationFinder()
     }
     
-    var searchComponent: ForecastLocationSearchComponent {
-        ForecastLocationSearchComponent(parent: self)
+    var searchComponent: ForecastLocationSearchViewBuilder {
+        ForecastLocationSearchReactiveComponent(parent: self)
     }
 }

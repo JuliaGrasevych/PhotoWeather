@@ -72,8 +72,8 @@ private class ForecastAddLocationReactiveDependency7f377ec4590efcc5c3c0Provider:
 private func factory8b3940fa560b2e58d9050c7717717e1dd9313958(_ component: NeedleFoundation.Scope) -> AnyObject {
     return ForecastAddLocationReactiveDependency7f377ec4590efcc5c3c0Provider(rootReactiveComponent: parent3(component) as! RootReactiveComponent)
 }
-private class ForecastLocationSearchDependencyb75f07f87e49345a0c68Provider: ForecastLocationSearchDependency {
-    var locationFinder: LocationSearching {
+private class ForecastLocationSearchReactiveDependency4532067ed7e6a1e5ea1cProvider: ForecastLocationSearchReactiveDependency {
+    var locationFinder: LocationSearchingReactive {
         return forecastAddLocationReactiveComponent.locationFinder
     }
     private let forecastAddLocationReactiveComponent: ForecastAddLocationReactiveComponent
@@ -81,9 +81,9 @@ private class ForecastLocationSearchDependencyb75f07f87e49345a0c68Provider: Fore
         self.forecastAddLocationReactiveComponent = forecastAddLocationReactiveComponent
     }
 }
-/// ^->RootReactiveComponent->ForecastReactiveComponent->ForecastListReactiveComponent->ForecastAddLocationReactiveComponent->ForecastLocationSearchComponent
-private func factorydc50ff9dbe44ebf58743450fe7ba33afcdf29c21(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return ForecastLocationSearchDependencyb75f07f87e49345a0c68Provider(forecastAddLocationReactiveComponent: parent1(component) as! ForecastAddLocationReactiveComponent)
+/// ^->RootReactiveComponent->ForecastReactiveComponent->ForecastListReactiveComponent->ForecastAddLocationReactiveComponent->ForecastLocationSearchReactiveComponent
+private func factorycb4bfbaefe614be9f5df450fe7ba33afcdf29c21(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ForecastLocationSearchReactiveDependency4532067ed7e6a1e5ea1cProvider(forecastAddLocationReactiveComponent: parent1(component) as! ForecastAddLocationReactiveComponent)
 }
 private class ForecastLocationSearchDependencyd0fd584696711db3e3a6Provider: ForecastLocationSearchDependency {
     var locationFinder: LocationSearching {
@@ -242,7 +242,12 @@ extension ForecastAddLocationReactiveComponent: Registration {
     public func registerItems() {
         keyPathToName[\ForecastAddLocationReactiveDependency.locationStorage] = "locationStorage-LocationStoringReactive"
         localTable["view-AnyView"] = { [unowned self] in self.view as Any }
-        localTable["locationFinder-LocationSearching"] = { [unowned self] in self.locationFinder as Any }
+        localTable["locationFinder-LocationSearchingReactive"] = { [unowned self] in self.locationFinder as Any }
+    }
+}
+extension ForecastLocationSearchReactiveComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\ForecastLocationSearchReactiveDependency.locationFinder] = "locationFinder-LocationSearchingReactive"
     }
 }
 extension ForecastLocationSearchComponent: Registration {
@@ -334,7 +339,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->RootReactiveComponent->ForecastReactiveComponent", factory1e61e324b043bdbac345bacfcca18711825e3a4e)
     registerProviderFactory("^->RootComponent->ForecastComponent", factory86564a6fad5198b6d013b3a8f24c1d289f2c0f2e)
     registerProviderFactory("^->RootReactiveComponent->ForecastReactiveComponent->ForecastListReactiveComponent->ForecastAddLocationReactiveComponent", factory8b3940fa560b2e58d9050c7717717e1dd9313958)
-    registerProviderFactory("^->RootReactiveComponent->ForecastReactiveComponent->ForecastListReactiveComponent->ForecastAddLocationReactiveComponent->ForecastLocationSearchComponent", factorydc50ff9dbe44ebf58743450fe7ba33afcdf29c21)
+    registerProviderFactory("^->RootReactiveComponent->ForecastReactiveComponent->ForecastListReactiveComponent->ForecastAddLocationReactiveComponent->ForecastLocationSearchReactiveComponent", factorycb4bfbaefe614be9f5df450fe7ba33afcdf29c21)
     registerProviderFactory("^->RootComponent->ForecastComponent->ForecastListComponent->ForecastAddLocationComponent->ForecastLocationSearchComponent", factory608345bf27adcb4b08a7675656a41af65a05573c)
     registerProviderFactory("^->RootComponent->ForecastComponent->ForecastListComponent->ForecastAddLocationComponent", factory2cea3293fe90ce11468e42f5655bf2362a8495f6)
     registerProviderFactory("^->RootReactiveComponent->ForecastReactiveComponent->ForecastListReactiveComponent->ForecastLocationItemReactiveComponent", factory7d25b2b487d4fb91d8420406837a51b780cb807e)

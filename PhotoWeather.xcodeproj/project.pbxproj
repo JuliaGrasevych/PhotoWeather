@@ -80,6 +80,10 @@
 		A37645BD2BB1DA8E009E69F5 /* ForecastAddLocationViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645BC2BB1DA8E009E69F5 /* ForecastAddLocationViewModelProtocol.swift */; };
 		A37645BF2BB1DACC009E69F5 /* ForecastAddLocationViewModelOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645BE2BB1DACC009E69F5 /* ForecastAddLocationViewModelOutput.swift */; };
 		A37645C12BB1DC0F009E69F5 /* ForecastAddLocationReactiveComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645C02BB1DC0F009E69F5 /* ForecastAddLocationReactiveComponent.swift */; };
+		A37645C42BB31EBD009E69F5 /* ForecastLocationSearchViewModelReactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645C32BB31EBD009E69F5 /* ForecastLocationSearchViewModelReactive.swift */; };
+		A37645C62BB31ED1009E69F5 /* ForecastLocationSearchViewModelOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645C52BB31ED1009E69F5 /* ForecastLocationSearchViewModelOutput.swift */; };
+		A37645C82BB31F31009E69F5 /* ForecastLocationSearchViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645C72BB31F31009E69F5 /* ForecastLocationSearchViewModelProtocol.swift */; };
+		A37645CA2BB328F4009E69F5 /* ForecastLocationSearchReactiveComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37645C92BB328F4009E69F5 /* ForecastLocationSearchReactiveComponent.swift */; };
 		A435411D13C3440BE6553BDB /* ExternalLocationStoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4C58C61369B7A533CABB39 /* ExternalLocationStoring.swift */; };
 		A57A12D83F672DB84516A08F /* StorageComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D27BFD6CCB1DB81218752D5 /* StorageComponent.swift */; };
 		A58AA252FE49EF6ECF015083 /* ForecastLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABFFD018DC354EAF2C9B338 /* ForecastLocation.swift */; };
@@ -365,6 +369,10 @@
 		A37645BC2BB1DA8E009E69F5 /* ForecastAddLocationViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastAddLocationViewModelProtocol.swift; sourceTree = "<group>"; };
 		A37645BE2BB1DACC009E69F5 /* ForecastAddLocationViewModelOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastAddLocationViewModelOutput.swift; sourceTree = "<group>"; };
 		A37645C02BB1DC0F009E69F5 /* ForecastAddLocationReactiveComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastAddLocationReactiveComponent.swift; sourceTree = "<group>"; };
+		A37645C32BB31EBD009E69F5 /* ForecastLocationSearchViewModelReactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLocationSearchViewModelReactive.swift; sourceTree = "<group>"; };
+		A37645C52BB31ED1009E69F5 /* ForecastLocationSearchViewModelOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLocationSearchViewModelOutput.swift; sourceTree = "<group>"; };
+		A37645C72BB31F31009E69F5 /* ForecastLocationSearchViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLocationSearchViewModelProtocol.swift; sourceTree = "<group>"; };
+		A37645C92BB328F4009E69F5 /* ForecastLocationSearchReactiveComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLocationSearchReactiveComponent.swift; sourceTree = "<group>"; };
 		A40976A9763A8CA4490108E8 /* NestedObservedObjectContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestedObservedObjectContainer.swift; sourceTree = "<group>"; };
 		AE26FC41538B399968D0D594 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		B1FCBC23584C08B97E8E1CA9 /* ForecastFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastFetcher.swift; sourceTree = "<group>"; };
@@ -661,6 +669,15 @@
 			path = Combine;
 			sourceTree = "<group>";
 		};
+		A37645C22BB31EAA009E69F5 /* Combine */ = {
+			isa = PBXGroup;
+			children = (
+				A37645C32BB31EBD009E69F5 /* ForecastLocationSearchViewModelReactive.swift */,
+				A37645C92BB328F4009E69F5 /* ForecastLocationSearchReactiveComponent.swift */,
+			);
+			path = Combine;
+			sourceTree = "<group>";
+		};
 		AE367D8C82CE3559B3F07162 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -831,8 +848,11 @@
 			children = (
 				7FF04FD2D137363601EDD2D3 /* ForecastLocationSearchComponent.swift */,
 				DD97938872B340856F2755A3 /* ForecastLocationSearchView.swift */,
+				A37645C72BB31F31009E69F5 /* ForecastLocationSearchViewModelProtocol.swift */,
 				DA67EACCFFAAE73AFAF7E55E /* ForecastLocationSearchViewModel.swift */,
+				A37645C52BB31ED1009E69F5 /* ForecastLocationSearchViewModelOutput.swift */,
 				65133E790BC812F1E2BDCA42 /* LocationFinder.swift */,
+				A37645C22BB31EAA009E69F5 /* Combine */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -1124,6 +1144,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A37645BB2BB1DA7F009E69F5 /* ForecastAddLocationViewModelReactive.swift in Sources */,
+				A37645C82BB31F31009E69F5 /* ForecastLocationSearchViewModelProtocol.swift in Sources */,
 				DAA4564943CBB4B4576903AB /* TuistAssets+Forecast.swift in Sources */,
 				A37645B82BB1C422009E69F5 /* ForecastListReactiveComponent.swift in Sources */,
 				A37645BF2BB1DACC009E69F5 /* ForecastAddLocationViewModelOutput.swift in Sources */,
@@ -1132,6 +1153,7 @@
 				578A1386782885885D618106 /* ForecastComponent.swift in Sources */,
 				B600CBE25086CDC17060A2EB /* LocationProvider+NamedLocation.swift in Sources */,
 				A37645B62BB1C275009E69F5 /* ForecastListViewModelProtocol.swift in Sources */,
+				A37645C62BB31ED1009E69F5 /* ForecastLocationSearchViewModelOutput.swift in Sources */,
 				95BFA17BDA75571462E8817B /* LocationStoring.swift in Sources */,
 				4699D9A828182B9E491C738F /* ForecastFetcher.swift in Sources */,
 				A37645B12BAC8AB3009E69F5 /* ForecastLocationItemViewModelProtocol.swift in Sources */,
@@ -1145,6 +1167,7 @@
 				6A6B94F46210E30193015219 /* ForecastAddLocationViewModel.swift in Sources */,
 				253547C6EFFCEB7CED77D6C5 /* ForecastLocationSearchComponent.swift in Sources */,
 				97C520DEBCC305692830750A /* ForecastLocationSearchView.swift in Sources */,
+				A37645CA2BB328F4009E69F5 /* ForecastLocationSearchReactiveComponent.swift in Sources */,
 				141F868AA9343F217A753360 /* ForecastLocationSearchViewModel.swift in Sources */,
 				A37645AA2BA9EF83009E69F5 /* ForecastLocationItemViewModelOutput.swift in Sources */,
 				0C7890F5703C1407E1B2FB82 /* LocationFinder.swift in Sources */,
@@ -1155,6 +1178,7 @@
 				A37645B42BB1C238009E69F5 /* ForecastListViewModelReactive.swift in Sources */,
 				A37645BD2BB1DA8E009E69F5 /* ForecastAddLocationViewModelProtocol.swift in Sources */,
 				A37645AF2BAC8389009E69F5 /* ForecastReactiveComponent.swift in Sources */,
+				A37645C42BB31EBD009E69F5 /* ForecastLocationSearchViewModelReactive.swift in Sources */,
 				8ACDE2DE0A0F23810A487B6F /* ForecastLocationItemView.swift in Sources */,
 				7F9DA96021B7A53415F318ED /* ForecastLocationItemViewModel.swift in Sources */,
 			);
