@@ -75,6 +75,7 @@ extension ForecastLocationItemViewModelReactive {
             .replaceError(with: nil)
             .receive(on: DispatchQueue.main)
             .share()
+            .makeConnectable()
         
         forecast
             .map(ForecastLocationItemViewModelOutput.CurrentWeather.init)
@@ -111,6 +112,9 @@ extension ForecastLocationItemViewModelReactive {
                 }
             })
             .assign(to: &output.$image)
+        
+        forecast.connect()
+            .store(in: &cancellables)
     }
     
     func deleteLocation() {
