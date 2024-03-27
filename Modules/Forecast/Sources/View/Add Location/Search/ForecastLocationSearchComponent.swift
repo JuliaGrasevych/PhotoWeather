@@ -15,8 +15,8 @@ public protocol ForecastLocationSearchViewBuilder {
 }
 
 public class ForecastLocationSearchComponent: Component<ForecastLocationSearchDependency>, ForecastLocationSearchViewBuilder {
-    var viewModel: ForecastLocationSearchView.ViewModel {
-        ForecastLocationSearchView.ViewModel(locationFinder: dependency.locationFinder)
+    var viewModel: ForecastLocationSearchViewModel {
+        ForecastLocationSearchViewModel(locationFinder: dependency.locationFinder)
     }
     
     @MainActor

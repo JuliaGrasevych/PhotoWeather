@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 import ForecastDependency
 
 public protocol LocationStoring {
@@ -13,6 +14,15 @@ public protocol LocationStoring {
     func locations() async throws -> AsyncStream<[NamedLocation]>
 }
 
+public protocol LocationStoringReactive {
+    func add(location: NamedLocation) -> AnyPublisher<Void, Error>
+    func locations() -> AnyPublisher<[NamedLocation], Error>
+}
+
 public protocol LocationManaging {
     func remove(location id: NamedLocation.ID) async throws
+}
+
+public protocol LocationManagingReactive {
+    func remove(location id: NamedLocation.ID) -> AnyPublisher<Void, Error>
 }

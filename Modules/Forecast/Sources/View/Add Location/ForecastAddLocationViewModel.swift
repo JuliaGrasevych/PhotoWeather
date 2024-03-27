@@ -16,50 +16,32 @@ public protocol ForecastAddLocationDependency: Dependency {
     var locationStorage: LocationStoring { get }
 }
 
-extension ForecastAddLocationView {
-    enum Error: LocalizedError {
-        case addFailed(any ForecastLocation)
-        
-        var errorDescription: String? {
-            switch self {
-            case .addFailed(let location):
-                return "Failed to add the location \(location.name)"
-            }
-        }
-    }
+class ForecastAddLocationViewModel: ForecastAddLocationViewModelProtocol, NestedObservedObjectOutputContainer {
+    private let locationStorage: LocationStoring
     
     @MainActor
-    class Output: ObservableObject {
-        @Published var error: Error?
-        @Published var dismissSearch: Bool = false
+    @ObservedObject var output = ForecastAddLocationViewModelOutput()
+    @MainActor
+    @Published var location: NamedLocation? {
+        didSet {
+            guard let location else { return }
+            add(location: location)
+        }
+    }
+    var nestedObservedObjectsSubscription: [AnyCancellable] = []
+    
+    init(locationStorage: LocationStoring) {
+        self.locationStorage = locationStorage
+        subscribeNestedObservedObjects()
     }
     
-    class ViewModel: ObservableObject, NestedObservedObjectOutputContainer {
-        private let locationStorage: LocationStoring
-        
-        @MainActor
-        @ObservedObject var output = ForecastAddLocationView.Output()
-        @MainActor
-        @Published var location: NamedLocation? {
-            didSet {
-                guard let location else { return }
-                add(location: location)
-            }
-        }
-        var nestedObservedObjectsSubscription: [AnyCancellable] = []
-        
-        init(locationStorage: LocationStoring) {
-            self.locationStorage = locationStorage
-        }
-        
-        func add(location: NamedLocation) {
-            Task { @MainActor in
-                do {
-                    try await locationStorage.add(location: location)
-                    output.dismissSearch = true
-                } catch {
-                    output.error = Error.addFailed(location)
-                }
+    func add(location: NamedLocation) {
+        Task { @MainActor in
+            do {
+                try await locationStorage.add(location: location)
+                output.dismissSearch = true
+            } catch {
+                output.error = ForecastAddLocationViewModelOutput.Error.addFailed(location)
             }
         }
     }

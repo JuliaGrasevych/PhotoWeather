@@ -1,22 +1,19 @@
 //
-//  ForecastLocationItemComponent.swift
+//  ForecastLocationItemReactiveComponent.swift
 //  Forecast
 //
-//  Created by Julia Grasevych on 16.02.2024.
+//  Created by Julia Grasevych on 21.03.2024.
 //
 
 import Foundation
 import SwiftUI
 import NeedleFoundation
+
 import ForecastDependency
 
-public protocol ForecastLocationItemBuilder {
-    func view(location: any ForecastLocation) -> AnyView
-}
-
-public class ForecastLocationItemComponent: Component<ForecastLocationItemDependency>, ForecastLocationItemBuilder {
-    func viewModel(location: any ForecastLocation) -> ForecastLocationItemViewModel {
-        ForecastLocationItemViewModel(
+public class ForecastLocationItemReactiveComponent: Component<ForecastLocationItemReactiveDependency>, ForecastLocationItemBuilder {
+    func viewModel(location: any ForecastLocation) -> ForecastLocationItemViewModelReactive {
+        ForecastLocationItemViewModelReactive(
             location: location,
             weatherFetcher: dependency.weatherFetcher,
             photoFetcher: dependency.photoFetcher,

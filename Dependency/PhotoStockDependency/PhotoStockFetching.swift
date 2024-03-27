@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 import Core
 
 public struct Photo {
@@ -20,4 +21,8 @@ public struct Photo {
 
 public protocol PhotoStockFetching {
     func photo(for location: LocationProtocol, tags: [String]) async throws -> Photo
+}
+
+public protocol PhotoStockFetchingReactive {
+    func photo(for location: LocationProtocol, tags: [String]) -> AnyPublisher<Photo, Error>
 }

@@ -16,13 +16,13 @@ enum LocationPhoto {
 }
 
 @MainActor
-struct ForecastLocationItemView: View {
-    @StateObject private var viewModel: ViewModel
+struct ForecastLocationItemView<VM: ForecastLocationItemViewModelProtocol>: View {
+    @StateObject private var viewModel: VM
     @State private var showingForecast = false
     @State private var showingDeleteAlert = false
     @State private var showingErrorAlert = false
     
-    init(viewModel: @escaping @autoclosure () -> ViewModel) {
+    init(viewModel: @escaping @autoclosure () -> VM) {
         _viewModel = .init(wrappedValue: viewModel())
     }
     
@@ -175,7 +175,7 @@ struct ForecastLocationItemView: View {
         Label(value, systemImage: isMax ? "arrow.up" : "arrow.down")
     }
     
-    private func hourlyWeatherView(forecast: [HourlyForecast]) -> some View {
+    private func hourlyWeatherView(forecast: [ForecastLocationItemViewModelOutput.HourlyForecast]) -> some View {
         Section {
             ScrollView(.horizontal) {
                 LazyHStack {
@@ -203,7 +203,7 @@ struct ForecastLocationItemView: View {
         }
     }
     
-    private func dailyWeatherView(forecast: [DailyForecast]) -> some View {
+    private func dailyWeatherView(forecast: [ForecastLocationItemViewModelOutput.DailyForecast]) -> some View {
         LazyVStack(alignment: .leading, pinnedViews: .sectionHeaders) {
             Section {
                 ForEach(forecast) { item in
@@ -269,8 +269,8 @@ fileprivate struct PreviewLocation: ForecastLocation {
     var timeZoneIdentifier: String? = nil
 }
 
-extension ForecastLocationItemView.ViewModel {
-    static let preview: ForecastLocationItemView.ViewModel = ForecastLocationItemView.ViewModel(
+extension ForecastLocationItemViewModel {
+    static let preview: ForecastLocationItemViewModel = ForecastLocationItemViewModel(
         location: PreviewLocation(),
         weatherFetcher: ForecastListPreviewFetcher(),
         photoFetcher: PhotoStockPreviewFetcher(),
@@ -282,11 +282,11 @@ struct ForecastLocationItemBuilderPreview: ForecastLocationItemBuilder {
     @MainActor
     func view(location: any ForecastLocation) -> AnyView {
         AnyView(
-            ForecastLocationItemView(viewModel: .preview)
+            ForecastLocationItemView(viewModel: ForecastLocationItemViewModel.preview)
         )
     }
 }
 
 #Preview {
-    ForecastLocationItemView(viewModel: .preview)
+    ForecastLocationItemView(viewModel: ForecastLocationItemViewModel.preview)
 }

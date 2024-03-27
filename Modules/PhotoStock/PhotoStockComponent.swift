@@ -23,4 +23,11 @@ public class PhotoStockComponent: Component<PhotoStockComponentDependency> {
             apiKeyProvider: dependency.apiKeyProvider
         )
     }
+    
+    public var fetcherReactive: PhotoStockFetchingReactive {
+        PhotoStockFetcher(
+            networkService: dependency.networkService,
+            apiKeyProvider: dependency.apiKeyProvider
+        )
+    }
 }

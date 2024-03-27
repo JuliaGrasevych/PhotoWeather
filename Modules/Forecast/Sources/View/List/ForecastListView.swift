@@ -12,15 +12,15 @@ import PhotoStockDependency
 import ForecastDependency
 
 @MainActor
-struct ForecastListView: View {
-    @StateObject private var viewModel: ViewModel
+struct ForecastListView<VM: ForecastListViewModelProtocol>: View {
+    @StateObject private var viewModel: VM
     @State private var selectedTab: String = ""
     
     private let itemBuilder: ForecastLocationItemBuilder
     private let addLocationBuilder: ForecastAddLocationViewBuilder
     
     init(
-        viewModel: @escaping @autoclosure () -> ViewModel,
+        viewModel: @escaping @autoclosure () -> VM,
         itemBuilder: ForecastLocationItemBuilder,
         addLocationBuilder: ForecastAddLocationViewBuilder
     ) {
@@ -151,8 +151,8 @@ struct LocationProviderPreview: LocationProviding {
     var currentLocation: CLLocation { CLLocation(latitude: 0, longitude: 0) }
 }
 
-extension ForecastListView.ViewModel {
-    static let preview: ForecastListView.ViewModel = ForecastListView.ViewModel(
+extension ForecastListViewModel {
+    static let preview: ForecastListViewModel = ForecastListViewModel(
         locationStorage: LocationStoragePreview(), 
         locationProvider: LocationProviderPreview()
     )
@@ -160,7 +160,7 @@ extension ForecastListView.ViewModel {
 
 #Preview {
     ForecastListView(
-        viewModel: .preview,
+        viewModel: ForecastListViewModel.preview,
         itemBuilder: ForecastLocationItemBuilderPreview(),
         addLocationBuilder: ForecastAddLocationViewBuilderPreview()
     )
