@@ -66,7 +66,6 @@ extension LocationStorage: LocationManagingReactive {
 
 extension LocationStorage: LocationStoringReactive {
     nonisolated func add(location: NamedLocation) -> AnyPublisher<Void, any Error> {
-        // TODO: check Deferred vs ConnectablePublisher
         Deferred {
             Future { promise in
                 Task {
