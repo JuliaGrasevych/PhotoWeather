@@ -82,15 +82,13 @@ public class LocationProvider: NSObject, LocationProviding {
 
 extension LocationProvider: LocationProvidingReactive {
     public var currentLocationPublisher: AnyPublisher<CLLocation, any Error> {
-        Deferred {
-            Future { promise in
-                Task {
-                    do {
-                        let location = try await self.currentLocation
-                        promise(.success(location))
-                    } catch {
-                        promise(.failure(error))
-                    }
+        AnyPublisher<CLLocation, Error>.single { promise in
+            Task {
+                do {
+                    let location = try await self.currentLocation
+                    promise(.success(location))
+                } catch {
+                    promise(.failure(error))
                 }
             }
         }
@@ -98,12 +96,10 @@ extension LocationProvider: LocationProvidingReactive {
     }
     
     public func isAuthorized() -> AnyPublisher<Bool, Never> {
-        Deferred {
-            Future { promise in
-                Task {
-                    let isAuthorized = await self.isAuthorized()
-                    promise(.success(isAuthorized))
-                }
+        AnyPublisher<Bool, Never>.single { promise in
+            Task {
+                let isAuthorized = await self.isAuthorized()
+                promise(.success(isAuthorized))
             }
         }
         .eraseToAnyPublisher()

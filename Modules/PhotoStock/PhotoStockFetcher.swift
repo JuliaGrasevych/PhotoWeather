@@ -103,15 +103,13 @@ class PhotoStockFetcher: PhotoStockFetching {
 
 extension PhotoStockFetcher: PhotoStockFetchingReactive {
     func photo(for location: any LocationProtocol, tags: [String]) -> AnyPublisher<Photo, any Error> {
-        Deferred {
-            Future { promise in
-                Task {
-                    do {
-                        let photo = try await self.photo(for: location, tags: tags)
-                        promise(.success(photo))
-                    } catch {
-                        promise(.failure(error))
-                    }
+        AnyPublisher<Photo, any Error>.single { promise in
+            Task {
+                do {
+                    let photo = try await self.photo(for: location, tags: tags)
+                    promise(.success(photo))
+                } catch {
+                    promise(.failure(error))
                 }
             }
         }

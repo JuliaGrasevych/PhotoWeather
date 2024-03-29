@@ -94,15 +94,13 @@ extension LocationFinder: MKLocalSearchCompleterDelegate {
 
 extension LocationFinder: LocationSearchingReactive {
     func search(query: String) -> AnyPublisher<[String], Swift.Error> {
-        Deferred {
-            Future { promise in
-                Task {
-                    do {
-                        let result = try await self.search(query: query)
-                        promise(.success(result))
-                    } catch {
-                        promise(.failure(error))
-                    }
+        AnyPublisher<[String], Swift.Error>.single { promise in
+            Task {
+                do {
+                    let result = try await self.search(query: query)
+                    promise(.success(result))
+                } catch {
+                    promise(.failure(error))
                 }
             }
         }
@@ -110,15 +108,13 @@ extension LocationFinder: LocationSearchingReactive {
     }
     
     func location(for query: String) -> AnyPublisher<ForecastDependency.NamedLocation, Swift.Error> {
-        Deferred {
-            Future { promise in
-                Task {
-                    do {
-                        let result = try await self.location(for: query)
-                        promise(.success(result))
-                    } catch {
-                        promise(.failure(error))
-                    }
+        AnyPublisher<ForecastDependency.NamedLocation, Swift.Error>.single { promise in
+            Task {
+                do {
+                    let result = try await self.location(for: query)
+                    promise(.success(result))
+                } catch {
+                    promise(.failure(error))
                 }
             }
         }

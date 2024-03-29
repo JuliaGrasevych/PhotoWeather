@@ -47,16 +47,14 @@ actor LocationStorage: LocationStoring, LocationManaging {
 
 extension LocationStorage: LocationManagingReactive {
     nonisolated func remove(location id: NamedLocation.ID) -> AnyPublisher<Void, any Error> {
-        Deferred {
-            Future { promise in
-                Task {
-                    do {
-                        try await self.remove(location: id)
-                        // TODO: how to access promise in async context?
-                        promise(.success(()))
-                    } catch {
-                        promise(.failure(error))
-                    }
+        AnyPublisher<Void, any Error>.single { promise in
+            Task {
+                do {
+                    try await self.remove(location: id)
+                    // TODO: how to access promise in async context?
+                    promise(.success(()))
+                } catch {
+                    promise(.failure(error))
                 }
             }
         }
@@ -66,33 +64,31 @@ extension LocationStorage: LocationManagingReactive {
 
 extension LocationStorage: LocationStoringReactive {
     nonisolated func add(location: NamedLocation) -> AnyPublisher<Void, any Error> {
-        Deferred {
-            Future { promise in
-                Task {
-                    do {
-                        try await self.add(location: location)
-                        promise(.success(()))
-                    } catch {
-                        promise(.failure(error))
-                    }
+        AnyPublisher<Void, Error>.single { promise in
+            Task {
+                do {
+                    try await self.add(location: location)
+                    promise(.success(()))
+                } catch {
+                    promise(.failure(error))
                 }
             }
         }
-        .eraseToAnyPublisher()
     }
     
     nonisolated func locations() -> AnyPublisher<[NamedLocation], any Error> {
-        let subject = PassthroughSubject<[NamedLocation], Error>()
-        Task {
-            do {
-                let asyncLocationsStream = try await self.locations()
-                for await element in asyncLocationsStream {
-                    subject.send(element)
+        AnyPublisher<[NamedLocation], any Error>.create { subscriber in
+            Task {
+                do {
+                    let asyncLocationsStream = try await self.locations()
+                    for await element in asyncLocationsStream {
+                        subscriber.receive(element)
+                    }
+                } catch {
+                    subscriber.receive(completion: .failure(error))
                 }
-            } catch {
-                subject.send(completion: .failure(error))
             }
+            return AnyCancellable { }
         }
-        return subject.eraseToAnyPublisher()
     }
 }

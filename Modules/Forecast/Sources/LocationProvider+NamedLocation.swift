@@ -61,20 +61,18 @@ extension LocationProvidingReactive {
     var currentForecastLocation: AnyPublisher<any ForecastLocation, Error> {
         currentLocationPublisher
             .flatMap { location in
-                Deferred {
-                    Future { promise in
-                        CLGeocoder().reverseGeocodeLocation(location) { placemarks, error in
-                            guard error == nil, let placemark = placemarks?.first else {
-                                promise(.failure(LocationProviderError.failedGetLocation))
-                                return
-                            }
-                            let location = NamedCurrentLocation(
-                                name: placemark.placeName ?? "N/A",
-                                placemark: placemark,
-                                timeZoneIdentifier: placemark.timeZone?.identifier
-                            )
-                            promise(.success(location))
+                AnyPublisher<any ForecastLocation, Error>.single { promise in
+                    CLGeocoder().reverseGeocodeLocation(location) { placemarks, error in
+                        guard error == nil, let placemark = placemarks?.first else {
+                            promise(.failure(LocationProviderError.failedGetLocation))
+                            return
                         }
+                        let location = NamedCurrentLocation(
+                            name: placemark.placeName ?? "N/A",
+                            placemark: placemark,
+                            timeZoneIdentifier: placemark.timeZone?.identifier
+                        )
+                        promise(.success(location))
                     }
                 }
             }

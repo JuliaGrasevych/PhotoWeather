@@ -60,7 +60,7 @@ class ForecastLocationSearchViewModelReactive: ForecastLocationSearchViewModelPr
             .map { [locationFinder] selection in
                 guard let selection, !selection.isEmpty else { return Just<NamedLocation?>(nil).eraseToAnyPublisher() }
                 return locationFinder.location(for: selection)
-                    .map(Optional.init)
+                    .mapOptional()
                     .replaceError(with: nil)
                     .eraseToAnyPublisher()
             }

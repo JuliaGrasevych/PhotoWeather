@@ -71,7 +71,7 @@ class ForecastLocationItemViewModelReactive: ForecastLocationItemViewModelProtoc
 extension ForecastLocationItemViewModelReactive {
     func onLoad() {
         let forecast = weatherFetcher.forecast(for: location)
-            .map(Optional.init)
+            .mapOptional()
             .replaceError(with: nil)
             .receive(on: DispatchQueue.main)
             .share()
@@ -104,7 +104,7 @@ extension ForecastLocationItemViewModelReactive {
                     forecast: item)
             }
             .switchToLatest()
-            .map(Optional.init)
+            .mapOptional()
             .receive(on: DispatchQueue.main)
             .handleEvents(receiveOutput: { [weak self] photo in
                 if case .stockPhoto(let stockPhoto) = photo {

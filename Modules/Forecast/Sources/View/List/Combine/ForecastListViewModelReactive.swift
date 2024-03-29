@@ -65,7 +65,7 @@ class ForecastListViewModelReactive: ForecastListViewModelProtocol {
                         .eraseToAnyPublisher()
                 }
                 return locationProvider.currentForecastLocation
-                    .map(Optional.init)
+                    .mapOptional()
                     .replaceError(with: nil)
                     .eraseToAnyPublisher()
             }

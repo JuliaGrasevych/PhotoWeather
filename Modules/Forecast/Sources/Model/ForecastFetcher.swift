@@ -49,15 +49,13 @@ class ForecastFetcher: ForecastFetching {
 
 extension ForecastFetcher: ForecastFetchingReactive {
     func forecast(for location: any ForecastLocation) -> AnyPublisher<ForecastItem, Error> {
-        Deferred {
-            Future { promise in
-                Task {
-                    do {
-                        let forecast = try await self.forecast(for: location)
-                        promise(.success(forecast))
-                    } catch {
-                        promise(.failure(error))
-                    }
+        AnyPublisher<ForecastItem, Error>.single { promise in
+            Task {
+                do {
+                    let forecast = try await self.forecast(for: location)
+                    promise(.success(forecast))
+                } catch {
+                    promise(.failure(error))
                 }
             }
         }
