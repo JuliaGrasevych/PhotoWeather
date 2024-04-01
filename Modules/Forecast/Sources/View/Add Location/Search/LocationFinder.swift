@@ -6,12 +6,18 @@
 //
 
 import Foundation
+import Combine
 import MapKit
 import ForecastDependency
 
 public protocol LocationSearching {
     func search(query: String) async throws -> [String]
     func location(for query: String) async throws -> NamedLocation
+}
+
+public protocol LocationSearchingReactive {
+    func search(query: String) -> AnyPublisher<[String], Swift.Error>
+    func location(for query: String) -> AnyPublisher<NamedLocation, Swift.Error>
 }
 
 @globalActor
@@ -83,5 +89,35 @@ extension LocationFinder: MKLocalSearchCompleterDelegate {
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Swift.Error) {
         resultContinuation?.resume(throwing: error)
         resultContinuation = nil
+    }
+}
+
+extension LocationFinder: LocationSearchingReactive {
+    func search(query: String) -> AnyPublisher<[String], Swift.Error> {
+        AnyPublisher<[String], Swift.Error>.single { promise in
+            Task {
+                do {
+                    let result = try await self.search(query: query)
+                    promise(.success(result))
+                } catch {
+                    promise(.failure(error))
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    func location(for query: String) -> AnyPublisher<ForecastDependency.NamedLocation, Swift.Error> {
+        AnyPublisher<ForecastDependency.NamedLocation, Swift.Error>.single { promise in
+            Task {
+                do {
+                    let result = try await self.location(for: query)
+                    promise(.success(result))
+                } catch {
+                    promise(.failure(error))
+                }
+            }
+        }
+        .eraseToAnyPublisher()
     }
 }

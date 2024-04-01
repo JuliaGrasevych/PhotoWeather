@@ -14,7 +14,11 @@ public protocol ForecastComponentDependency: Dependency {
     var networkService: NetworkServiceProtocol { get }
 }
 
-public class ForecastComponent: Component<ForecastComponentDependency> {
+public protocol ForecastComponentProtocol {
+    var view: AnyView { get }
+}
+
+public class ForecastComponent: Component<ForecastComponentDependency>, ForecastComponentProtocol {
     // MARK: - Child Dependencies
     public var weatherFetcher: ForecastFetching {
         shared {

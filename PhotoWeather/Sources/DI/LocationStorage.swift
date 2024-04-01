@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 import Forecast
 import ForecastDependency
 
@@ -41,5 +42,53 @@ actor LocationStorage: LocationStoring, LocationManaging {
     
     func remove(location id: NamedLocation.ID) async throws {
         internalLocationStore = try await externalStore.remove(location: id)
+    }
+}
+
+extension LocationStorage: LocationManagingReactive {
+    nonisolated func remove(location id: NamedLocation.ID) -> AnyPublisher<Void, any Error> {
+        AnyPublisher<Void, any Error>.single { promise in
+            Task {
+                do {
+                    try await self.remove(location: id)
+                    // TODO: how to access promise in async context?
+                    promise(.success(()))
+                } catch {
+                    promise(.failure(error))
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+}
+
+extension LocationStorage: LocationStoringReactive {
+    nonisolated func add(location: NamedLocation) -> AnyPublisher<Void, any Error> {
+        AnyPublisher<Void, Error>.single { promise in
+            Task {
+                do {
+                    try await self.add(location: location)
+                    promise(.success(()))
+                } catch {
+                    promise(.failure(error))
+                }
+            }
+        }
+    }
+    
+    nonisolated func locations() -> AnyPublisher<[NamedLocation], any Error> {
+        AnyPublisher<[NamedLocation], any Error>.create { subscriber in
+            Task {
+                do {
+                    let asyncLocationsStream = try await self.locations()
+                    for await element in asyncLocationsStream {
+                        subscriber.receive(element)
+                    }
+                } catch {
+                    subscriber.receive(completion: .failure(error))
+                }
+            }
+            return AnyCancellable { }
+        }
     }
 }

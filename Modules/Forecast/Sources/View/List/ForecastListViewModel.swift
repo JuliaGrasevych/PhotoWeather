@@ -17,59 +17,58 @@ public protocol ForecastListDependency: Dependency {
     var locationProvider: LocationProviding { get }
 }
 
-extension ForecastListView {
-    class ViewModel: ObservableObject {
-        private let locationStorage: LocationStoring
-        private let locationProvider: LocationProviding
+class ForecastListViewModel: ForecastListViewModelProtocol {
+    private let locationStorage: LocationStoring
+    private let locationProvider: LocationProviding
+    
+    @MainActor 
+    @Published var locations: [NamedLocation] = [] {
+        didSet {
+            updateAllLocations()
+        }
+    }
+    @MainActor var currentLocation: (any ForecastLocation)? {
+        didSet {
+            updateAllLocations()
+        }
+    }
+    @MainActor
+    @Published var allLocations: [any ForecastLocation] = []
+    
+    init(
+        locationStorage: LocationStoring,
+        locationProvider: LocationProviding
+    ) {
+        self.locationStorage = locationStorage
+        self.locationProvider = locationProvider
         
-        @MainActor @Published var locations: [NamedLocation] = [] {
-            didSet {
-                updateAllLocations()
+        Task { @MainActor in
+            guard let locations = try? await locationStorage.locations() else {
+                self.locations = []
+                return
+            }
+            for await changes in locations {
+                self.locations = changes
             }
         }
-        @MainActor var currentLocation: (any ForecastLocation)? {
-            didSet {
-                updateAllLocations()
-            }
-        }
-        @MainActor
-        @Published var allLocations: [any ForecastLocation] = []
-        
-        init(
-            locationStorage: LocationStoring,
-            locationProvider: LocationProviding
-        ) {
-            self.locationStorage = locationStorage
-            self.locationProvider = locationProvider
-            
-            Task { @MainActor in
-                guard let locations = try? await locationStorage.locations() else {
-                    self.locations = []
-                    return
-                }
-                for await changes in locations {
-                    self.locations = changes
-                }
-            }
-        }
-        @MainActor
-        func onAppear() {
-            Task {
-                do {
-                    if await locationProvider.isAuthorized() {
-                        currentLocation = try await locationProvider.currentForecastLocation
-                    } else {
-                        currentLocation = nil
-                    }
-                } catch {
+    }
+    @MainActor
+    func onAppear() {
+        Task {
+            do {
+                if await locationProvider.isAuthorized() {
+                    currentLocation = try await locationProvider.currentForecastLocation
+                } else {
                     currentLocation = nil
                 }
+            } catch {
+                currentLocation = nil
             }
         }
-        
-        @MainActor
-        func updateAllLocations() {
-            allLocations = [currentLocation].compactMap { $0 } + locations
-        }
+    }
+    
+    @MainActor
+    func updateAllLocations() {
+        allLocations = [currentLocation].compactMap { $0 } + locations
     }
 }

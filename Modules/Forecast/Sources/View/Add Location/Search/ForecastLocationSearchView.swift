@@ -10,14 +10,14 @@ import SwiftUI
 import ForecastDependency
 
 @MainActor
-struct ForecastLocationSearchView: View {
+struct ForecastLocationSearchView<VM: ForecastLocationSearchViewModelProtocol>: View {
     @Environment(\.dismiss) var dismiss
     @State private var isPresented = true
-    @StateObject private var viewModel: ViewModel
+    @StateObject private var viewModel: VM
     
     @Binding var location: NamedLocation?
     
-    init(viewModel: @escaping @autoclosure () -> ViewModel, location: Binding<NamedLocation?>) {
+    init(viewModel: @escaping @autoclosure () -> VM, location: Binding<NamedLocation?>) {
         _viewModel = .init(wrappedValue: viewModel())
         _location = location
     }
@@ -25,12 +25,12 @@ struct ForecastLocationSearchView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                List(viewModel.$output.searchResults, id: \.self, selection: viewModel.$input.selection) { $item in
+                List(viewModel.outputBinding.searchResults, id: \.self, selection: viewModel.inputBinding.selection) { $item in
                     VStack(alignment: .leading) {
                         Text(item)
                     }
                 }
-                .searchable(text: viewModel.$input.text, isPresented: $isPresented, prompt: Text("Search"))
+                .searchable(text: viewModel.inputBinding.text, isPresented: $isPresented, prompt: Text("Search"))
                 .autocorrectionDisabled()
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
@@ -59,14 +59,14 @@ fileprivate struct LocationSearchingPreview: LocationSearching {
     }
 }
 
-extension ForecastLocationSearchView.ViewModel {
-    static let preview: ForecastLocationSearchView.ViewModel = ForecastLocationSearchView.ViewModel(locationFinder: LocationSearchingPreview())
+extension ForecastLocationSearchViewModel {
+    static let preview: ForecastLocationSearchViewModel = ForecastLocationSearchViewModel(locationFinder: LocationSearchingPreview())
 }
 
 struct ForecastLocationSearchView_Preview: PreviewProvider {
     @Environment(\.dismiss) var dismiss
     static var previews: some View {
-        ForecastLocationSearchView(viewModel: .preview, location: .constant(nil)).body
+        ForecastLocationSearchView(viewModel: ForecastLocationSearchViewModel.preview, location: .constant(nil)).body
     }
 }
 
@@ -74,7 +74,7 @@ struct ForecastLocationSearchViewBuilderPreview: ForecastLocationSearchViewBuild
     @MainActor
     func view(locationBinding: Binding<NamedLocation?>) -> AnyView {
         AnyView(
-            ForecastLocationSearchView(viewModel: .preview, location: .constant(nil))
+            ForecastLocationSearchView(viewModel: ForecastLocationSearchViewModel.preview, location: .constant(nil))
         )
     }
 }
