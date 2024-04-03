@@ -30,6 +30,8 @@ class ForecastLocationSearchViewModelReactive: ForecastLocationSearchViewModelPr
     private let locationFinder: LocationSearchingReactive
     var nestedObservedObjectsSubscription: [AnyCancellable] = []
     
+    private let searchLocationQueue = DispatchQueue(label: "com.julia.PhotoWeather.Forecast.searchLocationQueue", qos: .userInteractive)
+    
     init(locationFinder: LocationSearchingReactive) {
         self.locationFinder = locationFinder
         subscribeNestedObservedObjects()
@@ -39,7 +41,8 @@ class ForecastLocationSearchViewModelReactive: ForecastLocationSearchViewModelPr
     
     private func setupSearchQueryDebounce() {
         input.$text
-            .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
+            .subscribe(on: searchLocationQueue)
+            .debounce(for: .seconds(0.5), scheduler: searchLocationQueue)
             .removeDuplicates()
             .map { [locationFinder] output in
                 Self.search(query: output, locationFinder: locationFinder)
@@ -57,6 +60,8 @@ class ForecastLocationSearchViewModelReactive: ForecastLocationSearchViewModelPr
     
     private func handleSelection() {
         input.$selection
+            .subscribe(on: searchLocationQueue)
+            .receive(on: searchLocationQueue)
             .map { [locationFinder] selection in
                 guard let selection, !selection.isEmpty else { return Just<NamedLocation?>(nil).eraseToAnyPublisher() }
                 return locationFinder.location(for: selection)
