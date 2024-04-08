@@ -73,7 +73,6 @@ class ForecastListViewModelReactive: ForecastListViewModelProtocol {
                     .replaceError(with: nil)
                     .eraseToAnyPublisher()
             }
-            .replaceError(with: nil)
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] in
                 self?.currentLocation = $0

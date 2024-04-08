@@ -75,13 +75,13 @@ class ForecastLocationItemViewModelReactive: ForecastLocationItemViewModelProtoc
 
 extension ForecastLocationItemViewModelReactive {
     func onLoad() {
+        let forecastSubject = PassthroughSubject<ForecastItem?, Never>()
         let forecast = weatherFetcher.forecast(for: location)
             .subscribe(on: forecastQueue)
             .mapOptional()
             .replaceError(with: nil)
             .receive(on: DispatchQueue.main)
-            .share()
-            .makeConnectable()
+            .multicast(subject: forecastSubject)
         
         forecast
             .map(ForecastLocationItemViewModelOutput.CurrentWeather.init)
