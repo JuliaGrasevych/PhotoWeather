@@ -29,7 +29,10 @@ class ForecastLocationItemViewModelReactive: ForecastLocationItemViewModelProtoc
     @MainActor
     @ObservedObject var output = ForecastLocationItemViewModelOutput()
     var nestedObservedObjectsSubscription: [AnyCancellable] = []
-    var cancellables: [AnyCancellable] = []
+    private var cancellables: [AnyCancellable] = []
+    
+    private let forecastQueue = DispatchQueue(label: "com.julia.PhotoWeather.Forecast.forecastQueue", qos: .userInteractive)
+    private let forecastPhotoQueue = DispatchQueue(label: "com.julia.PhotoWeather.Forecast.forecastPhotoQueue", qos: .userInteractive)
     
     init(
         location: any ForecastLocation,
@@ -62,6 +65,8 @@ class ForecastLocationItemViewModelReactive: ForecastLocationItemViewModelProtoc
             for: location,
             tags: tags
         )
+        .subscribe(on: forecastPhotoQueue)
+        .receive(on: forecastPhotoQueue)
         .map(LocationPhoto.stockPhoto)
         .replaceError(with: LocationPhoto.default)
         .eraseToAnyPublisher()
@@ -70,12 +75,13 @@ class ForecastLocationItemViewModelReactive: ForecastLocationItemViewModelProtoc
 
 extension ForecastLocationItemViewModelReactive {
     func onLoad() {
+        let forecastSubject = PassthroughSubject<ForecastItem?, Never>()
         let forecast = weatherFetcher.forecast(for: location)
+            .subscribe(on: forecastQueue)
             .mapOptional()
             .replaceError(with: nil)
             .receive(on: DispatchQueue.main)
-            .share()
-            .makeConnectable()
+            .multicast(subject: forecastSubject)
         
         forecast
             .map(ForecastLocationItemViewModelOutput.CurrentWeather.init)

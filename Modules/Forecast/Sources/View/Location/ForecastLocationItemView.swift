@@ -62,11 +62,11 @@ struct ForecastLocationItemView<VM: ForecastLocationItemViewModelProtocol>: View
         }
     }
     
+    @ViewBuilder
     private func locationImage() -> some View {
         switch viewModel.output.image {
         case .stockPhoto(let photo):
-            AnyView(
-                AsyncImage(url: photo.url, content: { phase in
+            AsyncImage(url: photo.url, content: { phase in
                 if let image = phase.image {
                     image
                         .resizable()
@@ -77,16 +77,11 @@ struct ForecastLocationItemView<VM: ForecastLocationItemViewModelProtocol>: View
                     ProgressView().progressViewStyle(.circular)
                         .tint(.white)
                 }
-                })
-            )
+            })
         case .default:
-            AnyView(
-                defaultImage()
-            )
+            defaultImage()
         case .none:
-            AnyView(
-                EmptyView()
-            )
+            EmptyView()
         }
     }
     

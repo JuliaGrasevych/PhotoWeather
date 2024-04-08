@@ -33,6 +33,8 @@ class ForecastAddLocationViewModelReactive: ForecastAddLocationViewModelProtocol
     var nestedObservedObjectsSubscription: [AnyCancellable] = []
     private var cancellables: [AnyCancellable] = []
     
+    private let addLocationQueue = DispatchQueue(label: "com.julia.PhotoWeather.Forecast.addLocationQueue", qos: .userInteractive)
+    
     init(locationStorage: LocationStoringReactive) {
         self.locationStorage = locationStorage
         subscribeNestedObservedObjects()
@@ -40,6 +42,7 @@ class ForecastAddLocationViewModelReactive: ForecastAddLocationViewModelProtocol
     
     func add(location: NamedLocation) {
         locationStorage.add(location: location)
+            .subscribe(on: addLocationQueue)
             .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { [weak self] completion in

@@ -37,6 +37,8 @@ class ForecastListViewModelReactive: ForecastListViewModelProtocol {
     
     private var cancellables: [AnyCancellable] = []
     
+    private let locationQueue = DispatchQueue(label: "com.julia.PhotoWeather.Forecast.locationQueue", qos: .userInteractive)
+    
     init(
         locationStorage: LocationStoringReactive,
         locationProvider: LocationProvidingReactive
@@ -55,6 +57,8 @@ class ForecastListViewModelReactive: ForecastListViewModelProtocol {
     
     func onAppear() {
         locationProvider.isAuthorized()
+            .subscribe(on: locationQueue)
+            .receive(on: locationQueue)
             .flatMap { [weak self] isAuthorized in
                 guard let self else {
                     return Just<(any ForecastLocation)?>(nil)
@@ -69,7 +73,6 @@ class ForecastListViewModelReactive: ForecastListViewModelProtocol {
                     .replaceError(with: nil)
                     .eraseToAnyPublisher()
             }
-            .replaceError(with: nil)
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] in
                 self?.currentLocation = $0
