@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 import SwiftData
 import ForecastDependency
 
@@ -19,8 +20,32 @@ public final class SwiftDataStore: ExternalLocationStoring {
         } catch {
             fatalError("Failed to create 'NamedLocation' model container")
         }
+        
         context = ModelContext(modelContainer)
         context.autosaveEnabled = true
+        
+        let fetchDescriptor = FetchDescriptor<NamedLocationModel>()
+        do {
+            let items = try context.fetch(fetchDescriptor).map(\.userRepresentation)
+            locationsPublisher = Just(items)
+                .setFailureType(to: Error.self)
+                .eraseToAnyPublisher()
+                .merge(with: Self.contextDidChangePublisher(context: context, fetchDescriptor: fetchDescriptor))
+                .removeDuplicates()
+                .eraseToAnyPublisher()
+        } catch {
+            locationsPublisher = Fail(error: error)
+                .eraseToAnyPublisher()
+        }
+    }
+    
+    private static func contextDidChangePublisher(context: ModelContext, fetchDescriptor: FetchDescriptor<NamedLocationModel>) -> AnyPublisher<[NamedLocation], Error> {
+        NotificationCenter.default.publisher(for: .NSManagedObjectContextObjectsDidChange, object: context)
+            .setFailureType(to: Error.self)
+            .tryMap { _ in
+                try context.fetch(fetchDescriptor).map(\.userRepresentation)
+            }
+            .eraseToAnyPublisher()
     }
     
     public func locations() async throws -> [NamedLocation] {
@@ -40,6 +65,36 @@ public final class SwiftDataStore: ExternalLocationStoring {
         }
         try context.delete(model: NamedLocationModel.self, where: predicate)
         return try await locations()
+    }
+    
+    public var locationsPublisher: AnyPublisher<[NamedLocation], any Error>
+    
+    public func addReactive(location: NamedLocation) -> AnyPublisher<Void, any Error> {
+        context.insert(NamedLocationModel(userRepresentation: location))
+        do {
+            try context.save()
+            return Just(())
+                .setFailureType(to: Error.self)
+                .eraseToAnyPublisher()
+        } catch {
+            return Fail(error: error)
+                .eraseToAnyPublisher()
+        }
+    }
+    
+    public func removeReactive(location id: NamedLocation.ID) -> AnyPublisher<Void, any Error> {
+        let predicate = #Predicate<NamedLocationModel> {
+            $0.id == id
+        }
+        do {
+            try context.delete(model: NamedLocationModel.self, where: predicate)
+            return Just(())
+                .setFailureType(to: Error.self)
+                .eraseToAnyPublisher()
+        } catch {
+            return Fail(error: error)
+                .eraseToAnyPublisher()
+        }
     }
 }
 
