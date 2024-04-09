@@ -103,17 +103,36 @@ class PhotoStockFetcher: PhotoStockFetching {
 
 extension PhotoStockFetcher: PhotoStockFetchingReactive {
     func photo(for location: any LocationProtocol, tags: [String]) -> AnyPublisher<Photo, any Error> {
-        AnyPublisher<Photo, any Error>.single { promise in
-            Task {
-                do {
-                    let photo = try await self.photo(for: location, tags: tags)
-                    promise(.success(photo))
-                } catch {
-                    promise(.failure(error))
+        do {
+            let apiKey = try apiKeyProvider.flickrAPIKey()
+            let fetchURL = Self.fetchURL(
+                for: location,
+                tags: tags,
+                apiKey: apiKey
+            )
+            
+            let dataPublisher: AnyPublisher<PhotosResponse, Error> = networkService.requestDataPublisher(
+                for: fetchURL,
+                transform: Self.transformResponse
+            )
+            
+            return dataPublisher
+                .tryMap { data in
+                    guard let photo = data.photos.photo.randomElement(),
+                          let photoUrl = Self.photoURL(for: photo)
+                    else {
+                        throw PhotoStockFetchingError.noResultsFound
+                    }
+                    return Photo(
+                        url: photoUrl,
+                        author: photo.owner
+                    )
                 }
-            }
+                .eraseToAnyPublisher()
+        } catch {
+            return Fail(error: error)
+                .eraseToAnyPublisher()
         }
-        .eraseToAnyPublisher()
     }
 }
 

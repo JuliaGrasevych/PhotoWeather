@@ -67,7 +67,7 @@ public final class SwiftDataStore: ExternalLocationStoring {
         return try await locations()
     }
     
-    public var locationsPublisher: AnyPublisher<[NamedLocation], any Error>
+    public let locationsPublisher: AnyPublisher<[NamedLocation], any Error>
     
     public func addReactive(location: NamedLocation) -> AnyPublisher<Void, any Error> {
         context.insert(NamedLocationModel(userRepresentation: location))

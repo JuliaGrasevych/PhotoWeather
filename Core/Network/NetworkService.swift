@@ -27,7 +27,7 @@ public extension NetworkServiceProtocol {
         )
     }
     
-    func requestData<DataType: Decodable>(for url: URL?) -> AnyPublisher<DataType, Error> {
+    func requestDataPublisher<DataType: Decodable>(for url: URL?) -> AnyPublisher<DataType, Error> {
         requestDataPublisher(
             for: url,
             transform: { $0 }
