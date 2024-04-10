@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -79,6 +79,8 @@
 		97C520DEBCC305692830750A /* ForecastLocationSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD97938872B340856F2755A3 /* ForecastLocationSearchView.swift */; };
 		9CF866076614C8224665B7CD /* PhotoStockDependency.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 453D909A0C0C6217E1D30441 /* PhotoStockDependency.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A2E8AA19C765BE201F6E0E6A /* ForecastLocation+Season.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272EA5B6E39FAE7418DD7A4D /* ForecastLocation+Season.swift */; };
+		A3D9CE722BC6E7CD00224707 /* Encodable+EncodedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9CE712BC6E7CD00224707 /* Encodable+EncodedData.swift */; };
+		A3D9CE742BC6E7E800224707 /* Decodable+DecodedFrom.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9CE732BC6E7E800224707 /* Decodable+DecodedFrom.swift */; };
 		A435411D13C3440BE6553BDB /* ExternalLocationStoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4C58C61369B7A533CABB39 /* ExternalLocationStoring.swift */; };
 		A57A12D83F672DB84516A08F /* StorageComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D27BFD6CCB1DB81218752D5 /* StorageComponent.swift */; };
 		A58AA252FE49EF6ECF015083 /* ForecastLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABFFD018DC354EAF2C9B338 /* ForecastLocation.swift */; };
@@ -367,6 +369,8 @@
 		9A80693542A52218D6C51594 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A06366A13D370FA33AE18F6C /* PhotoWeather-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "PhotoWeather-Info.plist"; sourceTree = "<group>"; };
 		A252969FAC048573FA87DCC4 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		A3D9CE712BC6E7CD00224707 /* Encodable+EncodedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+EncodedData.swift"; sourceTree = "<group>"; };
+		A3D9CE732BC6E7E800224707 /* Decodable+DecodedFrom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decodable+DecodedFrom.swift"; sourceTree = "<group>"; };
 		A40976A9763A8CA4490108E8 /* NestedObservedObjectContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestedObservedObjectContainer.swift; sourceTree = "<group>"; };
 		A4D55787CD74F104170B237A /* ForecastAddLocationViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastAddLocationViewModelProtocol.swift; sourceTree = "<group>"; };
 		AD1361D767B78319D20E2D7C /* ForecastLocationSearchViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLocationSearchViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -784,6 +788,8 @@
 				5B822EC367720E8CC9294CDF /* URL+Endpoint.swift */,
 				803032929DCCC18B6EE58E48 /* URLQueryItem+KeyInit.swift */,
 				DCA974BF2B7816E78F705A99 /* UserDefaults+ObjectSavable.swift */,
+				A3D9CE712BC6E7CD00224707 /* Encodable+EncodedData.swift */,
+				A3D9CE732BC6E7E800224707 /* Decodable+DecodedFrom.swift */,
 				67C22E82FC44EAE9EF5CC355 /* View+RoundedBorder.swift */,
 			);
 			path = Extensions;
@@ -1026,8 +1032,6 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				TargetAttributes = {
-				};
 			};
 			buildConfigurationList = F556F0E5EE08114259BFC3F6 /* Build configuration list for PBXProject "PhotoWeather" */;
 			compatibilityVersion = "Xcode 14.0";
@@ -1229,6 +1233,7 @@
 				969DD004D5C2A542D8E32A90 /* AnyPublisher+Single.swift in Sources */,
 				3A675D15D6CACE06972F6932 /* Publisher+MapOptional.swift in Sources */,
 				A916D3AD79597EF34A6A128D /* Bool+IntCodable.swift in Sources */,
+				A3D9CE742BC6E7E800224707 /* Decodable+DecodedFrom.swift in Sources */,
 				77436321EF975C944B613C3A /* DateFormatter+InitFormat.swift in Sources */,
 				BEACB61ABDC7E0094122A144 /* Double+TemperatureFormat.swift in Sources */,
 				75DE8C58A4498BABBB0EF1D1 /* JSONDecoder+AnyDateFormatter.swift in Sources */,
@@ -1240,6 +1245,7 @@
 				3A5A9929C3197A5072E7721C /* View+RoundedBorder.swift in Sources */,
 				157CEECDEE19C57AFE101AB9 /* LocationManager.swift in Sources */,
 				C6D31CA6BA5BE2C5959B16F0 /* NestedObservedObjectContainer.swift in Sources */,
+				A3D9CE722BC6E7CD00224707 /* Encodable+EncodedData.swift in Sources */,
 				DD715CA37D2F1EA31F52AC51 /* NetworkService.swift in Sources */,
 				345691E1B7303FEB3C6E9A11 /* ContentShadow.swift in Sources */,
 				93C0215AA1397285BFAA9205 /* VerticalLabelStyle.swift in Sources */,
@@ -1455,10 +1461,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1624,10 +1627,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1661,10 +1661,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1758,10 +1755,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1790,10 +1784,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1825,10 +1816,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1928,10 +1916,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
