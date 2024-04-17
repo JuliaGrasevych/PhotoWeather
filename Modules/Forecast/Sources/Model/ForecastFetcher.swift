@@ -49,17 +49,8 @@ class ForecastFetcher: ForecastFetching {
 
 extension ForecastFetcher: ForecastFetchingReactive {
     func forecast(for location: any ForecastLocation) -> AnyPublisher<ForecastItem, Error> {
-        AnyPublisher<ForecastItem, Error>.single { promise in
-            Task {
-                do {
-                    let forecast = try await self.forecast(for: location)
-                    promise(.success(forecast))
-                } catch {
-                    promise(.failure(error))
-                }
-            }
-        }
-        .eraseToAnyPublisher()
+        let url = Self.fetchURL(for: location)
+        return networkService.requestDataPublisher(for: url)
     }
 }
 

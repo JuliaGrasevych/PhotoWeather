@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import Combine
 
-enum NetworkError: Error {
+public enum NetworkError: Error {
     case invalidURLComponents
 }
 
@@ -15,22 +16,19 @@ public protocol NetworkServiceProtocol {
     var decoder: JSONDecoder { get }
 
     func requestData<DataType: Decodable>(for url: URL?, transform: (Data) throws -> Data) async throws -> DataType
+    func requestDataPublisher<DataType: Decodable>(for url: URL?, transform: @escaping (Data) throws -> Data) -> AnyPublisher<DataType, Error>
 }
 
 public extension NetworkServiceProtocol {
-    func requestData<DataType: Decodable>(for url: URL?, transform: (Data) throws -> Data) async throws -> DataType {
-        guard let url else {
-            throw NetworkError.invalidURLComponents
-        }
-        let request = URLRequest(url: url)
-        let response = try await URLSession.shared.data(for: request)
-        let transformedData = try transform(response.0)
-        let item = try decoder.decode(DataType.self, from: transformedData)
-        return item
-    }
-    
     func requestData<DataType: Decodable>(for url: URL?) async throws -> DataType {
         try await requestData(
+            for: url,
+            transform: { $0 }
+        )
+    }
+    
+    func requestDataPublisher<DataType: Decodable>(for url: URL?) -> AnyPublisher<DataType, Error> {
+        requestDataPublisher(
             for: url,
             transform: { $0 }
         )

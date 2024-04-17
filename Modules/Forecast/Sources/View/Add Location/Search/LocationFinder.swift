@@ -33,6 +33,8 @@ final class LocationFinder: NSObject, LocationSearching {
     private let completer = MKLocalSearchCompleter()
     private var resultContinuation: CheckedContinuation<[String], Swift.Error>?
     
+    private var searchResult = CurrentValueSubject<[String]?, Swift.Error>(nil)
+    
     override init() {
         super.init()
         completer.delegate = self
@@ -63,12 +65,7 @@ final class LocationFinder: NSObject, LocationSearching {
             .mapItems
             .first
             .map({ item in
-                NamedLocation(
-                    id: UUID().uuidString,
-                    name: item.name ?? "N/A",
-                    placemark: item.placemark,
-                    timeZoneIdentifier: item.timeZone?.identifier
-                )
+                NamedLocation(mapItem: item)
             })
         else {
             throw Error.locationNotFound
@@ -84,40 +81,71 @@ extension LocationFinder: MKLocalSearchCompleterDelegate {
         }
         resultContinuation?.resume(returning: searchResults)
         resultContinuation = nil
+        
+        searchResult.send(searchResults)
+        searchResult.send(completion: .finished)
     }
     
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Swift.Error) {
         resultContinuation?.resume(throwing: error)
         resultContinuation = nil
+        
+        searchResult.send(completion: .failure(error))
     }
 }
 
 extension LocationFinder: LocationSearchingReactive {
     func search(query: String) -> AnyPublisher<[String], Swift.Error> {
-        AnyPublisher<[String], Swift.Error>.single { promise in
-            Task {
-                do {
-                    let result = try await self.search(query: query)
-                    promise(.success(result))
-                } catch {
-                    promise(.failure(error))
-                }
-            }
+        guard !query.isEmpty else {
+            return Just([])
+                .setFailureType(to: Swift.Error.self)
+                .eraseToAnyPublisher()
         }
-        .eraseToAnyPublisher()
+        if completer.isSearching {
+            completer.cancel()
+        }
+        searchResult = CurrentValueSubject(nil)
+        DispatchQueue.main.async {
+            self.completer.resultTypes = .address
+            self.completer.queryFragment = query
+        }
+        
+        return searchResult
+            .compactMap { $0 }
+            .eraseToAnyPublisher()
     }
     
     func location(for query: String) -> AnyPublisher<ForecastDependency.NamedLocation, Swift.Error> {
-        AnyPublisher<ForecastDependency.NamedLocation, Swift.Error>.single { promise in
-            Task {
-                do {
-                    let result = try await self.location(for: query)
-                    promise(.success(result))
-                } catch {
+        let searchRequest = MKLocalSearch.Request()
+        searchRequest.naturalLanguageQuery = query
+        searchRequest.resultTypes = .address
+        let search = MKLocalSearch(request: searchRequest)
+        
+        return AnyPublisher<ForecastDependency.NamedLocation, Swift.Error>.single { promise in
+            search.start { response, error in
+                if let error {
                     promise(.failure(error))
+                    return
                 }
+                guard let item = response?.mapItems.first else {
+                    promise(.failure(Error.locationNotFound))
+                    return
+                }
+                promise(.success(
+                    NamedLocation(mapItem: item)
+                ))
             }
         }
-        .eraseToAnyPublisher()
+    }
+}
+
+fileprivate extension NamedLocation {
+    init(mapItem: MKMapItem) {
+        self.init(
+            id: UUID().uuidString,
+            name: mapItem.name ?? "N/A",
+            placemark: mapItem.placemark,
+            timeZoneIdentifier: mapItem.timeZone?.identifier
+        )
     }
 }

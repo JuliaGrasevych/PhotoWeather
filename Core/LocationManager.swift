@@ -31,6 +31,9 @@ public class LocationProvider: NSObject, LocationProviding {
     
     private var locationState = LocationState.empty
     
+    private let authorizationSubject: CurrentValueSubject<Bool, Never>
+    private let currentLocationSubject = CurrentValueSubject<Result<CLLocation?, Error>, Never>(.success(nil))
+    
     public var currentLocation: CLLocation {
         get async throws {
             switch locationState {
@@ -56,6 +59,7 @@ public class LocationProvider: NSObject, LocationProviding {
     
     public init(locationManager: CLLocationManager) {
         self.locationManager = locationManager
+        self.authorizationSubject = CurrentValueSubject(locationManager.authorizationStatus.isAuthorized)
         super.init()
         self.locationManager.delegate = self
     }
@@ -68,6 +72,84 @@ public class LocationProvider: NSObject, LocationProviding {
                 locationManager.requestWhenInUseAuthorization()
             }
         case .restricted,
+                .denied,
+                .authorizedAlways,
+                .authorizedWhenInUse,
+                .authorized:
+            return locationManager.authorizationStatus.isAuthorized
+        @unknown default:
+            return locationManager.authorizationStatus.isAuthorized
+        }
+    }
+}
+
+extension LocationProvider: LocationProvidingReactive {
+    public var currentLocationPublisher: AnyPublisher<CLLocation, any Error> {
+        locationManager.requestLocation()
+        return currentLocationSubject
+        .tryCompactMap { result in
+            switch result {
+            case .success(let location):
+                return location
+            case .failure(let error):
+                throw error
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    public func isAuthorized() -> AnyPublisher<Bool, Never> {
+        switch locationManager.authorizationStatus {
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+            return authorizationSubject.eraseToAnyPublisher()
+        case .restricted,
+                .denied,
+                .authorizedAlways,
+                .authorizedWhenInUse,
+                .authorized:
+            return authorizationSubject.eraseToAnyPublisher()
+        @unknown default:
+            return authorizationSubject.eraseToAnyPublisher()
+        }
+    }
+}
+
+extension LocationProvider: CLLocationManagerDelegate {
+    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let lastLocation = locations.last else {
+            return
+        }
+        currentLocationSubject.send(.success(lastLocation))
+        guard case let .pending(array) = locationState else { return }
+        array.forEach { continuation in
+            continuation.resume(returning: lastLocation)
+        }
+        self.locationState = .empty
+    }
+    
+    public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        currentLocationSubject.send(.failure(error))
+        guard case let .pending(array) = locationState else { return }
+        array.forEach { continuation in
+            continuation.resume(throwing: error)
+        }
+        self.locationState = .empty
+    }
+    
+    public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        let isAuthorized = locationManager.authorizationStatus.isAuthorized
+        authorizationContinuation?.resume(returning: isAuthorized)
+        authorizationSubject.send(isAuthorized)
+        authorizationContinuation = nil
+    }
+}
+
+extension CLAuthorizationStatus {
+    var isAuthorized: Bool {
+        switch self {
+        case .notDetermined,
+                .restricted,
                 .denied:
             return false
         case .authorizedAlways,
@@ -77,68 +159,5 @@ public class LocationProvider: NSObject, LocationProviding {
         @unknown default:
             return false
         }
-    }
-}
-
-extension LocationProvider: LocationProvidingReactive {
-    public var currentLocationPublisher: AnyPublisher<CLLocation, any Error> {
-        AnyPublisher<CLLocation, Error>.single { promise in
-            Task {
-                do {
-                    let location = try await self.currentLocation
-                    promise(.success(location))
-                } catch {
-                    promise(.failure(error))
-                }
-            }
-        }
-        .eraseToAnyPublisher()
-    }
-    
-    public func isAuthorized() -> AnyPublisher<Bool, Never> {
-        AnyPublisher<Bool, Never>.single { promise in
-            Task {
-                let isAuthorized = await self.isAuthorized()
-                promise(.success(isAuthorized))
-            }
-        }
-        .eraseToAnyPublisher()
-    }
-}
-
-extension LocationProvider: CLLocationManagerDelegate {
-    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let lastLocation = locations.last else {
-            return
-        }
-        guard case let .pending(array) = locationState else { return }
-        array.forEach { continuation in
-            continuation.resume(returning: lastLocation)
-        }
-        self.locationState = .empty
-    }
-    
-    public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        guard case let .pending(array) = locationState else { return }
-        array.forEach { continuation in
-            continuation.resume(throwing: error)
-        }
-        self.locationState = .empty
-    }
-    
-    public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        switch locationManager.authorizationStatus {
-        case .notDetermined,
-                .restricted,
-                .denied:
-            authorizationContinuation?.resume(returning: false)
-        case .authorizedAlways,
-                .authorizedWhenInUse,
-                .authorized:
-            authorizationContinuation?.resume(returning: true)
-        @unknown default:
-            authorizationContinuation?.resume(returning: false)
-        }
-        authorizationContinuation = nil
     }
 }
