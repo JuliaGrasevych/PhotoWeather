@@ -140,4 +140,9 @@ extension ForecastLocationItemViewModelReactive {
             )
             .store(in: &cancellables)
     }
+    
+    @MainActor
+    func refresh() async {
+        
+    }
 }

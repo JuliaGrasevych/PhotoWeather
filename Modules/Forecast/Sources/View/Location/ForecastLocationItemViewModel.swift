@@ -79,19 +79,24 @@ class ForecastLocationItemViewModel: ForecastLocationItemViewModelProtocol, Nest
 extension ForecastLocationItemViewModel {
     func onLoad() {
         Task { @MainActor in
-            let forecast = await fetchForecast(for: location)
-            output.currentWeather = ForecastLocationItemViewModelOutput.CurrentWeather(model: forecast)
-            output.todayForecast = Self.todayForecast(with: forecast, location: location)
-            output.hourlyForecast = Self.hourlyForecast(with: forecast)
-            output.dailyForecast = Self.dailyForecast(with: forecast)
-            let photo = await fetchImage(
-                for: location,
-                forecast: forecast
-            )
-            output.image = photo
-            if case .stockPhoto(let stockPhoto) = photo {
-                output.imageAuthorTitle = stockPhoto.author
-            }
+            await refresh()
+        }
+    }
+    
+    @MainActor
+    func refresh() async {
+        let forecast = await fetchForecast(for: location)
+        output.currentWeather = ForecastLocationItemViewModelOutput.CurrentWeather(model: forecast)
+        output.todayForecast = Self.todayForecast(with: forecast, location: location)
+        output.hourlyForecast = Self.hourlyForecast(with: forecast)
+        output.dailyForecast = Self.dailyForecast(with: forecast)
+        let photo = await fetchImage(
+            for: location,
+            forecast: forecast
+        )
+        output.image = photo
+        if case .stockPhoto(let stockPhoto) = photo {
+            output.imageAuthorTitle = stockPhoto.author
         }
     }
     

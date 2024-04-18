@@ -87,31 +87,31 @@ extension LocationProvider: LocationProvidingReactive {
     public var currentLocationPublisher: AnyPublisher<CLLocation, any Error> {
         locationManager.requestLocation()
         return currentLocationSubject
-        .tryCompactMap { result in
-            switch result {
-            case .success(let location):
-                return location
-            case .failure(let error):
-                throw error
+            .tryCompactMap { result in
+                switch result {
+                case .success(let location):
+                    return location
+                case .failure(let error):
+                    throw error
+                }
             }
-        }
-        .eraseToAnyPublisher()
+            .eraseToAnyPublisher()
     }
     
     public func isAuthorized() -> AnyPublisher<Bool, Never> {
         switch locationManager.authorizationStatus {
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
-            return authorizationSubject.eraseToAnyPublisher()
         case .restricted,
                 .denied,
                 .authorizedAlways,
                 .authorizedWhenInUse,
                 .authorized:
-            return authorizationSubject.eraseToAnyPublisher()
+            break
         @unknown default:
-            return authorizationSubject.eraseToAnyPublisher()
+            break
         }
+        return authorizationSubject.eraseToAnyPublisher()
     }
 }
 

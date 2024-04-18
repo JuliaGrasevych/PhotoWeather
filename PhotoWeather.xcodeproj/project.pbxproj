@@ -81,6 +81,7 @@
 		A2E8AA19C765BE201F6E0E6A /* ForecastLocation+Season.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272EA5B6E39FAE7418DD7A4D /* ForecastLocation+Season.swift */; };
 		A3D9CE722BC6E7CD00224707 /* Encodable+EncodedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9CE712BC6E7CD00224707 /* Encodable+EncodedData.swift */; };
 		A3D9CE742BC6E7E800224707 /* Decodable+DecodedFrom.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9CE732BC6E7E800224707 /* Decodable+DecodedFrom.swift */; };
+		A3D9CE762BD12C5500224707 /* ForecastLocationItemContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9CE752BD12C5500224707 /* ForecastLocationItemContentView.swift */; };
 		A435411D13C3440BE6553BDB /* ExternalLocationStoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4C58C61369B7A533CABB39 /* ExternalLocationStoring.swift */; };
 		A57A12D83F672DB84516A08F /* StorageComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D27BFD6CCB1DB81218752D5 /* StorageComponent.swift */; };
 		A58AA252FE49EF6ECF015083 /* ForecastLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABFFD018DC354EAF2C9B338 /* ForecastLocation.swift */; };
@@ -371,6 +372,7 @@
 		A252969FAC048573FA87DCC4 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		A3D9CE712BC6E7CD00224707 /* Encodable+EncodedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+EncodedData.swift"; sourceTree = "<group>"; };
 		A3D9CE732BC6E7E800224707 /* Decodable+DecodedFrom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decodable+DecodedFrom.swift"; sourceTree = "<group>"; };
+		A3D9CE752BD12C5500224707 /* ForecastLocationItemContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLocationItemContentView.swift; sourceTree = "<group>"; };
 		A40976A9763A8CA4490108E8 /* NestedObservedObjectContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestedObservedObjectContainer.swift; sourceTree = "<group>"; };
 		A4D55787CD74F104170B237A /* ForecastAddLocationViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastAddLocationViewModelProtocol.swift; sourceTree = "<group>"; };
 		AD1361D767B78319D20E2D7C /* ForecastLocationSearchViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLocationSearchViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -851,6 +853,7 @@
 				818D65F4BC9C1C220FECE358 /* Combine */,
 				557AE446555B129E6568FE0E /* ForecastLocationItemComponent.swift */,
 				086AA05018207C0AB729C07D /* ForecastLocationItemView.swift */,
+				A3D9CE752BD12C5500224707 /* ForecastLocationItemContentView.swift */,
 				6D07779E1BD38ABBC00F946B /* ForecastLocationItemViewModel.swift */,
 				4AE4D332BF2D1DF88CC589FE /* ForecastLocationItemViewModelOutput.swift */,
 				1A676D1CE73B6413F999FE8B /* ForecastLocationItemViewModelProtocol.swift */,
@@ -1188,6 +1191,7 @@
 				253547C6EFFCEB7CED77D6C5 /* ForecastLocationSearchComponent.swift in Sources */,
 				97C520DEBCC305692830750A /* ForecastLocationSearchView.swift in Sources */,
 				141F868AA9343F217A753360 /* ForecastLocationSearchViewModel.swift in Sources */,
+				A3D9CE762BD12C5500224707 /* ForecastLocationItemContentView.swift in Sources */,
 				5060803147D3949277CA0F77 /* ForecastLocationSearchViewModelOutput.swift in Sources */,
 				F9F0D03B102EA23063732932 /* ForecastLocationSearchViewModelProtocol.swift in Sources */,
 				0C7890F5703C1407E1B2FB82 /* LocationFinder.swift in Sources */,
