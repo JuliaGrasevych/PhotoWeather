@@ -13,6 +13,7 @@ protocol ForecastLocationItemViewModelProtocol: ObservableObject {
     var output: ForecastLocationItemViewModelOutput { get }
     func onLoad()
     func deleteLocation()
+    func refresh() async
 }
 
 extension ForecastLocationItemViewModelProtocol {

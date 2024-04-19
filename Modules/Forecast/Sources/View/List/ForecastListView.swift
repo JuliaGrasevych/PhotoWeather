@@ -41,7 +41,6 @@ struct ForecastListView<VM: ForecastListViewModelProtocol>: View {
                 .containerRelativeFrame([.horizontal, .vertical])
                 .clipped()
         }
-        
         .overlay(alignment: .top) {
             Self.topGradient()
         }
