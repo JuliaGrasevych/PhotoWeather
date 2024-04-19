@@ -75,6 +75,29 @@ class ForecastLocationItemViewModelReactive: ForecastLocationItemViewModelProtoc
 
 extension ForecastLocationItemViewModelReactive {
     func onLoad() {
+        refreshPublisher()
+    }
+    
+    func deleteLocation() {
+        locationManager.remove(location: location.id)
+            .receive(on: DispatchQueue.main)
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    switch completion {
+                    case .finished:
+                        break
+                    case .failure:
+                        guard let self else { return }
+                        self.output.error = ForecastLocationItemViewModelOutput.Error.deleteFailed(self.location)
+                    }
+                },
+                receiveValue: { _ in }
+            )
+            .store(in: &cancellables)
+    }
+    
+    @discardableResult
+    func refreshPublisher() -> AnyPublisher<Never, Never> {
         let forecastSubject = PassthroughSubject<ForecastItem?, Never>()
         let forecast = weatherFetcher.forecast(for: location)
             .subscribe(on: forecastQueue)
@@ -119,30 +142,39 @@ extension ForecastLocationItemViewModelReactive {
             })
             .assign(to: &output.$image)
         
-        forecast.connect()
-            .store(in: &cancellables)
-    }
-    
-    func deleteLocation() {
-        locationManager.remove(location: location.id)
-            .receive(on: DispatchQueue.main)
-            .sink(
-                receiveCompletion: { [weak self] completion in
-                    switch completion {
-                    case .finished:
-                        break
-                    case .failure:
-                        guard let self else { return }
-                        self.output.error = ForecastLocationItemViewModelOutput.Error.deleteFailed(self.location)
-                    }
-                },
-                receiveValue: { _ in }
-            )
-            .store(in: &cancellables)
+        defer {
+            forecast.connect()
+                .store(in: &cancellables)
+        }
+        
+        let publisher = Publishers.Zip4(output.$currentWeather, output.$todayForecast, output.$hourlyForecast, output.$dailyForecast)
+            .zip(output.$image)
+            .dropFirst() // drop stored values
+            .prefix(1) // get only 1st updated results
+            .ignoreOutput()
+            .eraseToAnyPublisher()
+        return publisher
     }
     
     @MainActor
     func refresh() async {
-        
+        let refresh = refreshPublisher()
+        return await withCheckedContinuation { continuation in
+            var cancellable: AnyCancellable?
+            cancellable = refresh
+                .receive(on: DispatchQueue.main)
+                .sink(
+                    receiveCompletion: { result in
+                        switch result {
+                        case .finished:
+                            continuation.resume(returning: ())
+                        case .failure(let failure):
+                            break
+                        }
+                        cancellable?.cancel()
+                    },
+                    receiveValue: { _ in }
+                )
+        }
     }
 }
