@@ -3,22 +3,25 @@ import ProjectDescription
 extension Target {
     static func appTarget(
         _ name: String,
+        bundleIdPath: String? = nil,
         path: String? = nil,
         product: Product,
         infoPlist: InfoPlist? = .default,
+        additionalSources: [String] = [],
         hasResources: Bool = false,
         scripts: [TargetScript] = [],
         dependencies: [TargetDependency] = [],
         settings: Settings? = nil
     ) -> Target {
         let frameworkPath = path ?? name
-        let sources: SourceFilesList = hasResources ? ["\(frameworkPath)/Sources/**"] : ["\(frameworkPath)/**"]
+        var sourcesPaths: [String] = (hasResources ? ["\(frameworkPath)/Sources/**"] : ["\(frameworkPath)/**"]) + additionalSources
+        let sources: SourceFilesList = SourceFilesList.paths(sourcesPaths.map { Path(stringLiteral: $0) })
         let resources: ResourceFileElements? = hasResources ? ["\(frameworkPath)/Resources/**"] : nil
         return .target(
             name: name,
             destinations: [.iPhone],
             product: product,
-            bundleId: "com.julia.\(name)",
+            bundleId: "com.julia.\(bundleIdPath ?? name)",
             deploymentTargets: .iOS("17.0"),
             infoPlist: infoPlist,
             sources: sources,
@@ -32,6 +35,7 @@ extension Target {
     static func app(
         _ name: String,
         infoPlist: InfoPlist? = .default,
+        additionalSources: [String] = [],
         scripts: [TargetScript] = [],
         dependencies: [TargetDependency] = [],
         settings: Settings? = nil
@@ -40,6 +44,7 @@ extension Target {
             name,
             product: .app,
             infoPlist: infoPlist,
+            additionalSources: additionalSources,
             hasResources: true,
             scripts: scripts,
             dependencies: dependencies,
@@ -127,6 +132,24 @@ let project = Project(
                 .external(name: "NeedleFoundation")
             ]
         ),
+        .appTarget(
+            "PhotoWeatherWidget",
+            bundleIdPath: "PhotoWeather.extension",
+            product: .appExtension,
+            infoPlist: .file(path: "PhotoWeatherWidget/Info.plist"),
+            additionalSources: ["Shared/**"],
+            dependencies: [
+                .target(name: "Core"),
+                .target(name: "Forecast"),
+                .target(name: "ForecastDependency"),
+                .target(name: "PhotoStock"),
+                .target(name: "PhotoStockDependency"),
+                .target(name: "Storage"),
+                .external(name: "NeedleFoundation"),
+                .sdk(name: "SwiftUI", type: .framework),
+                .sdk(name: "WidgetKit", type: .framework)
+            ]
+        ),
         .app(
             "PhotoWeather",
             infoPlist: .extendingDefault(
@@ -139,9 +162,10 @@ let project = Project(
                     "UILaunchStoryboardName": "Launch Screen.storyboard"
                 ]
             ),
+            additionalSources: ["Shared/**"],
             scripts: [
                 .pre(
-                    script: "export SOURCEKIT_LOGGING=0 && needle generate PhotoWeather/Sources/DI/NeedleGenerated.swift ./",
+                    script: "export SOURCEKIT_LOGGING=0 && needle generate Shared/DI/NeedleGenerated.swift ./",
                     name: "Needle",
                     shellPath: "/bin/sh"
                 )
@@ -153,7 +177,8 @@ let project = Project(
                 .target(name: "PhotoStock"),
                 .target(name: "PhotoStockDependency"),
                 .target(name: "Storage"),
-                .external(name: "NeedleFoundation")
+                .external(name: "NeedleFoundation"),
+                .target(name: "PhotoWeatherWidget")
             ],
             settings: .settings(
                 configurations: [

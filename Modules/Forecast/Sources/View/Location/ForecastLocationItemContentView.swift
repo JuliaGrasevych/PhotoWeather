@@ -251,8 +251,6 @@ struct ForecastLocationItemContentView<VM: ForecastLocationItemViewModelProtocol
     }
 }
 
-fileprivate extension Font {
-    static func weatherIconFont(size: CGFloat) -> Font {
-        .custom("weather-icons-lite", size: size)
-    }
+#Preview {
+    ForecastLocationItemContentView(viewModel: ForecastLocationItemViewModel.preview)
 }

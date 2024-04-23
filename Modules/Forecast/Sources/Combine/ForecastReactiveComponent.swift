@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import NeedleFoundation
+import ForecastDependency
 
 public class ForecastReactiveComponent: Component<ForecastComponentDependency>, ForecastComponentProtocol {
     // MARK: - Child Dependencies
@@ -26,5 +27,11 @@ public class ForecastReactiveComponent: Component<ForecastComponentDependency>, 
     
     var childComponent: ForecastListReactiveComponent {
         ForecastListReactiveComponent(parent: self)
+    }
+    
+    @MainActor
+    public func widgetView(location: any ForecastLocation) -> AnyView {
+        ForecastLocationItemReactiveComponent(parent: self)
+            .widgetView(location: location)
     }
 }

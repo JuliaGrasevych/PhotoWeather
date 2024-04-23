@@ -28,3 +28,12 @@ public class ForecastLocationItemReactiveComponent: Component<ForecastLocationIt
         )
     }
 }
+
+extension ForecastLocationItemReactiveComponent: ForecastLocationWidgetBuilder {
+    @MainActor
+    public func widgetView(location: any ForecastLocation) -> AnyView {
+        AnyView(
+            ForecastLocationWidgetView(viewModel: self.viewModel(location: location))
+        )
+    }
+}
