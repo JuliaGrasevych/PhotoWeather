@@ -15,7 +15,7 @@ public protocol ForecastLocationItemBuilder {
 }
 
 public protocol ForecastLocationWidgetBuilder {
-    func widgetView(location: any ForecastLocation) -> AnyView
+    func widgetView(viewModel: ForecastLocationItemWidgetViewModel) -> AnyView
 }
 
 public class ForecastLocationItemComponent: Component<ForecastLocationItemDependency>, ForecastLocationItemBuilder {
@@ -38,9 +38,9 @@ public class ForecastLocationItemComponent: Component<ForecastLocationItemDepend
 
 extension ForecastLocationItemComponent: ForecastLocationWidgetBuilder {
     @MainActor
-    public func widgetView(location: any ForecastLocation) -> AnyView {
+    public func widgetView(viewModel: ForecastLocationItemWidgetViewModel) -> AnyView {
         AnyView(
-            ForecastLocationWidgetView(viewModel: self.viewModel(location: location))
+            ForecastLocationWidgetView(viewModel: viewModel)
         )
     }
 }

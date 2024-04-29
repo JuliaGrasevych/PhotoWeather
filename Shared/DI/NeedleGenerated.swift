@@ -258,6 +258,7 @@ extension ForecastReactiveComponent: Registration {
     public func registerItems() {
         keyPathToName[\ForecastComponentDependency.networkService] = "networkService-NetworkServiceProtocol"
         localTable["weatherFetcher-ForecastFetchingReactive"] = { [unowned self] in self.weatherFetcher as Any }
+        localTable["weatherFetcherExport-ForecastFetching"] = { [unowned self] in self.weatherFetcherExport as Any }
         localTable["view-AnyView"] = { [unowned self] in self.view as Any }
     }
 }
@@ -265,6 +266,7 @@ extension ForecastComponent: Registration {
     public func registerItems() {
         keyPathToName[\ForecastComponentDependency.networkService] = "networkService-NetworkServiceProtocol"
         localTable["weatherFetcher-ForecastFetching"] = { [unowned self] in self.weatherFetcher as Any }
+        localTable["weatherFetcherExport-ForecastFetching"] = { [unowned self] in self.weatherFetcherExport as Any }
         localTable["view-AnyView"] = { [unowned self] in self.view as Any }
     }
 }

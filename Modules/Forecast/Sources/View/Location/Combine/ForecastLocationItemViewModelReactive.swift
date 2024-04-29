@@ -168,7 +168,7 @@ extension ForecastLocationItemViewModelReactive {
                         switch result {
                         case .finished:
                             continuation.resume(returning: ())
-                        case .failure(let failure):
+                        case .failure:
                             break
                         }
                         cancellable?.cancel()

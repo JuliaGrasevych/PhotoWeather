@@ -17,6 +17,12 @@ public class ForecastReactiveComponent: Component<ForecastComponentDependency>, 
             ForecastFetcher(networkService: dependency.networkService)
         }
     }
+    // TODO: make reactive?
+    public var weatherFetcherExport: ForecastFetching {
+        shared {
+            ForecastFetcher(networkService: dependency.networkService)
+        }
+    }
     
     @MainActor
     public var view: AnyView {
@@ -30,8 +36,8 @@ public class ForecastReactiveComponent: Component<ForecastComponentDependency>, 
     }
     
     @MainActor
-    public func widgetView(location: any ForecastLocation) -> AnyView {
+    public func widgetView(viewModel: ForecastLocationItemWidgetViewModel) -> AnyView {
         ForecastLocationItemReactiveComponent(parent: self)
-            .widgetView(location: location)
+            .widgetView(viewModel: viewModel)
     }
 }

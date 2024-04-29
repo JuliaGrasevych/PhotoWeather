@@ -8,12 +8,38 @@
 import Foundation
 import SwiftUI
 
-@MainActor
-struct ForecastLocationWidgetView<VM: ForecastLocationItemViewModelProtocol>: View {
-    @StateObject private var viewModel: VM
+public struct ForecastLocationItemWidgetViewModel {
+    public struct CurrentWeather {
+        let temperature: String
+        let weatherIcon: String
+        let weatherDescription: String
+        
+        public init(temperature: String, weatherIcon: String, weatherDescription: String) {
+            self.temperature = temperature
+            self.weatherIcon = weatherIcon
+            self.weatherDescription = weatherDescription
+        }
+    }
     
-    init(viewModel: @escaping @autoclosure () -> VM) {
-        _viewModel = .init(wrappedValue: viewModel())
+    let locationName: String
+    let isUserLocation: Bool
+    let currentWeather: CurrentWeather
+    // TODO: add image loading
+//    let image: LocationPhoto?
+    
+    public init(locationName: String, isUserLocation: Bool, currentWeather: CurrentWeather) {
+        self.locationName = locationName
+        self.isUserLocation = isUserLocation
+        self.currentWeather = currentWeather
+    }
+}
+
+@MainActor
+struct ForecastLocationWidgetView: View {
+    private var viewModel: ForecastLocationItemWidgetViewModel
+    
+    init(viewModel: ForecastLocationItemWidgetViewModel) {
+        self.viewModel = viewModel
     }
     
     var body: some View {
@@ -32,49 +58,48 @@ struct ForecastLocationWidgetView<VM: ForecastLocationItemViewModelProtocol>: Vi
     private func currentWeatherView() -> some View {
         VStack {
             HStack {
-                if viewModel.output.isUserLocation {
+                if viewModel.isUserLocation {
                     Image(systemName: "location.fill")
                 }
-                Text(viewModel.output.locationName)
+                Text(viewModel.locationName)
                     .font(.system(.body, design: .rounded))
                     .fontWeight(.bold)
             }
-            Text(viewModel.output.currentWeather.temperature)
+            Text(viewModel.currentWeather.temperature)
                 .font(.system(.body, design: .rounded))
-            Text(viewModel.output.currentWeather.weatherIcon)
-                .font(Font.weatherIconFont(size: 12))
-            Text(viewModel.output.currentWeather.weatherDescription)
+            Text(viewModel.currentWeather.weatherIcon)
+                .font(Font.weatherIconFont(size: 40))
+            Text(viewModel.currentWeather.weatherDescription)
                 .font(.system(.body, design: .rounded))
                 .fontWeight(.medium)
         }
         .defaultContentStyle()
-        .padding(EdgeInsets(top: 40, leading: 0, bottom: 20, trailing: 0))
+        .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
         .frame(maxWidth: .infinity, alignment: .top)
-        .background(.ultraThinMaterial.opacity(0.85))
-        .shadow(color: .white.opacity(0.5), radius: 4, x: 0, y: 4)
     }
     
     @ViewBuilder
     private func locationImage() -> some View {
-        switch viewModel.output.image {
-        case .stockPhoto(let photo):
-            AsyncImage(url: photo.url, content: { phase in
-                if let image = phase.image {
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                } else if phase.error != nil {
-                    defaultImage()
-                } else {
-                    ProgressView().progressViewStyle(.circular)
-                        .tint(.white)
-                }
-            })
-        case .default:
-            defaultImage()
-        case .none:
-            EmptyView()
-        }
+        EmptyView()
+//        switch viewModel.image {
+//        case .stockPhoto(let photo):
+//            AsyncImage(url: photo.url, content: { phase in
+//                if let image = phase.image {
+//                    image
+//                        .resizable()
+//                        .aspectRatio(contentMode: .fill)
+//                } else if phase.error != nil {
+//                    defaultImage()
+//                } else {
+//                    ProgressView().progressViewStyle(.circular)
+//                        .tint(.white)
+//                }
+//            })
+//        case .default:
+//            defaultImage()
+//        case .none:
+//            EmptyView()
+//        }
     }
     
     private func defaultImage() -> some View {

@@ -137,6 +137,7 @@ struct LocationStoragePreview: LocationStoring, LocationManaging {
     func locations() async -> AsyncStream<[NamedLocation]> {
         AsyncStream { _ in }
     }
+    func getLocations() async throws -> [NamedLocation] { [] }
     func add(location _: NamedLocation) { }
     func addLocationsObserver(_ observer: ([NamedLocation]) -> ()) { }
     func remove(location id: NamedLocation.ID) { }

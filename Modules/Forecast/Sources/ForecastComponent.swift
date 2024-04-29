@@ -17,7 +17,8 @@ public protocol ForecastComponentDependency: Dependency {
 
 public protocol ForecastComponentProtocol {
     var view: AnyView { get }
-    func widgetView(location: any ForecastLocation) -> AnyView
+    var weatherFetcherExport: ForecastFetching { get }
+    func widgetView(viewModel: ForecastLocationItemWidgetViewModel) -> AnyView
 }
 
 public class ForecastComponent: Component<ForecastComponentDependency>, ForecastComponentProtocol {
@@ -26,6 +27,10 @@ public class ForecastComponent: Component<ForecastComponentDependency>, Forecast
         shared {
             ForecastFetcher(networkService: dependency.networkService)
         }
+    }
+    
+    public var weatherFetcherExport: ForecastFetching {
+        weatherFetcher
     }
     
     @MainActor
@@ -38,8 +43,8 @@ public class ForecastComponent: Component<ForecastComponentDependency>, Forecast
     }
     
     @MainActor
-    public func widgetView(location: any ForecastLocation) -> AnyView {
+    public func widgetView(viewModel: ForecastLocationItemWidgetViewModel) -> AnyView {
         ForecastLocationItemComponent(parent: self)
-            .widgetView(location: location)
+            .widgetView(viewModel: viewModel)
     }
 }
