@@ -45,14 +45,16 @@ struct LocationQuery: EntityQuery {
     let locationStorage: LocationStoring = PhotoWeatherWidget.rootComponent.locationStorage
     
     func entities(for identifiers: [Entity.ID]) async throws -> [Entity] {
-        try await locationStorage.getLocations()
+       let result = try await locationStorage.getLocations()
             .filter { item in identifiers.contains(where: { $0 == item.id }) }
             .map(LocationAppEntity.init)
+        return result
     }
     
     func suggestedEntities() async throws -> [LocationAppEntity] {
-        try await locationStorage.getLocations()
+        let results = try await locationStorage.getLocations()
             .map(LocationAppEntity.init)
+        return results
     }
     
     func defaultResult() async -> LocationAppEntity? {

@@ -8,7 +8,9 @@ extension Target {
         product: Product,
         infoPlist: InfoPlist? = .default,
         additionalSources: [String] = [],
+        additionalResources: [String] = [],
         hasResources: Bool = false,
+        entitlements: Entitlements? = nil,
         scripts: [TargetScript] = [],
         dependencies: [TargetDependency] = [],
         settings: Settings? = nil
@@ -16,7 +18,10 @@ extension Target {
         let frameworkPath = path ?? name
         var sourcesPaths: [String] = (hasResources ? ["\(frameworkPath)/Sources/**"] : ["\(frameworkPath)/**"]) + additionalSources
         let sources: SourceFilesList = SourceFilesList.paths(sourcesPaths.map { Path(stringLiteral: $0) })
-        let resources: ResourceFileElements? = hasResources ? ["\(frameworkPath)/Resources/**"] : nil
+        let resourcesPaths: [String] = (hasResources ? ["\(frameworkPath)/Resources/**"] : []) + additionalResources
+        let resources: ResourceFileElements? = resourcesPaths.isEmpty
+        ? nil
+        : ResourceFileElements.resources( resourcesPaths.map { ResourceFileElement(stringLiteral: $0) })
         return .target(
             name: name,
             destinations: [.iPhone],
@@ -26,6 +31,7 @@ extension Target {
             infoPlist: infoPlist,
             sources: sources,
             resources: resources,
+            entitlements: entitlements,
             scripts: scripts,
             dependencies: dependencies,
             settings: settings
@@ -36,6 +42,8 @@ extension Target {
         _ name: String,
         infoPlist: InfoPlist? = .default,
         additionalSources: [String] = [],
+        additionalResources: [String] = [],
+        entitlements: Entitlements? = nil,
         scripts: [TargetScript] = [],
         dependencies: [TargetDependency] = [],
         settings: Settings? = nil
@@ -45,7 +53,9 @@ extension Target {
             product: .app,
             infoPlist: infoPlist,
             additionalSources: additionalSources,
+            additionalResources: additionalResources,
             hasResources: true,
+            entitlements: entitlements,
             scripts: scripts,
             dependencies: dependencies,
             settings: settings
@@ -137,7 +147,11 @@ let project = Project(
             bundleIdPath: "PhotoWeather.extension",
             product: .appExtension,
             infoPlist: .file(path: "PhotoWeatherWidget/Info.plist"),
-            additionalSources: ["Shared/**"],
+            additionalSources: ["Shared/Sources/**"],
+            additionalResources: ["Shared/Resources/**"],
+            entitlements: Entitlements.dictionary(
+                ["com.apple.security.application-groups": Plist.Value(arrayLiteral: "group.com.julia.PhotoWeather")]
+            ),
             dependencies: [
                 .target(name: "Core"),
                 .target(name: "Forecast"),
@@ -162,10 +176,14 @@ let project = Project(
                     "UILaunchStoryboardName": "Launch Screen.storyboard"
                 ]
             ),
-            additionalSources: ["Shared/**"],
+            additionalSources: ["Shared/Sources/**"],
+            additionalResources: ["Shared/Resources/**"],
+            entitlements: Entitlements.dictionary(
+                ["com.apple.security.application-groups": Plist.Value(arrayLiteral: "group.com.julia.PhotoWeather")]
+            ),
             scripts: [
                 .pre(
-                    script: "export SOURCEKIT_LOGGING=0 && needle generate Shared/DI/NeedleGenerated.swift ./",
+                    script: "export SOURCEKIT_LOGGING=0 && needle generate Shared/Sources/DI/NeedleGenerated.swift ./",
                     name: "Needle",
                     shellPath: "/bin/sh"
                 )
