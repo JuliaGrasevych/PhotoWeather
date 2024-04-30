@@ -12,14 +12,14 @@ import SwiftUI
 struct ForecastLocationItemContentView<VM: ForecastLocationItemViewModelProtocol>: View {
     @StateObject private var viewModel: VM
     @State private var showingForecast = false
-    @State private var showingDeleteAlert = false
-    @State private var showingErrorAlert = false
+    @Binding var showingDeleteAlert: Bool
     
     @State private var taskId: UUID?
     @Environment(\.refresh) private var refresh
     
-    init(viewModel: @escaping @autoclosure () -> VM) {
+    init(viewModel: @escaping @autoclosure () -> VM, showingDeleteAlert: Binding<Bool>) {
         _viewModel = .init(wrappedValue: viewModel())
+        _showingDeleteAlert = showingDeleteAlert
     }
     
     var body: some View {
@@ -252,5 +252,5 @@ struct ForecastLocationItemContentView<VM: ForecastLocationItemViewModelProtocol
 }
 
 #Preview {
-    ForecastLocationItemContentView(viewModel: ForecastLocationItemViewModel.preview)
+    ForecastLocationItemContentView(viewModel: ForecastLocationItemViewModel.preview, showingDeleteAlert: Binding(get: { false }, set: { _ in }))
 }

@@ -18,7 +18,6 @@ enum LocationPhoto {
 @MainActor
 struct ForecastLocationItemView<VM: ForecastLocationItemViewModelProtocol>: View {
     @StateObject private var viewModel: VM
-    @State private var showingForecast = false
     @State private var showingDeleteAlert = false
     @State private var showingErrorAlert = false
     
@@ -27,7 +26,7 @@ struct ForecastLocationItemView<VM: ForecastLocationItemViewModelProtocol>: View
     }
     
     var body: some View {
-        ForecastLocationItemContentView(viewModel: viewModel)
+        ForecastLocationItemContentView(viewModel: viewModel, showingDeleteAlert: $showingDeleteAlert)
             .background(.black)
             .refreshable {
                 await viewModel.refresh()

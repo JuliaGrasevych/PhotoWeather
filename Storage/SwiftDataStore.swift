@@ -22,7 +22,6 @@ public final class SwiftDataStore: ExternalLocationStoring {
         }
         
         context = ModelContext(modelContainer)
-        context.autosaveEnabled = true
         
         let fetchDescriptor = FetchDescriptor<NamedLocationModel>()
         do {
@@ -64,6 +63,7 @@ public final class SwiftDataStore: ExternalLocationStoring {
             $0.id == id
         }
         try context.delete(model: NamedLocationModel.self, where: predicate)
+        try context.save()
         return try await locations()
     }
     
@@ -88,6 +88,7 @@ public final class SwiftDataStore: ExternalLocationStoring {
         }
         do {
             try context.delete(model: NamedLocationModel.self, where: predicate)
+            try context.save()
             return Just(())
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher()
