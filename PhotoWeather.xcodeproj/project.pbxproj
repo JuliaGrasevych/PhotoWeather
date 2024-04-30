@@ -440,6 +440,7 @@
 		52E61266025DA8A01B60D98D /* ForecastAddLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastAddLocationView.swift; sourceTree = "<group>"; };
 		557AE446555B129E6568FE0E /* ForecastLocationItemComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLocationItemComponent.swift; sourceTree = "<group>"; };
 		565F18A38DA62A723D1CF5C1 /* ForecastLocationWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLocationWidgetView.swift; sourceTree = "<group>"; };
+		56924A9B56CCFEF8D12919B3 /* PhotoWeatherWidget.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = PhotoWeatherWidget.xcconfig; sourceTree = "<group>"; };
 		56CBB34EA5911A9C14BB6917 /* PhotoStockFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoStockFetcher.swift; sourceTree = "<group>"; };
 		57CC7B983735CE6B5C717943 /* ForecastLocationSearchReactiveComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLocationSearchReactiveComponent.swift; sourceTree = "<group>"; };
 		5A25CC742A23FB4687F1AC10 /* LocationStoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationStoring.swift; sourceTree = "<group>"; };
@@ -898,6 +899,7 @@
 			children = (
 				8335166EFFD49E5C80A1E469 /* PhotoWeatherApp.xcconfig */,
 				D2807D12E8DC2881EEE3C6AE /* PhotoWeatherProject.xcconfig */,
+				56924A9B56CCFEF8D12919B3 /* PhotoWeatherWidget.xcconfig */,
 			);
 			path = Configs;
 			sourceTree = "<group>";
@@ -1802,6 +1804,7 @@
 		};
 		5847A10425EFC3C0EDAE43B3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 56924A9B56CCFEF8D12919B3 /* PhotoWeatherWidget.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Derived/Entitlements/PhotoWeatherWidget.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";

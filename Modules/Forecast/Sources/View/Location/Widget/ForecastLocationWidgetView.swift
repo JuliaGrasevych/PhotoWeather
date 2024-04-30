@@ -24,13 +24,13 @@ public struct ForecastLocationItemWidgetViewModel {
     let locationName: String
     let isUserLocation: Bool
     let currentWeather: CurrentWeather
-    // TODO: add image loading
-//    let image: LocationPhoto?
+    let image: UIImage?
     
-    public init(locationName: String, isUserLocation: Bool, currentWeather: CurrentWeather) {
+    public init(locationName: String, isUserLocation: Bool, currentWeather: CurrentWeather, image: UIImage?) {
         self.locationName = locationName
         self.isUserLocation = isUserLocation
         self.currentWeather = currentWeather
+        self.image = image
     }
 }
 
@@ -80,26 +80,14 @@ struct ForecastLocationWidgetView: View {
     
     @ViewBuilder
     private func locationImage() -> some View {
-        EmptyView()
-//        switch viewModel.image {
-//        case .stockPhoto(let photo):
-//            AsyncImage(url: photo.url, content: { phase in
-//                if let image = phase.image {
-//                    image
-//                        .resizable()
-//                        .aspectRatio(contentMode: .fill)
-//                } else if phase.error != nil {
-//                    defaultImage()
-//                } else {
-//                    ProgressView().progressViewStyle(.circular)
-//                        .tint(.white)
-//                }
-//            })
-//        case .default:
-//            defaultImage()
-//        case .none:
-//            EmptyView()
-//        }
+        switch viewModel.image {
+        case .none:
+            EmptyView()
+        case .some(let image):
+            Image(uiImage: image)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+        }
     }
     
     private func defaultImage() -> some View {

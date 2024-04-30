@@ -53,7 +53,8 @@ extension ForecastLocationItemWidgetViewModel {
             temperature: "0°C",
             weatherIcon: "n/a",
             weatherDescription: "n/a"
-        )
+        ),
+        image: nil
     )
 }
 

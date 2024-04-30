@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 import WidgetKit
 import ForecastDependency
 import Forecast
@@ -16,8 +17,6 @@ struct SimpleEntry: TimelineEntry {
     let forecast: ForecastLocationItemWidgetViewModel
 }
 
-// TODO: feed view with actual data
-// TODO: configuration intent? to set city?
 struct Provider: AppIntentTimelineProvider {
     typealias Entry = SimpleEntry
     typealias Intent = LocationIntent
@@ -26,23 +25,55 @@ struct Provider: AppIntentTimelineProvider {
         let weatherFetcher = PhotoWeatherWidget.rootComponent.forecastComponent.weatherFetcherExport
         do {
             let forecast = try await weatherFetcher.forecast(for: configuration.location)
-            return SimpleEntry(date: Date(), forecast: .init(location: configuration.location, forecastItem: forecast))
+            return SimpleEntry(
+                date: Date(),
+                forecast: .init(
+                    location: configuration.location,
+                    forecastItem: forecast,
+                    image: nil
+                )
+            )
         } catch {
             return SimpleEntry(date: Date(), forecast: .placeholder)
         }
     }
     
-    // TODO: image can't be downloaded asynchronously on view - load here
     func timeline(for configuration: LocationIntent, in context: Context) async -> Timeline<SimpleEntry> {
         let weatherFetcher = PhotoWeatherWidget.rootComponent.forecastComponent.weatherFetcherExport
+        let photoFetcher = PhotoWeatherWidget.rootComponent.photoFetcher
         let currentDate = Date.now
+        let location = configuration.location
         do {
             let forecast = try await weatherFetcher.forecast(for: configuration.location)
-            let entry = SimpleEntry(date: currentDate, forecast: .init(location: configuration.location, forecastItem: forecast))
+            // TODO: move to common place - the same in forecast module
+            let calendar = (try? Calendar.currentCalendar(for: location)) ?? Calendar.current
+            let tags = [
+                try? location.season(for: Date.now, calendar: calendar).tag,
+                forecast.current.weatherCode.description,
+                forecast.current.isDay ? "day" : "night"
+            ].compactMap { $0 }
+            let image: UIImage?
+            if let imagePhoto = try? await photoFetcher.photo(for: location, tags: tags),
+               let imageData = try? Data(contentsOf: imagePhoto.url) {
+                image = UIImage(data: imageData)
+            } else {
+                image = nil
+            }
+            let entry = SimpleEntry(
+                date: currentDate,
+                forecast: .init(
+                    location: location,
+                    forecastItem: forecast,
+                    image: image
+                )
+            )
             let timeline = Timeline(entries: [entry], policy: .never)
             return timeline
         } catch {
-            let entry = SimpleEntry(date: currentDate, forecast: .placeholder)
+            let entry = SimpleEntry(
+                date: currentDate,
+                forecast: .placeholder
+            )
             let timeline = Timeline(entries: [entry], policy: .never)
             return timeline
         }
@@ -54,7 +85,7 @@ struct Provider: AppIntentTimelineProvider {
 }
 
 extension ForecastLocationItemWidgetViewModel {
-    init(location: any ForecastLocation, forecastItem: ForecastItem) {
+    init(location: any ForecastLocation, forecastItem: ForecastItem, image: UIImage?) {
         let currentWeather = forecastItem.current
         // TODO: the same code is in Forecast module - move to common place
         let temperature = currentWeather.temperature.formatted(.temperature) + forecastItem.currentUnits.temperature
@@ -67,10 +98,8 @@ extension ForecastLocationItemWidgetViewModel {
         self.init(
             locationName: location.name,
             isUserLocation: location.isUserLocation,
-            currentWeather: currentWeatherModel
+            currentWeather: currentWeatherModel, 
+            image: image
         )
     }
 }
-
-// TODO: add font resource to widget target (Tuist) and info.plist
-// TODO: add default image resource

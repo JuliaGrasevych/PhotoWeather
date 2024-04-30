@@ -1,0 +1,22 @@
+#include "./PrivateConfig.xcconfig"
+
+CODE_SIGN_ENTITLEMENTS=Derived/Entitlements/PhotoWeatherWidget.entitlements
+CODE_SIGN_IDENTITY=iPhone Developer
+INFOPLIST_FILE=PhotoWeatherWidget/Info.plist
+IPHONEOS_DEPLOYMENT_TARGET=17.0
+PRODUCT_BUNDLE_IDENTIFIER=com.julia.PhotoWeather.extension
+PRODUCT_NAME=PhotoWeatherWidget
+SDKROOT=iphoneos
+SUPPORTS_MACCATALYST=NO
+SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD=NO
+SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD=NO
+SWIFT_VERSION=5.0
+TARGETED_DEVICE_FAMILY=1
+
+LD_RUNPATH_SEARCH_PATHS[config=Debug]=$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks
+LD_RUNPATH_SEARCH_PATHS[config=Release]=$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks
+SWIFT_ACTIVE_COMPILATION_CONDITIONS[config=Debug]=$(inherited) DEBUG
+SWIFT_COMPILATION_MODE[config=Debug]=singlefile
+SWIFT_COMPILATION_MODE[config=Release]=wholemodule
+SWIFT_OPTIMIZATION_LEVEL[config=Debug]=-Onone
+SWIFT_OPTIMIZATION_LEVEL[config=Release]=-Owholemodule

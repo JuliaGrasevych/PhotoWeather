@@ -18,7 +18,8 @@ public enum Season: String {
     public var tag: String { rawValue }
 }
 
-extension ForecastLocation {
+// TODO: move to dependency
+public extension ForecastLocation {
     func season(for date: Date, calendar: Calendar) throws -> Season {
         let isNorth = latitude > 0
         return try calendar.season(for: date, isNorth: isNorth)
@@ -62,7 +63,8 @@ extension Calendar {
     }
 }
 
-extension Calendar {
+// TODO: move to dependency
+public extension Calendar {
     enum TimeZoneError: Error {
         case invalidIdentifier
     }

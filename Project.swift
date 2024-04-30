@@ -162,7 +162,12 @@ let project = Project(
                 .external(name: "NeedleFoundation"),
                 .sdk(name: "SwiftUI", type: .framework),
                 .sdk(name: "WidgetKit", type: .framework)
-            ]
+            ],
+            settings: .settings(
+                configurations: [
+                    .debug(name: "Debug", xcconfig: "Configs/PhotoWeatherWidget.xcconfig")
+                ]
+            )
         ),
         .app(
             "PhotoWeather",
