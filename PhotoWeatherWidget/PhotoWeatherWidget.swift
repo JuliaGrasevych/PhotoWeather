@@ -28,7 +28,8 @@ struct PhotoWeatherWidgetEntryView : View {
 
 struct PhotoWeatherWidget: Widget {
     let kind: String = "PhotoWeatherWidget"
-    
+    // TODO: implement userDefaults shred storage
+    // TODO: implement deeplinking into the app
     static let rootComponent: RootComponent = RootComponent(configuration: .init(storage: .swiftData))
     
     var body: some WidgetConfiguration {
@@ -62,5 +63,5 @@ extension ForecastLocationItemWidgetViewModel {
 #Preview(as: .systemSmall) {
     PhotoWeatherWidget()
 } timeline: {
-    SimpleEntry(date: .now, forecast: .placeholder)
+    ForecastEntry(date: .now, forecast: .placeholder)
 }
