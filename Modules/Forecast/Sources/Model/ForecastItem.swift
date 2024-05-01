@@ -147,6 +147,21 @@ extension ForecastItem {
     }
 }
 
+public extension ForecastItem {
+    var formattedTemperature: String {
+        current.temperature.formatted(.temperature) + currentUnits.temperature
+    }
+}
+
+public extension ForecastItem {
+    var photoTags: [String] {
+        [
+            current.weatherCode.description,
+            current.isDay ? "day" : "night"
+        ]
+    }
+}
+
 /// Preview
 extension ForecastItem.CurrentUnits {
     static let preview: ForecastItem.CurrentUnits = ForecastItem.CurrentUnits(temperature: "ºC")

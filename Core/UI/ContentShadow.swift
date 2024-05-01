@@ -10,19 +10,21 @@ import SwiftUI
 
 public struct ContentShadow: ViewModifier {
     public let color: Color
+    public let radius: CGFloat
     
-    public init(color: Color) {
+    public init(color: Color, radius: CGFloat) {
         self.color = color
+        self.radius = radius
     }
     
     public func body(content: Content) -> some View {
-        content.shadow(color: color, radius: 10)
+        content.shadow(color: color, radius: radius)
     }
 }
 
 public extension View {
-    func whiteContentShadow() -> some View {
-        modifier(ContentShadow(color: .white))
+    func whiteContentShadow(radius: CGFloat = 10) -> some View {
+        modifier(ContentShadow(color: .white, radius: radius))
     }
     
     func defaultContentStyle() -> some View {

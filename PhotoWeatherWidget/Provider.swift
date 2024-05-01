@@ -45,13 +45,7 @@ struct Provider: AppIntentTimelineProvider {
         let location = configuration.location
         do {
             let forecast = try await weatherFetcher.forecast(for: configuration.location)
-            // TODO: move to common place - the same in forecast module
-            let calendar = (try? Calendar.currentCalendar(for: location)) ?? Calendar.current
-            let tags = [
-                try? location.season(for: Date.now, calendar: calendar).tag,
-                forecast.current.weatherCode.description,
-                forecast.current.isDay ? "day" : "night"
-            ].compactMap { $0 }
+            let tags = location.photoTags + forecast.photoTags
             let image: UIImage?
             if let imagePhoto = try? await photoFetcher.photo(for: location, tags: tags),
                let imageData = try? Data(contentsOf: imagePhoto.url) {
@@ -87,10 +81,8 @@ struct Provider: AppIntentTimelineProvider {
 extension ForecastLocationItemWidgetViewModel {
     init(location: any ForecastLocation, forecastItem: ForecastItem, image: UIImage?) {
         let currentWeather = forecastItem.current
-        // TODO: the same code is in Forecast module - move to common place
-        let temperature = currentWeather.temperature.formatted(.temperature) + forecastItem.currentUnits.temperature
         let currentWeatherModel = CurrentWeather(
-            temperature: temperature,
+            temperature: forecastItem.formattedTemperature,
             weatherIcon: currentWeather.formatted(.weatherIcon),
             weatherDescription: currentWeather.weatherCode.description
         )

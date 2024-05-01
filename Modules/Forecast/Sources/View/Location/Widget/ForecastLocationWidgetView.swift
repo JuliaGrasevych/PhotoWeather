@@ -50,6 +50,10 @@ struct ForecastLocationWidgetView: View {
                 }
                 .contentShape(Rectangle())
                 .clipped()
+                .overlay {
+                    Rectangle()
+                        .background(Material.ultraThinMaterial.opacity(0.25))
+                }
             
             currentWeatherView()
         }
@@ -74,6 +78,7 @@ struct ForecastLocationWidgetView: View {
                 .fontWeight(.medium)
         }
         .defaultContentStyle()
+        .whiteContentShadow(radius: 5)
         .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
         .frame(maxWidth: .infinity, alignment: .top)
     }

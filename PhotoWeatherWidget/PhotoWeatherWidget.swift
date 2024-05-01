@@ -38,10 +38,11 @@ struct PhotoWeatherWidget: Widget {
             provider: Provider(),
             content: { entry in
                 PhotoWeatherWidgetEntryView(entry: entry, viewBuilder: Self.rootComponent.forecastComponent)
-                    .containerBackground(.fill.tertiary, for: .widget)
+                    .containerBackground(.fill, for: .widget)
             })
         .configurationDisplayName("Location Forecast")
         .description("Choose your location")
+        .contentMarginsDisabled()
     }
 }
 

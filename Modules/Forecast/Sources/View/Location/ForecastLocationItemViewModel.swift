@@ -127,13 +127,8 @@ extension ForecastLocationItemViewModelOutput.CurrentWeather {
     
     init(model: ForecastItem?) {
         let currentWeather = model?.current
-        let temperature = (currentWeather &&& model?.currentUnits)
-            .map { weather, units in
-                weather.temperature.formatted(.temperature)
-                + units.temperature
-            }
         self.init(
-            temperature: temperature ?? Defaults.temperature,
+            temperature: model?.formattedTemperature ?? Defaults.temperature,
             weatherIcon: currentWeather?.formatted(.weatherIcon) ?? Defaults.weatherIcon,
             weatherDescription: currentWeather?.weatherCode.description ?? Defaults.weatherDescription
         )

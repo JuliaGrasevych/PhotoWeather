@@ -1,13 +1,12 @@
 //
 //  ForecastLocation.swift
-//  Forecast
+//  ForecastDependency
 //
 //  Created by Julia Grasevych on 12.02.2024.
 //
 
 import Foundation
 import Core
-import ForecastDependency
 
 public enum Season: String {
     case spring
@@ -18,7 +17,6 @@ public enum Season: String {
     public var tag: String { rawValue }
 }
 
-// TODO: move to dependency
 public extension ForecastLocation {
     func season(for date: Date, calendar: Calendar) throws -> Season {
         let isNorth = latitude > 0
@@ -63,7 +61,6 @@ extension Calendar {
     }
 }
 
-// TODO: move to dependency
 public extension Calendar {
     enum TimeZoneError: Error {
         case invalidIdentifier

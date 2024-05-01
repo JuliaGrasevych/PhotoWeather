@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -101,7 +101,7 @@
 		97C520DEBCC305692830750A /* ForecastLocationSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD97938872B340856F2755A3 /* ForecastLocationSearchView.swift */; };
 		9CF866076614C8224665B7CD /* PhotoStockDependency.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 453D909A0C0C6217E1D30441 /* PhotoStockDependency.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A2D4FC266E254EFF4B3F9891 /* NeedleGenerated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20560F4C8087775E2E97EC /* NeedleGenerated.swift */; };
-		A2E8AA19C765BE201F6E0E6A /* ForecastLocation+Season.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272EA5B6E39FAE7418DD7A4D /* ForecastLocation+Season.swift */; };
+		A3D9CF352BE2860100224707 /* ForecastLocation+Season.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272EA5B6E39FAE7418DD7A4D /* ForecastLocation+Season.swift */; };
 		A435411D13C3440BE6553BDB /* ExternalLocationStoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4C58C61369B7A533CABB39 /* ExternalLocationStoring.swift */; };
 		A57A12D83F672DB84516A08F /* StorageComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D27BFD6CCB1DB81218752D5 /* StorageComponent.swift */; };
 		A58AA252FE49EF6ECF015083 /* ForecastLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABFFD018DC354EAF2C9B338 /* ForecastLocation.swift */; };
@@ -765,6 +765,7 @@
 			children = (
 				ED4C58C61369B7A533CABB39 /* ExternalLocationStoring.swift */,
 				6ABFFD018DC354EAF2C9B338 /* ForecastLocation.swift */,
+				272EA5B6E39FAE7418DD7A4D /* ForecastLocation+Season.swift */,
 				4DBEB6DDC9DCBDE4A7D9661D /* NamedLocation.swift */,
 			);
 			path = ForecastDependency;
@@ -1030,7 +1031,6 @@
 			children = (
 				B1FCBC23584C08B97E8E1CA9 /* ForecastFetcher.swift */,
 				38D3383FCD6C331C6E00F9B7 /* ForecastItem.swift */,
-				272EA5B6E39FAE7418DD7A4D /* ForecastLocation+Season.swift */,
 				6BCFCF199619D5417DA0A9BE /* WeatherCode+WMO.swift */,
 			);
 			path = Model;
@@ -1251,8 +1251,6 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				TargetAttributes = {
-				};
 			};
 			buildConfigurationList = F556F0E5EE08114259BFC3F6 /* Build configuration list for PBXProject "PhotoWeather" */;
 			compatibilityVersion = "Xcode 14.0";
@@ -1423,7 +1421,6 @@
 				95BFA17BDA75571462E8817B /* LocationStoring.swift in Sources */,
 				4699D9A828182B9E491C738F /* ForecastFetcher.swift in Sources */,
 				2281A2BDC2F8ADF20660AE66 /* ForecastItem.swift in Sources */,
-				A2E8AA19C765BE201F6E0E6A /* ForecastLocation+Season.swift in Sources */,
 				3B7F09E2DA04540A76464386 /* WeatherCode+WMO.swift in Sources */,
 				6DEBAA53E5D06F60D7D4DBA2 /* ForecastAddLocationReactiveComponent.swift in Sources */,
 				F88EC382B2FA5F219FCAE952 /* ForecastAddLocationViewModelReactive.swift in Sources */,
@@ -1463,6 +1460,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3D9CF352BE2860100224707 /* ForecastLocation+Season.swift in Sources */,
 				A435411D13C3440BE6553BDB /* ExternalLocationStoring.swift in Sources */,
 				A58AA252FE49EF6ECF015083 /* ForecastLocation.swift in Sources */,
 				007B62E7A4B48F3FBA746BB9 /* NamedLocation.swift in Sources */,
@@ -1756,10 +1754,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1821,10 +1816,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1980,10 +1972,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -2017,10 +2006,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -2114,10 +2100,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -2147,10 +2130,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -2182,10 +2162,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -2285,10 +2262,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
