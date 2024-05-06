@@ -12,4 +12,5 @@ import ForecastDependency
 protocol ForecastListViewModelProtocol: ObservableObject {
     var allLocations: [any ForecastLocation] { get }
     func onAppear()
+    func onOpenURL(_ url: URL)
 }

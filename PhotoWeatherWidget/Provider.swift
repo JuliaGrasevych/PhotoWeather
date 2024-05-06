@@ -77,6 +77,7 @@ extension ForecastLocationItemWidgetViewModel {
         
         self.init(
             locationName: location.name,
+            locationId: location.id,
             isUserLocation: location.isUserLocation,
             currentWeather: currentWeatherModel, 
             image: image

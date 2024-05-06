@@ -39,7 +39,7 @@ public final class SwiftDataStore: ExternalLocationStoring {
     }
     
     private static func contextDidChangePublisher(context: ModelContext, fetchDescriptor: FetchDescriptor<NamedLocationModel>) -> AnyPublisher<[NamedLocation], Error> {
-        NotificationCenter.default.publisher(for: .NSManagedObjectContextObjectsDidChange, object: context)
+        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange, object: context)
             .setFailureType(to: Error.self)
             .tryMap { _ in
                 try context.fetch(fetchDescriptor).map(\.userRepresentation)

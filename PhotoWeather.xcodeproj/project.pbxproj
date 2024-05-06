@@ -670,6 +670,7 @@
 		1B72F7C12168897AE0F6EBF6 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				4E81E1D1E75EA0CDEE1F8F21 /* Widget */,
 				C3534C780C69E30646DB8144 /* Add Location */,
 				35D02EFC1F9BB9A96A439429 /* List */,
 				F8CD55CECF34F58441AEC832 /* Location */,
@@ -1040,7 +1041,6 @@
 			isa = PBXGroup;
 			children = (
 				818D65F4BC9C1C220FECE358 /* Combine */,
-				4E81E1D1E75EA0CDEE1F8F21 /* Widget */,
 				557AE446555B129E6568FE0E /* ForecastLocationItemComponent.swift */,
 				610897B7ACCBE9883D1B5E0B /* ForecastLocationItemContentView.swift */,
 				086AA05018207C0AB729C07D /* ForecastLocationItemView.swift */,

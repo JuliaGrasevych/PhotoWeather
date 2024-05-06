@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import WidgetKit
 
 public struct ForecastLocationItemWidgetViewModel {
     public struct CurrentWeather {
@@ -22,12 +23,24 @@ public struct ForecastLocationItemWidgetViewModel {
     }
     
     let locationName: String
+    let locationId: String
     let isUserLocation: Bool
     let currentWeather: CurrentWeather
     let image: UIImage?
     
-    public init(locationName: String, isUserLocation: Bool, currentWeather: CurrentWeather, image: UIImage?) {
+    var deeplinkURL: URL {
+        URL(string: "photoWeather://location/\(locationId)")!
+    }
+    
+    public init(
+        locationName: String,
+        locationId: String,
+        isUserLocation: Bool,
+        currentWeather: CurrentWeather,
+        image: UIImage?
+    ) {
         self.locationName = locationName
+        self.locationId = locationId
         self.isUserLocation = isUserLocation
         self.currentWeather = currentWeather
         self.image = image
@@ -57,6 +70,7 @@ struct ForecastLocationWidgetView: View {
             
             currentWeatherView()
         }
+        .widgetURL(viewModel.deeplinkURL)
     }
     
     private func currentWeatherView() -> some View {

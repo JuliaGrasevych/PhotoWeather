@@ -28,9 +28,9 @@ struct PhotoWeatherWidgetEntryView : View {
 
 struct PhotoWeatherWidget: Widget {
     let kind: String = "PhotoWeatherWidget"
-    // TODO: implement userDefaults shred storage
     // TODO: implement deeplinking into the app
-    static let rootComponent: RootComponent = RootComponent(configuration: .init(storage: .swiftData))
+//    static let rootComponent: RootComponent = RootComponent(configuration: .init(storage: .swiftData))
+    static let rootComponent: RootComponent = RootComponent(configuration: .init(storage: .userDefaults))
     
     var body: some WidgetConfiguration {
         AppIntentConfiguration(
@@ -50,6 +50,7 @@ struct PhotoWeatherWidget: Widget {
 extension ForecastLocationItemWidgetViewModel {
     static var placeholder: ForecastLocationItemWidgetViewModel = .init(
         locationName: "Kyiv",
+        locationId: "1",
         isUserLocation: false,
         currentWeather: .init(
             temperature: "0°C",

@@ -55,6 +55,9 @@ struct ForecastListView<VM: ForecastListViewModelProtocol>: View {
         .onAppear {
             viewModel.onAppear()
         }
+        .onOpenURL(perform: { url in
+            viewModel.onOpenURL(url)
+        })
     }
     
     private func didUpdateContent(oldContent: [String], newContent: [String]) {

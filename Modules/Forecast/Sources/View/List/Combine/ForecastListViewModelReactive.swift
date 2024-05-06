@@ -83,4 +83,8 @@ class ForecastListViewModelReactive: ForecastListViewModelProtocol {
     func updateAllLocations() {
         allLocations = [currentLocation].compactMap { $0 } + locations
     }
+    
+    func onOpenURL(_ url: URL) {
+        // TODO: implement
+    }
 }

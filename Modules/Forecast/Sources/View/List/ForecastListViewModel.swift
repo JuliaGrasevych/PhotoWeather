@@ -71,4 +71,17 @@ class ForecastListViewModel: ForecastListViewModelProtocol {
     func updateAllLocations() {
         allLocations = [currentLocation].compactMap { $0 } + locations
     }
+    
+    @MainActor
+    func onOpenURL(_ url: URL) {
+        guard url.scheme == "photoWeather",
+                url.host() == "location"
+        else {
+            return
+        }
+        let id = url.lastPathComponent
+        guard !id.isEmpty else { return }
+        print("===id \(id)")
+        // TODO: scroll to location with id
+    }
 }
