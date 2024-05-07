@@ -102,6 +102,8 @@
 		9CF866076614C8224665B7CD /* PhotoStockDependency.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 453D909A0C0C6217E1D30441 /* PhotoStockDependency.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A2D4FC266E254EFF4B3F9891 /* NeedleGenerated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D20560F4C8087775E2E97EC /* NeedleGenerated.swift */; };
 		A3D9CF352BE2860100224707 /* ForecastLocation+Season.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272EA5B6E39FAE7418DD7A4D /* ForecastLocation+Season.swift */; };
+		A3D9CF372BEA68A100224707 /* ForecastListViewModelOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9CF362BEA68A100224707 /* ForecastListViewModelOutput.swift */; };
+		A3D9CF392BEA6BDB00224707 /* Deeplink.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9CF382BEA6BDB00224707 /* Deeplink.swift */; };
 		A435411D13C3440BE6553BDB /* ExternalLocationStoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4C58C61369B7A533CABB39 /* ExternalLocationStoring.swift */; };
 		A57A12D83F672DB84516A08F /* StorageComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D27BFD6CCB1DB81218752D5 /* StorageComponent.swift */; };
 		A58AA252FE49EF6ECF015083 /* ForecastLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABFFD018DC354EAF2C9B338 /* ForecastLocation.swift */; };
@@ -479,6 +481,8 @@
 		A06366A13D370FA33AE18F6C /* PhotoWeather-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "PhotoWeather-Info.plist"; sourceTree = "<group>"; };
 		A1A369A3407791947908922D /* RootComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootComponent.swift; sourceTree = "<group>"; };
 		A252969FAC048573FA87DCC4 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		A3D9CF362BEA68A100224707 /* ForecastListViewModelOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastListViewModelOutput.swift; sourceTree = "<group>"; };
+		A3D9CF382BEA6BDB00224707 /* Deeplink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deeplink.swift; sourceTree = "<group>"; };
 		A40976A9763A8CA4490108E8 /* NestedObservedObjectContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestedObservedObjectContainer.swift; sourceTree = "<group>"; };
 		A4D55787CD74F104170B237A /* ForecastAddLocationViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastAddLocationViewModelProtocol.swift; sourceTree = "<group>"; };
 		AD1361D767B78319D20E2D7C /* ForecastLocationSearchViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLocationSearchViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -704,6 +708,7 @@
 				69534005F2CC57128B881306 /* ForecastListView.swift */,
 				FD516C62D7FA9663E6AC0F3E /* ForecastListViewModel.swift */,
 				D513031309FE07CB408F38F0 /* ForecastListViewModelProtocol.swift */,
+				A3D9CF362BEA68A100224707 /* ForecastListViewModelOutput.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -864,6 +869,7 @@
 				C5C710307D129F28B9D37CE1 /* ForecastComponent.swift */,
 				2D0427439EC4AA3AA9C463BC /* LocationProvider+NamedLocation.swift */,
 				5A25CC742A23FB4687F1AC10 /* LocationStoring.swift */,
+				A3D9CF382BEA6BDB00224707 /* Deeplink.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -1413,6 +1419,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3D9CF372BEA68A100224707 /* ForecastListViewModelOutput.swift in Sources */,
 				DAA4564943CBB4B4576903AB /* TuistAssets+Forecast.swift in Sources */,
 				3DBB8F91049B001BDE3ADCEE /* TuistBundle+Forecast.swift in Sources */,
 				B8418B76307C897060017372 /* ForecastReactiveComponent.swift in Sources */,
@@ -1451,6 +1458,7 @@
 				8ACDE2DE0A0F23810A487B6F /* ForecastLocationItemView.swift in Sources */,
 				7F9DA96021B7A53415F318ED /* ForecastLocationItemViewModel.swift in Sources */,
 				7D26B06B8C74AB0E8CE2962D /* ForecastLocationItemViewModelOutput.swift in Sources */,
+				A3D9CF392BEA6BDB00224707 /* Deeplink.swift in Sources */,
 				CCB8E5843B767C828625D4E5 /* ForecastLocationItemViewModelProtocol.swift in Sources */,
 				77EE623D94F87C4DE40C50BF /* ForecastLocationWidgetView.swift in Sources */,
 			);

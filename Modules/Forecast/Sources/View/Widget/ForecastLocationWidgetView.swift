@@ -28,8 +28,8 @@ public struct ForecastLocationItemWidgetViewModel {
     let currentWeather: CurrentWeather
     let image: UIImage?
     
-    var deeplinkURL: URL {
-        URL(string: "photoWeather://location/\(locationId)")!
+    var deeplinkURL: URL? {
+        URL.locationDeeplinkURL(locationId: locationId)
     }
     
     public init(

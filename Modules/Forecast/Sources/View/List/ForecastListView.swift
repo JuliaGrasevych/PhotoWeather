@@ -31,7 +31,7 @@ struct ForecastListView<VM: ForecastListViewModelProtocol>: View {
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            ForEach(viewModel.allLocations, id: \.id) { item in
+            ForEach(viewModel.output.allLocations, id: \.id) { item in
                 itemBuilder.view(location: item)
                     .containerRelativeFrame([.horizontal, .vertical])
                     .id(item.id)
@@ -49,8 +49,12 @@ struct ForecastListView<VM: ForecastListViewModelProtocol>: View {
         }
         .background(.black)
         .tabViewStyle(.page(indexDisplayMode: .always))
-        .onChange(of: viewModel.allLocations.map(\.id), initial: false) { (old, new) in
+        .onChange(of: viewModel.output.allLocations.map(\.id), initial: false) { old, new in
             didUpdateContent(oldContent: old, newContent: new)
+        }
+        .onReceive(viewModel.output.$scrollToItem) { id in
+            guard let id else { return }
+            selectedTab = id
         }
         .onAppear {
             viewModel.onAppear()

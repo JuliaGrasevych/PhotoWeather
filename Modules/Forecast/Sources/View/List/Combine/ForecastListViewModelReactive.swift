@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 import NeedleFoundation
 import Core
@@ -19,9 +20,15 @@ public protocol ForecastListReactiveDependency: Dependency {
     var locationProvider: LocationProvidingReactive { get }
 }
 
-class ForecastListViewModelReactive: ForecastListViewModelProtocol {
+class ForecastListViewModelReactive: ForecastListViewModelProtocol, NestedObservedObjectOutputContainer {
     private let locationStorage: LocationStoringReactive
     private let locationProvider: LocationProvidingReactive
+    @MainActor
+    private var deeplinkState: ForecastListDeeplinkState = .idle {
+        didSet {
+            handleDeeplinkIfNeeded()
+        }
+    }
     
     @Published var locations: [NamedLocation] = [] {
         didSet {
@@ -33,7 +40,13 @@ class ForecastListViewModelReactive: ForecastListViewModelProtocol {
             updateAllLocations()
         }
     }
-    @Published var allLocations: [any ForecastLocation] = []
+    
+    @MainActor
+    @Published var scrollToItem: String?
+    
+    @MainActor
+    @ObservedObject var output = ForecastListViewModelOutput()
+    var nestedObservedObjectsSubscription: [AnyCancellable] = []
     
     private var cancellables: [AnyCancellable] = []
     
@@ -45,6 +58,17 @@ class ForecastListViewModelReactive: ForecastListViewModelProtocol {
     ) {
         self.locationStorage = locationStorage
         self.locationProvider = locationProvider
+        subscribeNestedObservedObjects()
+        
+        output.$allLocations
+            .receive(on: DispatchQueue.main)
+            .sink(
+                receiveCompletion: { _ in },
+                receiveValue: { [weak self] _ in
+                    self?.handleDeeplinkIfNeeded()
+                }
+            )
+            .store(in: &cancellables)
         
         locationStorage.locations()
             .receive(on: DispatchQueue.main)
@@ -81,10 +105,25 @@ class ForecastListViewModelReactive: ForecastListViewModelProtocol {
     }
     
     func updateAllLocations() {
-        allLocations = [currentLocation].compactMap { $0 } + locations
+        output.allLocations = [currentLocation].compactMap { $0 } + locations
+    }
+    
+    func handleDeeplinkIfNeeded() {
+        guard case let .location(id) = deeplinkState else {
+            return
+        }
+        output.scrollToItem = id
+        deeplinkState = .idle
     }
     
     func onOpenURL(_ url: URL) {
-        // TODO: implement
+        guard url.scheme == URL.deeplinkScheme,
+              url.host() == URL.locationDeeplinkHost
+        else {
+            return
+        }
+        let id = url.lastPathComponent
+        guard !id.isEmpty else { return }
+        deeplinkState = .location(id)
     }
 }

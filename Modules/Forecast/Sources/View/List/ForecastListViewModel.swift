@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 import NeedleFoundation
 import Core
 
@@ -17,9 +18,15 @@ public protocol ForecastListDependency: Dependency {
     var locationProvider: LocationProviding { get }
 }
 
-class ForecastListViewModel: ForecastListViewModelProtocol {
+class ForecastListViewModel: ForecastListViewModelProtocol, NestedObservedObjectOutputContainer {
     private let locationStorage: LocationStoring
     private let locationProvider: LocationProviding
+    @MainActor
+    private var deeplinkState: ForecastListDeeplinkState = .idle {
+        didSet {
+            handleDeeplinkIfNeeded()
+        }
+    }
     
     @MainActor 
     @Published var locations: [NamedLocation] = [] {
@@ -32,8 +39,10 @@ class ForecastListViewModel: ForecastListViewModelProtocol {
             updateAllLocations()
         }
     }
+    
     @MainActor
-    @Published var allLocations: [any ForecastLocation] = []
+    @ObservedObject var output = ForecastListViewModelOutput()
+    var nestedObservedObjectsSubscription: [AnyCancellable] = []
     
     init(
         locationStorage: LocationStoring,
@@ -41,6 +50,11 @@ class ForecastListViewModel: ForecastListViewModelProtocol {
     ) {
         self.locationStorage = locationStorage
         self.locationProvider = locationProvider
+        subscribeNestedObservedObjects()
+        
+        output.didSetAllLocations = { [weak self] _ in
+            self?.handleDeeplinkIfNeeded()
+        }
         
         Task { @MainActor in
             guard let locations = try? await locationStorage.locations() else {
@@ -68,20 +82,28 @@ class ForecastListViewModel: ForecastListViewModelProtocol {
     }
     
     @MainActor
-    func updateAllLocations() {
-        allLocations = [currentLocation].compactMap { $0 } + locations
+    private func updateAllLocations() {
+        output.allLocations = [currentLocation].compactMap { $0 } + locations
+    }
+    
+    @MainActor
+    func handleDeeplinkIfNeeded() {
+        guard case let .location(id) = deeplinkState else {
+            return
+        }
+        output.scrollToItem = id
+        deeplinkState = .idle
     }
     
     @MainActor
     func onOpenURL(_ url: URL) {
-        guard url.scheme == "photoWeather",
-                url.host() == "location"
+        guard url.scheme == URL.deeplinkScheme,
+              url.host() == URL.locationDeeplinkHost
         else {
             return
         }
         let id = url.lastPathComponent
         guard !id.isEmpty else { return }
-        print("===id \(id)")
-        // TODO: scroll to location with id
+        deeplinkState = .location(id)
     }
 }
