@@ -28,7 +28,6 @@ struct PhotoWeatherWidgetEntryView : View {
 
 struct PhotoWeatherWidget: Widget {
     let kind: String = "PhotoWeatherWidget"
-    // TODO: implement deeplinking into the app
 //    static let rootComponent: RootComponent = RootComponent(configuration: .init(storage: .swiftData))
     static let rootComponent: RootComponent = RootComponent(configuration: .init(storage: .userDefaults))
     
@@ -40,7 +39,9 @@ struct PhotoWeatherWidget: Widget {
             content: { entry in
                 PhotoWeatherWidgetEntryView(entry: entry, viewBuilder: Self.rootComponent.forecastComponent)
                     .containerBackground(.fill, for: .widget)
-            })
+            }
+        )
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
         .configurationDisplayName("Location Forecast")
         .description("Choose your location")
         .contentMarginsDisabled()
