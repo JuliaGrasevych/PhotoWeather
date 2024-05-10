@@ -54,12 +54,7 @@ class ForecastLocationItemViewModelReactive: ForecastLocationItemViewModelProtoc
     }
     
     private func fetchImage(for location: any ForecastLocation, forecast: ForecastItem?) -> AnyPublisher<LocationPhoto, Never> {
-        let calendar = (try? Calendar.currentCalendar(for: location)) ?? Calendar.current
-        let tags = [
-            try? location.season(for: Date.now, calendar: calendar).tag,
-            forecast?.current.weatherCode.description,
-            forecast.map { $0.current.isDay ? "day" : "night" }
-        ].compactMap { $0 }
+        let tags = location.photoTags + (forecast?.photoTags ?? [])
         
         return photoFetcher.photo(
             for: location,
@@ -168,7 +163,7 @@ extension ForecastLocationItemViewModelReactive {
                         switch result {
                         case .finished:
                             continuation.resume(returning: ())
-                        case .failure(let failure):
+                        case .failure:
                             break
                         }
                         cancellable?.cancel()

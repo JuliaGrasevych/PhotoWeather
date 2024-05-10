@@ -36,6 +36,10 @@ actor LocationStorage: LocationStoring, LocationManaging {
         return locationsStream
     }
     
+    func getLocations() async throws -> [NamedLocation] {
+        try await externalStore.locations()
+    }
+    
     func add(location: NamedLocation) async throws {
         internalLocationStore = try await externalStore.add(location: location)
     }

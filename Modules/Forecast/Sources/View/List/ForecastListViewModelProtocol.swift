@@ -7,9 +7,14 @@
 
 import Foundation
 
-import ForecastDependency
-
 protocol ForecastListViewModelProtocol: ObservableObject {
-    var allLocations: [any ForecastLocation] { get }
+    var output: ForecastListViewModelOutput { get }
+
     func onAppear()
+    func onOpenURL(_ url: URL)
+}
+
+enum ForecastListDeeplinkState {
+    case idle
+    case location(String)
 }

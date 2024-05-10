@@ -162,7 +162,7 @@ extension ForecastItem.WeatherCode {
 }
 
 // MARK: - Formating
-protocol DayDependentForecast {
+public protocol DayDependentForecast {
     var isDay: Bool { get }
     var weatherCode: ForecastItem.WeatherCode { get }
 }
@@ -171,7 +171,7 @@ extension ForecastItem.CurrentWeather: DayDependentForecast { }
 
 extension ForecastItem.HourlyWeather: DayDependentForecast { }
 
-struct WeatherIconFormatStyle: FormatStyle {
+public struct WeatherIconFormatStyle: FormatStyle {
     public typealias FormatInput = DayDependentForecast
     public typealias FormatOutput = String
     
@@ -180,13 +180,13 @@ struct WeatherIconFormatStyle: FormatStyle {
     }
 }
 
-extension FormatStyle where Self == WeatherIconFormatStyle {
+public extension FormatStyle where Self == WeatherIconFormatStyle {
     static var weatherIcon: WeatherIconFormatStyle {
         return WeatherIconFormatStyle()
     }
 }
 
-extension DayDependentForecast {
+public extension DayDependentForecast {
     func formatted<Style: FormatStyle>(_ style: Style) -> Style.FormatOutput where Style.FormatInput == DayDependentForecast {
         style.format(self)
     }

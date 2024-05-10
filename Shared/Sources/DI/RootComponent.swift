@@ -77,15 +77,21 @@ final class RootComponent: BootstrapComponent {
     
     // MARK: - Child components
     var forecastComponent: ForecastComponentProtocol {
-        ForecastComponent(parent: self)
+        shared {
+            ForecastComponent(parent: self)
+        }
     }
     
     var photoStockComponent: PhotoStockComponent {
-        PhotoStockComponent(parent: self)
+        shared {
+            PhotoStockComponent(parent: self)
+        }
     }
     
     var storageComponent: StorageComponent {
-        StorageComponent(parent: self)
+        shared {
+            StorageComponent(parent: self)
+        }
     }
     
     /// Root view
@@ -159,15 +165,21 @@ final class RootReactiveComponent: BootstrapComponent {
     
     // MARK: - Child components
     var forecastComponent: ForecastComponentProtocol {
-        ForecastReactiveComponent(parent: self)
+        shared {
+            ForecastReactiveComponent(parent: self)
+        }
     }
     
     var photoStockComponent: PhotoStockComponent {
-        PhotoStockComponent(parent: self)
+        shared {
+            PhotoStockComponent(parent: self)
+        }
     }
     
     var storageComponent: StorageComponent {
-        StorageComponent(parent: self)
+        shared {
+            StorageComponent(parent: self)
+        }
     }
     
     /// Root view

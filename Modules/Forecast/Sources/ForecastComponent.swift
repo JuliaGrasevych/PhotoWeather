@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import NeedleFoundation
 import Core
+import ForecastDependency
 
 public protocol ForecastComponentDependency: Dependency {
     var networkService: NetworkServiceProtocol { get }
@@ -16,6 +17,8 @@ public protocol ForecastComponentDependency: Dependency {
 
 public protocol ForecastComponentProtocol {
     var view: AnyView { get }
+    var weatherFetcherExport: ForecastFetching { get }
+    func widgetView(viewModel: ForecastLocationItemWidgetViewModel) -> AnyView
 }
 
 public class ForecastComponent: Component<ForecastComponentDependency>, ForecastComponentProtocol {
@@ -26,14 +29,22 @@ public class ForecastComponent: Component<ForecastComponentDependency>, Forecast
         }
     }
     
+    public var weatherFetcherExport: ForecastFetching {
+        weatherFetcher
+    }
+    
     @MainActor
     public var view: AnyView {
-        AnyView(
-            childComponent.view
-        )
+        childComponent.view
     }
     
     var childComponent: ForecastListComponent {
         ForecastListComponent(parent: self)
+    }
+    
+    @MainActor
+    public func widgetView(viewModel: ForecastLocationItemWidgetViewModel) -> AnyView {
+        ForecastLocationItemComponent(parent: self)
+            .widgetView(viewModel: viewModel)
     }
 }

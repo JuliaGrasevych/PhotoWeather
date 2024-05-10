@@ -14,3 +14,13 @@ public protocol ForecastLocation: LocationProtocol, Equatable, Identifiable wher
     var isUserLocation: Bool { get }
     var timeZoneIdentifier: String? { get }
 }
+
+public extension ForecastLocation {
+    var photoTags: [String] {
+        let calendar = (try? Calendar.currentCalendar(for: self)) ?? Calendar.current
+        guard let tag = try? season(for: Date.now, calendar: calendar).tag else {
+            return []
+        }
+        return [tag]
+    }
+}

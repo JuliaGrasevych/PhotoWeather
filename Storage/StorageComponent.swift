@@ -11,7 +11,7 @@ import ForecastDependency
 
 public class StorageComponent: Component<EmptyDependency> {
     public var userDefaultsStorage: ExternalLocationStoring {
-        UserDefaultsStore(userDefaults: .standard)
+        UserDefaultsStore(userDefaults: UserDefaults(suiteName: "group.com.julia.PhotoWeather") ?? .standard)
     }
     
     public var swiftDataStorge: ExternalLocationStoring {

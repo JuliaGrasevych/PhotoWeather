@@ -11,7 +11,10 @@ import ForecastDependency
 
 public protocol LocationStoring {
     func add(location: NamedLocation) async throws
+    /// Get location as updated async stream
     func locations() async throws -> AsyncStream<[NamedLocation]>
+    /// Get locations as one-time list
+    func getLocations() async throws -> [NamedLocation]
 }
 
 public protocol LocationStoringReactive {
