@@ -10,6 +10,8 @@ import Combine
 
 public enum NetworkError: Error {
     case invalidURLComponents
+    case invalidResponse
+    case httpError(Int)
 }
 
 public protocol NetworkServiceProtocol {

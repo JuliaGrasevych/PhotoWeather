@@ -17,8 +17,10 @@ struct NetworkService: NetworkServiceProtocol {
             throw NetworkError.invalidURLComponents
         }
         let request = URLRequest(url: url)
-        let response = try await URLSession.shared.data(for: request)
-        let transformedData = try transform(response.0)
+        let (data, response) = try await URLSession.shared.data(for: request)
+        try Self.check(response: response)
+        
+        let transformedData = try transform(data)
         let item = try decoder.decode(DataType.self, from: transformedData)
         return item
     }
@@ -29,11 +31,21 @@ struct NetworkService: NetworkServiceProtocol {
                 .eraseToAnyPublisher()
         }
         return URLSession.shared.dataTaskPublisher(for: url)
-            .tryMap { response in
-                try transform(response.data)
+            .tryMap { data, response in
+                try Self.check(response: response)
+                return try transform(data)
             }
             .decode(type: DataType.self, decoder: decoder)
             .eraseToAnyPublisher()
+    }
+    
+    private static func check(response: URLResponse) throws {
+        guard let response = response as? HTTPURLResponse else {
+            throw NetworkError.invalidResponse
+        }
+        guard 200..<400 ~= response.statusCode else {
+            throw NetworkError.httpError(response.statusCode)
+        }
     }
 }
 
