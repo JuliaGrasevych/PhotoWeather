@@ -55,7 +55,7 @@ extension ForecastLocationItemWidgetViewModel {
         isUserLocation: false,
         currentWeather: .init(
             temperature: "0°C",
-            weatherIcon: "n/a",
+            weatherSFSymbol: "questionmark.circle",
             weatherDescription: "n/a"
         ),
         image: nil

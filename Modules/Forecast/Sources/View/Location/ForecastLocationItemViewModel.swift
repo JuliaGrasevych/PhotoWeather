@@ -115,13 +115,13 @@ extension ForecastLocationItemViewModel {
 extension ForecastLocationItemViewModelOutput.CurrentWeather {
     private enum Defaults {
         static let temperature = "n/a"
-        static let weatherIcon = "n/a"
+        static let weatherSFSymbol = "questionmark.circle"
         static let weatherDescription = "n/a"
     }
     
     static let `default` = ForecastLocationItemViewModelOutput.CurrentWeather(
         temperature: Defaults.temperature,
-        weatherIcon: Defaults.weatherIcon,
+        weatherSFSymbol: Defaults.weatherSFSymbol,
         weatherDescription: Defaults.weatherDescription
     )
     
@@ -129,7 +129,7 @@ extension ForecastLocationItemViewModelOutput.CurrentWeather {
         let currentWeather = model?.current
         self.init(
             temperature: model?.formattedTemperature ?? Defaults.temperature,
-            weatherIcon: currentWeather?.formatted(.weatherIcon) ?? Defaults.weatherIcon,
+            weatherSFSymbol: currentWeather?.weatherSFSymbol ?? Defaults.weatherSFSymbol,
             weatherDescription: currentWeather?.weatherCode.description ?? Defaults.weatherDescription
         )
     }
@@ -146,7 +146,7 @@ extension ForecastLocationItemViewModelOutput.HourlyForecast {
     static let `default` = ForecastLocationItemViewModelOutput.HourlyForecast(
         time: "12:00",
         temperature: "n/a",
-        weatherIcon: "n/a"
+        weatherSFSymbol: "questionmark.circle"
     )
 }
 
@@ -155,7 +155,7 @@ extension ForecastLocationItemViewModelOutput.DailyForecast {
         date: "01 Jan",
         temperatureMin: "n/a",
         temperatureMax: "n/a",
-        weatherIcon: "n/a"
+        weatherSFSymbol: "questionmark.circle"
     )
 }
 

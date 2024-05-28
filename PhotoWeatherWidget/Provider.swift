@@ -71,7 +71,7 @@ extension ForecastLocationItemWidgetViewModel {
         let currentWeather = forecastItem.current
         let currentWeatherModel = CurrentWeather(
             temperature: forecastItem.formattedTemperature,
-            weatherIcon: currentWeather.formatted(.weatherIcon),
+            weatherSFSymbol: currentWeather.weatherSFSymbol,
             weatherDescription: currentWeather.weatherCode.description
         )
         
