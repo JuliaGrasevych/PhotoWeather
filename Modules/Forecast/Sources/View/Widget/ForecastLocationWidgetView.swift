@@ -12,12 +12,12 @@ import WidgetKit
 public struct ForecastLocationItemWidgetViewModel {
     public struct CurrentWeather {
         let temperature: String
-        let weatherIcon: String
+        let weatherSFSymbol: String
         let weatherDescription: String
         
-        public init(temperature: String, weatherIcon: String, weatherDescription: String) {
+        public init(temperature: String, weatherSFSymbol: String, weatherDescription: String) {
             self.temperature = temperature
-            self.weatherIcon = weatherIcon
+            self.weatherSFSymbol = weatherSFSymbol
             self.weatherDescription = weatherDescription
         }
     }
@@ -85,8 +85,9 @@ struct ForecastLocationWidgetView: View {
             }
             Text(viewModel.currentWeather.temperature)
                 .font(.system(.body, design: .rounded))
-            Text(viewModel.currentWeather.weatherIcon)
-                .font(Font.weatherIconFont(size: 40))
+            Image(systemName: viewModel.currentWeather.weatherSFSymbol)
+                .fixedSize()
+                .font(Font.system(size: 40))
             Text(viewModel.currentWeather.weatherDescription)
                 .font(.system(.body, design: .rounded))
                 .fontWeight(.medium)

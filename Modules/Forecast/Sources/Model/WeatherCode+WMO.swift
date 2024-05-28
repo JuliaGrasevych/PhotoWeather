@@ -70,93 +70,90 @@ extension ForecastItem.WeatherCode {
                 return "n/a"
             }
     }
-    /// Weather icon Unicode symbol to be used with `weather-icons-lite` font.
+    
+    /// Weather icon SF symbol to be used with system image
     /// Always represents day
-    public var icon: String {
-        iconDay
+    public var sfSymbol: String {
+        sfSymbolDay
     }
     
-    /// Weather icon Unicode symbol to be used with `weather-icons-lite` font.
+    /// Weather icon SF symbol to be used with system image
     /// Always represents day
-    public var iconDay: String {
+    public var sfSymbolDay: String {
         switch self {
         case 0:
             // "Clear sky"
-            return "\u{f00d}"
-        case 1:
+            return "sun.max"
+        case 1, 2:
             // "Mainly clear"
-            return "\u{f00c}"
-        case 2:
             // "Partly cloudy"
-            return "\u{f002}"
+            return "cloud.sun"
         case 3:
             // "Overcast"
-            return "\u{f013}"
+            return "smoke"
         case 45, 48:
             // "Fog and depositing rime fog"
-            return "\u{f014}"
+            return "cloud.fog"
         case 51, 53, 55, 56, 57:
             // "Drizzle: Light, moderate, and dense intensity"
             // "Freezing Drizzle: Light and dense intensity"
-            return "\u{f01a}"
+            return "cloud.drizzle"
         case 61, 63, 65, 66, 67, 80, 81, 82:
             // "Rain: Slight, moderate and heavy intensity"
             // "Freezing Rain: Light and heavy intensity"
             // "Rain showers: Slight, moderate, and violent"
-            return "\u{f019}"
+            return "cloud.rain"
         case 71, 73, 75, 77, 85, 86:
             // "Snow fall: Slight, moderate, and heavy intensity"
             // "Snow grains"
             // "Snow showers slight and heavy"
-            return "\u{f01b}"
+            return "cloud.snow"
         case 95, 96, 99:
             // "Thunderstorm: Slight or moderate"
             // "Thunderstorm with slight and heavy hail"
-            return "\u{f01e}"
+            return "cloud.bolt.rain"
         default:
-            return "n/a"
+            return "questionmark.circle"
         }
     }
     
-    /// Weather icon Unicode symbol to be used with `weather-icons-lite` font.
+    /// Weather icon SF symbol to be used with system image
     /// Always represents night
-    public var iconNight: String {
+    public var sfSymbolNight: String {
         switch self {
         case 0:
             // "Clear sky"
-            return "\u{f02e}"
-        case 1:
+            return "moon.stars"
+        case 1, 2:
             // "Mainly clear"
-            return "\u{f081}"
-        case 2:
             // "Partly cloudy"
-            return "\u{f086}"
+            return "cloud.moon"
         case 3:
             // "Overcast"
-            return "\u{f013}"
+            return "smoke"
         case 45, 48:
             // "Fog and depositing rime fog"
-            return "\u{f014}"
+            return "cloud.fog"
         case 51, 53, 55, 56, 57:
             // "Drizzle: Light, moderate, and dense intensity"
             // "Freezing Drizzle: Light and dense intensity"
-            return "\u{f01a}"
+            return "cloud.drizzle"
         case 61, 63, 65, 66, 67, 80, 81, 82:
             // "Rain: Slight, moderate and heavy intensity"
             // "Freezing Rain: Light and heavy intensity"
             // "Rain showers: Slight, moderate, and violent"
-            return "\u{f028}"
+            return "cloud.moon.rain"
         case 71, 73, 75, 77, 85, 86:
             // "Snow fall: Slight, moderate, and heavy intensity"
             // "Snow grains"
             // "Snow showers slight and heavy"
-            return "\u{f02a}"
+            return "cloud.snow"
         case 95, 96, 99:
             // "Thunderstorm: Slight or moderate"
             // "Thunderstorm with slight and heavy hail"
-            return "\u{f02d}"
+            return "cloud.bolt.rain"
         default:
-            return "n/a"
+            return "questionmark.circle"
         }
     }
 }
@@ -171,23 +168,8 @@ extension ForecastItem.CurrentWeather: DayDependentForecast { }
 
 extension ForecastItem.HourlyWeather: DayDependentForecast { }
 
-public struct WeatherIconFormatStyle: FormatStyle {
-    public typealias FormatInput = DayDependentForecast
-    public typealias FormatOutput = String
-    
-    public func format(_ value: any DayDependentForecast) -> String {
-        value.isDay ? value.weatherCode.iconDay : value.weatherCode.iconNight
-    }
-}
-
-public extension FormatStyle where Self == WeatherIconFormatStyle {
-    static var weatherIcon: WeatherIconFormatStyle {
-        return WeatherIconFormatStyle()
-    }
-}
-
 public extension DayDependentForecast {
-    func formatted<Style: FormatStyle>(_ style: Style) -> Style.FormatOutput where Style.FormatInput == DayDependentForecast {
-        style.format(self)
+    var weatherSFSymbol: String {
+        isDay ? weatherCode.sfSymbolDay : weatherCode.sfSymbolNight
     }
 }

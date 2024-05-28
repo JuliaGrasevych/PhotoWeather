@@ -24,7 +24,7 @@ class ForecastLocationItemViewModelOutput: ObservableObject {
 extension ForecastLocationItemViewModelOutput {
     struct CurrentWeather {
         let temperature: String
-        let weatherIcon: String
+        let weatherSFSymbol: String
         let weatherDescription: String
     }
     struct TodayForecast {
@@ -34,13 +34,13 @@ extension ForecastLocationItemViewModelOutput {
     struct HourlyForecast {
         let time: String
         let temperature: String
-        let weatherIcon: String
+        let weatherSFSymbol: String
     }
     struct DailyForecast {
         let date: String
         let temperatureMin: String
         let temperatureMax: String
-        let weatherIcon: String
+        let weatherSFSymbol: String
     }
     
     enum Error: LocalizedError {

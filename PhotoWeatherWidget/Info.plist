@@ -19,9 +19,5 @@
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.widgetkit-extension</string>
 	</dict>
-	<key>UIAppFonts</key>
-	<array>
-		<string>weather-icons-lite.ttf</string>
-	</array>
 </dict>
 </plist>

@@ -148,7 +148,6 @@ let project = Project(
             product: .appExtension,
             infoPlist: .file(path: "PhotoWeatherWidget/Info.plist"),
             additionalSources: ["Shared/Sources/**"],
-            additionalResources: ["Shared/Resources/**"],
             entitlements: Entitlements.dictionary(
                 ["com.apple.security.application-groups": Plist.Value(arrayLiteral: "group.com.julia.PhotoWeather")]
             ),
@@ -174,7 +173,6 @@ let project = Project(
             infoPlist: .extendingDefault(
                 with: [
                     "FLICKR_API_KEY": "$(FLICKR_API_KEY)",
-                    "UIAppFonts": ["weather-icons-lite.ttf"],
                     "NSLocationWhenInUseUsageDescription": "Allow access to user location to get weather for your city",
                     "CFBundleVersion": "0.1",
                     "CFBundleShortVersionString": "0.1",
@@ -182,7 +180,6 @@ let project = Project(
                 ]
             ),
             additionalSources: ["Shared/Sources/**"],
-            additionalResources: ["Shared/Resources/**"],
             entitlements: Entitlements.dictionary(
                 ["com.apple.security.application-groups": Plist.Value(arrayLiteral: "group.com.julia.PhotoWeather")]
             ),
