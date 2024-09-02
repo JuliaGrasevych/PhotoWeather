@@ -11,6 +11,7 @@ import Core
 
 @MainActor
 struct ForecastAddLocationView<VM: ForecastAddLocationViewModelProtocol>: View {
+    // TODO: use showingSearch as binding and replace dismiss on search view
     @State private var showingSearch = false
     @State private var showingAlert = false
     
