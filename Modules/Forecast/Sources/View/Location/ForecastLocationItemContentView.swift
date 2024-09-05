@@ -12,9 +12,11 @@ import SwiftUI
 struct ForecastLocationItemContentView<VM: ForecastLocationItemViewModelProtocol>: View {
     @StateObject private var viewModel: VM
     @State private var showingForecast = false
+    @State private var isAnimating = false
     @Binding var showingDeleteAlert: Bool
     
     @State private var taskId: UUID?
+    private var isRefreshing: Bool { taskId != nil }
     @Environment(\.refresh) private var refresh
     
     init(viewModel: @escaping @autoclosure () -> VM, showingDeleteAlert: Binding<Bool>) {
@@ -40,12 +42,19 @@ struct ForecastLocationItemContentView<VM: ForecastLocationItemViewModelProtocol
                             Image(systemName: "arrow.clockwise.circle.fill")
                         }
                         .defaultContentStyle()
-                        .opacity(taskId == nil ? 1.0 : 0.5)
+                        .rotationEffect(isRefreshing ? .degrees(360) : .zero)
+                        .animation(
+                            isRefreshing
+                            ? .default.repeatForever(autoreverses: false)
+                            : .default,
+                            value: taskId
+                        )
+                        .opacity(isRefreshing ? 0.5 : 1.0)
                         .padding([.bottom, .trailing], 20)
                         .font(.title)
-                        .disabled(taskId != nil)
+                        .disabled(isRefreshing)
                         .task(id: taskId) {
-                            guard taskId != nil else {
+                            guard isRefreshing else {
                                 return
                             }
                             await refresh?()
@@ -93,6 +102,9 @@ struct ForecastLocationItemContentView<VM: ForecastLocationItemViewModelProtocol
             HStack {
                 if viewModel.output.isUserLocation {
                     Image(systemName: "location.fill")
+                        .scaleEffect(isAnimating ? 1.5 : 1.0)
+                        .animation(.easeInOut(duration: 1.0).repeatForever(), value: isAnimating)
+                        .onAppear { isAnimating = true }
                 }
                 Text(viewModel.output.locationName)
                     .font(.system(.largeTitle, design: .rounded))
