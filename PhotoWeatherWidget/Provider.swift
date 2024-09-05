@@ -44,6 +44,7 @@ struct Provider: AppIntentTimelineProvider {
             let tags = location.photoTags + forecast.photoTags
             let image: UIImage?
             if let imagePhoto = try? await photoFetcher.photo(for: location, tags: tags),
+               // TODO: create image cache - NSCache? 
                let imageData = try? Data(contentsOf: imagePhoto.url) {
                 image = UIImage(data: imageData)
             } else {

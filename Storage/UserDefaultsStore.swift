@@ -66,9 +66,11 @@ public actor UserDefaultsStore: ExternalLocationStoring {
         return try await locations()
     }
     
+    // TODO: check `SE-0423: Dynamic actor isolation enforcement from non-strict-concurrency contexts` with Swift 6 to get rid of nonisolated
     nonisolated
     public private(set) lazy var locationsPublisher: AnyPublisher<[NamedLocation], any Error> = locationsSubject.eraseToAnyPublisher()
     
+    // TODO: check `SE-0423: Dynamic actor isolation enforcement from non-strict-concurrency contexts` with Swift 6 to get rid of nonisolated
     nonisolated
     public func addReactive(location: NamedLocation) -> AnyPublisher<Void, any Error> {
         locationsPublisher
@@ -88,7 +90,10 @@ public actor UserDefaultsStore: ExternalLocationStoring {
                 updatedArray.append(location)
                 do {
                     let data = try updatedArray.encodedData()
-                    self.userDefaults.locationsData = data
+                    // work around actor isolation
+                    Task {
+                        await self.updateLocationsData(data)
+                    }
                     return Just(())
                         .setFailureType(to: Error.self)
                         .eraseToAnyPublisher()
@@ -100,6 +105,11 @@ public actor UserDefaultsStore: ExternalLocationStoring {
             .eraseToAnyPublisher()
     }
     
+    private func updateLocationsData(_ data: Data) async {
+        userDefaults.locationsData = data
+    }
+    
+    // TODO: check `SE-0423: Dynamic actor isolation enforcement from non-strict-concurrency contexts` with Swift 6 to get rid of nonisolated
     nonisolated
     public func removeReactive(location id: NamedLocation.ID) -> AnyPublisher<Void, any Error> {
         locationsPublisher
@@ -113,7 +123,10 @@ public actor UserDefaultsStore: ExternalLocationStoring {
                 updatedArray.removeAll(where: { $0.id == id })
                 do {
                     let data = try updatedArray.encodedData()
-                    self.userDefaults.locationsData = data
+                    // work around actor isolation
+                    Task {
+                        await self.updateLocationsData(data)
+                    }
                     return Just(())
                         .setFailureType(to: Error.self)
                         .eraseToAnyPublisher()
