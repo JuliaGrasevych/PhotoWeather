@@ -11,7 +11,7 @@ import NeedleFoundation
 import ForecastDependency
 
 public protocol ForecastLocationSearchViewBuilder {
-    func view(locationBinding: Binding<NamedLocation?>) -> AnyView
+    func view(locationBinding: Binding<NamedLocation?>, isPresented: Binding<Bool>) -> AnyView
 }
 
 public class ForecastLocationSearchComponent: Component<ForecastLocationSearchDependency>, ForecastLocationSearchViewBuilder {
@@ -20,11 +20,12 @@ public class ForecastLocationSearchComponent: Component<ForecastLocationSearchDe
     }
     
     @MainActor
-    public func view(locationBinding: Binding<NamedLocation?>) -> AnyView {
+    public func view(locationBinding: Binding<NamedLocation?>, isPresented: Binding<Bool>) -> AnyView {
         AnyView(
             ForecastLocationSearchView(
                 viewModel: self.viewModel,
-                location: locationBinding
+                location: locationBinding,
+                isPresented: isPresented
             )
         )
     }
