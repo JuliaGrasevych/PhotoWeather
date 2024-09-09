@@ -42,7 +42,7 @@ extension LocationAppEntity {
 }
 
 struct LocationQuery: EntityQuery {
-    let locationStorage: LocationStoring = PhotoWeatherWidget.rootComponent.locationStorage
+    private let locationStorage: LocationStoring = PhotoWeatherWidget.rootComponent.locationStorage
     
     func entities(for identifiers: [Entity.ID]) async throws -> [Entity] {
        let result = try await locationStorage.getLocations()

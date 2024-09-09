@@ -17,11 +17,12 @@ public class ForecastLocationSearchReactiveComponent: Component<ForecastLocation
     }
     
     @MainActor
-    public func view(locationBinding: Binding<NamedLocation?>) -> AnyView {
+    public func view(locationBinding: Binding<NamedLocation?>, isPresented: Binding<Bool>) -> AnyView {
         AnyView(
             ForecastLocationSearchView(
                 viewModel: self.viewModel,
-                location: locationBinding
+                location: locationBinding,
+                isPresented: isPresented
             )
         )
     }

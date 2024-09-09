@@ -11,15 +11,19 @@ import ForecastDependency
 
 @MainActor
 struct ForecastLocationSearchView<VM: ForecastLocationSearchViewModelProtocol>: View {
-    @Environment(\.dismiss) var dismiss
-    @State private var isPresented = true
+    @Binding private var isPresented: Bool
     @StateObject private var viewModel: VM
     
     @Binding var location: NamedLocation?
     
-    init(viewModel: @escaping @autoclosure () -> VM, location: Binding<NamedLocation?>) {
+    init(
+        viewModel: @escaping @autoclosure () -> VM,
+        location: Binding<NamedLocation?>,
+        isPresented: Binding<Bool>
+    ) {
         _viewModel = .init(wrappedValue: viewModel())
         _location = location
+        _isPresented = isPresented
     }
     
     var body: some View {
@@ -35,7 +39,7 @@ struct ForecastLocationSearchView<VM: ForecastLocationSearchViewModelProtocol>: 
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button("Cancel") {
-                            dismiss()
+                            isPresented = false
                         }
                     }
                 }
@@ -66,15 +70,23 @@ extension ForecastLocationSearchViewModel {
 struct ForecastLocationSearchView_Preview: PreviewProvider {
     @Environment(\.dismiss) var dismiss
     static var previews: some View {
-        ForecastLocationSearchView(viewModel: ForecastLocationSearchViewModel.preview, location: .constant(nil)).body
+        ForecastLocationSearchView(
+            viewModel: ForecastLocationSearchViewModel.preview,
+            location: .constant(nil),
+            isPresented: .constant(true)
+        ).body
     }
 }
 
 struct ForecastLocationSearchViewBuilderPreview: ForecastLocationSearchViewBuilder {
     @MainActor
-    func view(locationBinding: Binding<NamedLocation?>) -> AnyView {
+    func view(locationBinding: Binding<NamedLocation?>, isPresented: Binding<Bool>) -> AnyView {
         AnyView(
-            ForecastLocationSearchView(viewModel: ForecastLocationSearchViewModel.preview, location: .constant(nil))
+            ForecastLocationSearchView(
+                viewModel: ForecastLocationSearchViewModel.preview,
+                location: .constant(nil),
+                isPresented: .constant(true)
+            )
         )
     }
 }

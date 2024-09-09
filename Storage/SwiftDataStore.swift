@@ -10,9 +10,13 @@ import Combine
 import SwiftData
 import ForecastDependency
 
-public final class SwiftDataStore: ExternalLocationStoring {
-    private let modelContainer: ModelContainer
-    private let context: ModelContext
+public final actor SwiftDataStore: ExternalLocationStoring, ModelActor {
+    public let modelExecutor: any ModelExecutor
+    
+    public let modelContainer: ModelContainer
+    // I didn't manage to get model context notifications working,
+    // so resorted to rx subject
+    private let modelContextDidChange: PassthroughSubject<Void, Never>
     
     init() {
         do {
@@ -21,15 +25,24 @@ public final class SwiftDataStore: ExternalLocationStoring {
             fatalError("Failed to create 'NamedLocation' model container")
         }
         
-        context = ModelContext(modelContainer)
+        let context = ModelContext(modelContainer)
+        context.autosaveEnabled = true
+        modelExecutor = DefaultSerialModelExecutor(modelContext: context)
         
         let fetchDescriptor = FetchDescriptor<NamedLocationModel>()
+        let mcdc = PassthroughSubject<Void, Never>()
+        self.modelContextDidChange = mcdc
+        
         do {
             let items = try context.fetch(fetchDescriptor).map(\.userRepresentation)
             locationsPublisher = Just(items)
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher()
-                .merge(with: Self.contextDidChangePublisher(context: context, fetchDescriptor: fetchDescriptor))
+                .merge(with: Self.contextDidChangePublisher(
+                    context: context,
+                    modelContextDidChange: mcdc.eraseToAnyPublisher(),
+                    fetchDescriptor: fetchDescriptor
+                ))
                 .removeDuplicates()
                 .eraseToAnyPublisher()
         } catch {
@@ -38,63 +51,78 @@ public final class SwiftDataStore: ExternalLocationStoring {
         }
     }
     
-    private static func contextDidChangePublisher(context: ModelContext, fetchDescriptor: FetchDescriptor<NamedLocationModel>) -> AnyPublisher<[NamedLocation], Error> {
-        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange, object: context)
+    private static func contextDidChangePublisher(
+        context: @escaping @autoclosure () -> ModelContext,
+        modelContextDidChange: AnyPublisher<Void, Never>,
+        fetchDescriptor: FetchDescriptor<NamedLocationModel>
+    ) -> AnyPublisher<[NamedLocation], Error> {
+        modelContextDidChange
             .setFailureType(to: Error.self)
             .tryMap { _ in
-                try context.fetch(fetchDescriptor).map(\.userRepresentation)
+                try context().fetch(fetchDescriptor).map(\.userRepresentation)
             }
             .eraseToAnyPublisher()
     }
     
     public func locations() async throws -> [NamedLocation] {
         let fetchDescriptor = FetchDescriptor<NamedLocationModel>()
-        return try context.fetch(fetchDescriptor).map(\.userRepresentation)
+        return try modelContext.fetch(fetchDescriptor).map(\.userRepresentation)
+    }
+    
+    private func insert(location: NamedLocation) throws {
+        modelContext.insert(NamedLocationModel(userRepresentation: location))
+        try modelContext.save()
+        modelContextDidChange.send()
+    }
+    
+    private func delete(location id: NamedLocation.ID) throws {
+        let predicate = #Predicate<NamedLocationModel> {
+            $0.id == id
+        }
+        try modelContext.delete(model: NamedLocationModel.self, where: predicate)
+        try modelContext.save()
+        modelContextDidChange.send()
     }
     
     public func add(location: NamedLocation) async throws -> [NamedLocation] {
-        context.insert(NamedLocationModel(userRepresentation: location))
-        try context.save()
+        try insert(location: location)
         return try await locations()
     }
     
     public func remove(location id: NamedLocation.ID) async throws -> [NamedLocation] {
-        let predicate = #Predicate<NamedLocationModel> {
-            $0.id == id
-        }
-        try context.delete(model: NamedLocationModel.self, where: predicate)
-        try context.save()
+        try delete(location: id)
         return try await locations()
     }
     
+    nonisolated
     public let locationsPublisher: AnyPublisher<[NamedLocation], any Error>
     
+    nonisolated
     public func addReactive(location: NamedLocation) -> AnyPublisher<Void, any Error> {
-        context.insert(NamedLocationModel(userRepresentation: location))
-        do {
-            try context.save()
-            return Just(())
-                .setFailureType(to: Error.self)
-                .eraseToAnyPublisher()
-        } catch {
-            return Fail(error: error)
-                .eraseToAnyPublisher()
+        AnyPublisher<Void, any Error>.single { promise in
+            Task {
+                do {
+                    try await self.insert(location: location)
+                    promise(.success(()))
+                } catch {
+                    promise(.failure(error))
+                }
+            }
         }
     }
     
+    
+    nonisolated
     public func removeReactive(location id: NamedLocation.ID) -> AnyPublisher<Void, any Error> {
-        let predicate = #Predicate<NamedLocationModel> {
-            $0.id == id
-        }
-        do {
-            try context.delete(model: NamedLocationModel.self, where: predicate)
-            try context.save()
-            return Just(())
-                .setFailureType(to: Error.self)
-                .eraseToAnyPublisher()
-        } catch {
-            return Fail(error: error)
-                .eraseToAnyPublisher()
+        AnyPublisher<Void, any Error>.single { promise in
+            Task {
+                do {
+                    try await self.delete(location: id)
+                    promise(.success(()))
+                } catch {
+                    promise(.failure(error))
+                }
+            }
         }
     }
 }

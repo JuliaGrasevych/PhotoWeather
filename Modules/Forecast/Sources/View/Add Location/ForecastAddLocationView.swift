@@ -52,7 +52,7 @@ struct ForecastAddLocationView<VM: ForecastAddLocationViewModelProtocol>: View {
         .contentShape(Rectangle())
         .clipped()
         .sheet(isPresented: $showingSearch) {
-            searchBuilder.view(locationBinding: $viewModel.location)
+            searchBuilder.view(locationBinding: $viewModel.location, isPresented: $showingSearch)
                 .alert(isPresented: $showingAlert, error: viewModel.output.error) {
                     Button("Ok", role: .cancel) { }
                 }

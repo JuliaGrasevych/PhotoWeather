@@ -21,6 +21,8 @@ struct Provider: AppIntentTimelineProvider {
     typealias Entry = ForecastEntry
     typealias Intent = LocationIntent
     
+    let urlSession: URLSession
+    
     func snapshot(for configuration: LocationIntent, in context: Context) async -> ForecastEntry {
         return await forecastEntry(for: configuration.location)
     }
@@ -44,7 +46,7 @@ struct Provider: AppIntentTimelineProvider {
             let tags = location.photoTags + forecast.photoTags
             let image: UIImage?
             if let imagePhoto = try? await photoFetcher.photo(for: location, tags: tags),
-               let imageData = try? Data(contentsOf: imagePhoto.url) {
+               let (imageData, _) = try? await urlSession.data(from: imagePhoto.url) {
                 image = UIImage(data: imageData)
             } else {
                 image = nil

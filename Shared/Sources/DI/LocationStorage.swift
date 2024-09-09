@@ -50,18 +50,21 @@ actor LocationStorage: LocationStoring, LocationManaging {
 }
 
 extension LocationStorage: LocationManagingReactive {
-    nonisolated 
+    // TODO: check `SE-0423: Dynamic actor isolation enforcement from non-strict-concurrency contexts` with Swift 6 to get rid of nonisolated
+    nonisolated
     func remove(location id: NamedLocation.ID) -> AnyPublisher<Void, any Error> {
         externalStore.removeReactive(location: id)
     }
 }
 
 extension LocationStorage: LocationStoringReactive {
+    // TODO: check `SE-0423: Dynamic actor isolation enforcement from non-strict-concurrency contexts` with Swift 6 to get rid of nonisolated
     nonisolated
     func add(location: NamedLocation) -> AnyPublisher<Void, any Error> {
         externalStore.addReactive(location: location)
     }
     
+    // TODO: check `SE-0423: Dynamic actor isolation enforcement from non-strict-concurrency contexts` with Swift 6 to get rid of nonisolated
     nonisolated
     func locations() -> AnyPublisher<[NamedLocation], any Error> {
         externalStore.locationsPublisher
