@@ -13,6 +13,7 @@ struct ForecastLocationItemContentView<VM: ForecastLocationItemViewModelProtocol
     @StateObject private var viewModel: VM
     @State private var showingForecast = false
     @State private var isAnimating = false
+    @State private var rotationAngle: Double = 0
     @Binding var showingDeleteAlert: Bool
     
     @State private var taskId: UUID?
@@ -42,13 +43,15 @@ struct ForecastLocationItemContentView<VM: ForecastLocationItemViewModelProtocol
                             Image(systemName: "arrow.clockwise.circle.fill")
                         }
                         .defaultContentStyle()
-                        .rotationEffect(isRefreshing ? .degrees(360) : .zero)
-                        .animation(
-                            isRefreshing
-                            ? .default.repeatForever(autoreverses: false)
-                            : .default,
-                            value: taskId
-                        )
+                        .rotationEffect(Angle(degrees: rotationAngle))
+                        .onChange(of: isRefreshing, { oldValue, newValue in
+                            guard newValue else { return }
+                            // reduce rotation angle if refresh animation is about to start
+                            if newValue && !oldValue {
+                                rotationAngle = 0
+                            }
+                            refreshingAnimationTurn()
+                        })
                         .opacity(isRefreshing ? 0.5 : 1.0)
                         .padding([.bottom, .trailing], 20)
                         .font(.title)
@@ -72,6 +75,15 @@ struct ForecastLocationItemContentView<VM: ForecastLocationItemViewModelProtocol
                 maxHeight: .infinity
             )
         }
+    }
+    
+    private func refreshingAnimationTurn() {
+        withAnimation(.default, {
+            rotationAngle += 360
+        }, completion: {
+            guard isRefreshing else { return }
+            refreshingAnimationTurn()
+        })
     }
     
     @ViewBuilder
