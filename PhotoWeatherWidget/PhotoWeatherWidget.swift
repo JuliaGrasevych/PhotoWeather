@@ -28,14 +28,25 @@ struct PhotoWeatherWidgetEntryView : View {
 
 struct PhotoWeatherWidget: Widget {
     let kind: String = "PhotoWeatherWidget"
+    let urlSession: URLSession
 //    static let rootComponent: RootComponent = RootComponent(configuration: .init(storage: .swiftData))
     static let rootComponent: RootComponent = RootComponent(configuration: .init(storage: .userDefaults))
+    
+    init() {
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.urlCache = URLCache(
+            memoryCapacity: 100 * 1024 * 1024, // 100 MB
+            diskCapacity: 1024 * 1024 * 1024 // 1 GB
+        )
+        
+        urlSession = URLSession(configuration: sessionConfig)
+    }
     
     var body: some WidgetConfiguration {
         AppIntentConfiguration(
             kind: kind,
             intent: LocationIntent.self,
-            provider: Provider(),
+            provider: Provider(urlSession: urlSession),
             content: { entry in
                 PhotoWeatherWidgetEntryView(entry: entry, viewBuilder: Self.rootComponent.forecastComponent)
                     .containerBackground(.fill, for: .widget)
