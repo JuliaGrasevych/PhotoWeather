@@ -133,10 +133,12 @@ struct ForecastLocationItemContentView<VM: ForecastLocationItemViewModelProtocol
                 .fontWeight(.medium)
         }
         .defaultContentStyle()
-        .padding(EdgeInsets(top: 40, leading: 0, bottom: 20, trailing: 0))
+        .padding(EdgeInsets(top: 40, leading: 0, bottom: 20 + 20, trailing: 0))
         .frame(maxWidth: .infinity, alignment: .top)
         .background(.ultraThinMaterial.opacity(0.85))
         .shadow(color: .white.opacity(0.5), radius: 4, x: 0, y: 4)
+        .clipShape(NotchedRectShape(notch: .fixed(radius: 100), visibleNotchPart: 5))
+        .padding(EdgeInsets(top: 0, leading: 0, bottom: -20, trailing: 0))
     }
     
     private func forecastView() -> some View {
